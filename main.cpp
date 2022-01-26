@@ -3,8 +3,6 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <bitset>
-//#include <boost/dynamic_bitset.hpp>
 
 #include "vm.h"
 
@@ -34,73 +32,26 @@ std::list<Instruction> instructions = {
     Instruction(0b1110,   5, "lock"),
     Instruction(0b1111,   5, "unlock")
 };*/
-// class cpu
-// registry + call stack
-
-// instruction memory
-// data memory
-std::array<int64_t, 16> reg;
 
 std::vector<char> loadBinary(std::string filename)
 {
 	std::ifstream input(filename, std::ios::in | std::ios::binary);
-    // get length of file:
-    //input.seekg (0, input.end);
-    //int fileLength = input.tellg();
-    //input.seekg (0, input.beg);
-
-    // print content in ASCII
-    //std::cout << input.rdbuf() << std::endl;
-    //std::cout << "length is " << fileLength << std::endl;
-    //std::string str(std::istreambuf_iterator<char>(input), (std::istreambuf_iterator<char>()));
 	std::vector<char> program(std::istreambuf_iterator<char>(input), (std::istreambuf_iterator<char>()));
 	input.close();
 
 	return program;
 }
 
-void printAsXxd(std::vector<char>& bytes) {
-    // print vector loaded from binary file as xxd -b {file}
-    for (size_t i = 0; i < bytes.size(); ++i) {
-        std::bitset<8> bs(bytes[i]);
-        std::cout << bs << " ";
-
-        if ((i+1) % 6 == 0 && i != 0)
-            std::cout << std::endl;
-    }
-}
-
-std::string generateBitstring(std::vector<char>& bytes) {
-    std::string bitString;
-    for (size_t i = 0; i < bytes.size(); ++i) {
-        std::bitset<8> bs(bytes[i]);
-        bitString += bs.to_string();
-    }
-
-    return bitString;
-}
-
-/*
-boost::dynamic_bitset<> generateDynamicBitset(std::string& bitString) {
-    return boost::dynamic_bitset<>(bitString);
-}*/
-
-
-
 int main()
 {
     auto filename = "/home/buky/eset/samples/precompiled/math.evm";
     auto program = loadBinary(filename);
-    //printAsXxd(bytes);
-    //auto bitString = generateBitstring(program);
-    //auto dBitSet = generateDynamicBitset(bitString);
 
     VirtualMachine vm(program);
-
-    vm.printBits(24);
-    vm.setIp(1);
-    vm.printBits(24);
-
+    vm.printBits(80);
+    //vm.printBits(24);
+    //vm.setIp(1);
+    //vm.printBits(24);
 
     return 0;
 }

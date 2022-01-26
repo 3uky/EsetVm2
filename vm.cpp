@@ -22,7 +22,12 @@ void VirtualMachine::printBits(VM_DWORD numberOfBits)
 {
     for(VM_DWORD i=0; i < numberOfBits; i++) {
         bool a = getBitFromCodeMemory();
+
+        if (i % (8*6) == 0 && i != 0)
+            std::cout << std::endl;
+
         std::cout << a;
+
         if ((i+1) % 8 == 0 && i != 0)
             std::cout << " ";
     }

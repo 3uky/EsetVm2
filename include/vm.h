@@ -1,19 +1,11 @@
 #ifndef VIRTUALMACHINE_H
 #define VIRTUALMACHINE_H
 
-
 #include <iostream>
 #include <string.h>
-#include <fstream>
 #include <stdexcept>
-#include <list>
-#include <chrono>
-#include <thread>
-#include <mutex>
-#include <stdlib.h>
-#include <time.h>
-#include <bitset>
 #include <vector>
+#include <array>
 
 typedef uint8_t VM_BYTE;
 typedef uint16_t VM_WORD;
@@ -54,6 +46,7 @@ private:
     //HEADER header;
 
     std::vector<char> memory;
+    std::array<int64_t, REGS_COUNT> reg;
 
     // MEMORY CONTROLLERS
     VM_DWORD ip;
