@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <bitset>
 
 #include "vm.h"
 
@@ -36,6 +37,9 @@ std::list<Instruction> instructions = {
 std::vector<char> loadBinary(std::string filename)
 {
 	std::ifstream input(filename, std::ios::in | std::ios::binary);
+    if (!input.is_open()) {
+        throw;
+    }
 	std::vector<char> program(std::istreambuf_iterator<char>(input), (std::istreambuf_iterator<char>()));
 	input.close();
 
@@ -44,14 +48,17 @@ std::vector<char> loadBinary(std::string filename)
 
 int main()
 {
-    auto filename = "/home/buky/eset/samples/precompiled/math.evm";
+    auto filename = "./task/samples/precompiled/math.evm";
     auto program = loadBinary(filename);
 
     VirtualMachine vm(program);
-    vm.printBits(80);
-    //vm.printBits(24);
+
+    vm.printBits(64);
+    vm.setIp(0);
+    //std::cout << std::bitset<8>(vm.decodeArg());
+    std::cout << std::bitset<64>(vm.decodeConstant());
     //vm.setIp(1);
-    //vm.printBits(24);
+    //vm().printBits(24);
 
     return 0;
 }
