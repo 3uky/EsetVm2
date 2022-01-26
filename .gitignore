@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+main
+
+# CodeBlocks
+test.*
+
+# other folders
+bac
+bin
+
+*.swp
