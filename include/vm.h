@@ -56,6 +56,7 @@ public:
 public:
     VM_BYTE getBitFromCodeMemory();
     VM_BYTE decodeArg();
+    VM_QWORD decodeConstant();
     void setIp(VM_DWORD);
     void printBits(VM_DWORD);
 };

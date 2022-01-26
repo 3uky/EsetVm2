@@ -1,5 +1,5 @@
 #include "vm.h"
-
+#include <bitset>
 VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : memory(programMemory), ip(0)
 {
 }
@@ -16,6 +16,16 @@ VM_BYTE VirtualMachine::getBitFromCodeMemory()
 VM_BYTE VirtualMachine::decodeArg()
 {
     return getBitFromCodeMemory() | (getBitFromCodeMemory() << 1) | (getBitFromCodeMemory() << 2) | (getBitFromCodeMemory() << 3);
+}
+
+VM_QWORD VirtualMachine::decodeConstant()
+{
+    VM_QWORD constant = 0;
+    for (int i=0; i < 64; i++)
+    {   // https://stackoverflow.com/questions/9290823/bitwise-shift-operation-in-c-on-uint64-t-variable
+        constant |= (VM_QWORD(getBitFromCodeMemory()) << i);
+    }
+    return constant;
 }
 
 void VirtualMachine::setIp(VM_DWORD newIp)
