@@ -33,7 +33,6 @@ typedef struct {
     //VM_QWORD sp;
 } REGISTERS, *PREGISTERS;
 
-
 class VirtualMachine
 {
 private:
@@ -56,6 +55,7 @@ public:
 
 public:
     VM_BYTE getBitFromCodeMemory();
+    VM_BYTE decodeArg();
     void setIp(VM_DWORD);
     void printBits(VM_DWORD);
 };

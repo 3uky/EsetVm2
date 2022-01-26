@@ -13,6 +13,11 @@ VM_BYTE VirtualMachine::getBitFromCodeMemory()
     return b;
 }
 
+VM_BYTE VirtualMachine::decodeArg()
+{
+    return getBitFromCodeMemory() | (getBitFromCodeMemory() << 1) | (getBitFromCodeMemory() << 2) | (getBitFromCodeMemory() << 3);
+}
+
 void VirtualMachine::setIp(VM_DWORD newIp)
 {
     ip = newIp;
