@@ -24,9 +24,29 @@ VM_QWORD VirtualMachine::getBitsFromCodeMemory(int numberOfBits)
     return bits;
 }
 
-VM_BYTE VirtualMachine::decodeReg()
+ARGUMENT VirtualMachine::decodeArg()
+{
+    ARGUMENT arg = {0,};
+
+    arg.type = getBitFromCodeMemory();
+    if(arg.type == RegType::reg)
+        arg.index = decodeRegIndex();
+    else if(arg.type == RegType::mem) {
+        arg.memSize = decodeMemSize();
+        arg.index = decodeRegIndex();
+    }
+
+    return arg;
+}
+
+VM_BYTE VirtualMachine::decodeRegIndex()
 {
     return getBitsFromCodeMemory(4);
+}
+
+VM_BYTE VirtualMachine::decodeMemSize()
+{
+    return getBitsFromCodeMemory(2);
 }
 
 VM_DWORD VirtualMachine::decodeAddress()
@@ -37,26 +57,6 @@ VM_DWORD VirtualMachine::decodeAddress()
 VM_QWORD VirtualMachine::decodeConstant()
 {
     return getBitsFromCodeMemory(64);
-}
-
-VM_BYTE VirtualMachine::decodeMemSize()
-{
-    return getBitsFromCodeMemory(2);
-}
-
-ARGUMENT VirtualMachine::decodeArg()
-{
-    ARGUMENT arg = {0,};
-    arg.type = getBitFromCodeMemory();
-
-    if(arg.type == RegType::reg)
-        arg.index = decodeReg();
-    else if(arg.type == RegType::mem) {
-        arg.memSize = decodeMemSize();
-        arg.index = decodeReg();
-    }
-
-    return arg;
 }
 
 void VirtualMachine::setIp(VM_DWORD newIp)
