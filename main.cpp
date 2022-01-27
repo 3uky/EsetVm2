@@ -11,22 +11,23 @@ using namespace std;
 
 vector<char> loadBinary(string filename)
 {
-	ifstream input(filename, ios::in | ios::binary);
-    if (!input.is_open()) {
+	ifstream f(filename, ios::in | ios::binary);
+    if (!f.is_open()) {
         throw;
     }
-	vector<char> program(istreambuf_iterator<char>(input), (istreambuf_iterator<char>()));
-	input.close();
+	vector<char> binary(istreambuf_iterator<char>(f), (istreambuf_iterator<char>()));
+	f.close();
 
-	return program;
+	return binary;
 }
 
 int main()
 {
     auto filename = "./task/samples/precompiled/math.evm";
-    auto program = loadBinary(filename);
+    auto binary = loadBinary(filename);
 
-    VirtualMachine vm(program);
+    VirtualMachine vm(binary);
+    vm.decodeHeader();
 
     return 0;
 }
