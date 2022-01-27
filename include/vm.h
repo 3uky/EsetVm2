@@ -37,7 +37,7 @@ enum RegType { mem=1, reg=0 };
 enum MemSize { byte=0b00, word=0b01, dword=0b10, qword=0b11 };
 
 typedef struct {
-    int index;
+    VM_BYTE index;
     VM_BYTE type;
     VM_BYTE memSize;
     VM_DWORD address;
@@ -65,10 +65,14 @@ public:
 
 public:
     VM_BYTE getBitFromCodeMemory();
+    VM_QWORD getBitsFromCodeMemory(int);
+
     VM_BYTE decodeReg();
     VM_QWORD decodeConstant();
     VM_DWORD decodeAddress();
+    VM_BYTE decodeMemSize();
     ARGUMENT decodeArg();
+
     void setIp(VM_DWORD);
     void printBits(VM_DWORD);
 };
