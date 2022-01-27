@@ -1,4 +1,4 @@
-#include <bitset>
+#include <string>
 
 #include "vm.h"
 
@@ -62,21 +62,22 @@ VM_QWORD VirtualMachine::getBitsFromCodeMemory_BigEndianOrder(int numberOfBits)
     }
     return bits;
 }
-#include <vector>
-#include <string>
+
+bool VirtualMachine::isMagicValueValid() const
+{
+    return std::string(memory.begin(), memory.begin()+8) == "ESET-VM2";
+}
+
 void VirtualMachine::decodeHeader()
 {
-    std::string magic = std::string(memory.begin(), memory.begin()+8);
-    std::cout << magic << std::endl;
-    if(magic == "ESET-VM2")
-        std::cout << "magic value is ok" << std::endl;
-
+    // set bit pointer after magic value (8B=64b)
     setIp(64);
 
     auto sizeData = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
     auto sizeCode = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
     auto sizeInit = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
 
+    // tbd initialize structure
     std::cout << int(sizeData) << std::endl;
     std::cout << int(sizeCode) << std::endl;
     std::cout << int(sizeInit) << std::endl;
