@@ -1,6 +1,33 @@
 #include "vm.h"
 #include <bitset>
 
+//enum InsType { mov, loadConst, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, }
+
+std::unordered_set<VM_BYTE> validInstructions = {
+    {0b000},    // mov
+    {0b001},    // loadConst
+    {0b010001}, // add
+    {0b010010}, // sub
+    {0b010011}, // div
+    {0b010100}, // mod
+    {0b010101}, // mul
+    {0b01100},  // compare
+    {0b01101},  // jump
+    {0b01110},  // jumpEqual
+    {0b10000},  // read
+    {0b10001},  // write
+    {0b10001},  // consoleRead
+    {0b10011},  // consoleWrite
+    {0b10100},  // createThread
+    {0b10101},  // joinThread
+    {0b10110},  // hlt
+    {0b10111},  // sleep
+    {0b1100},   // call
+    {0b1101},   // ret
+    {0b1110},   // lock
+    {0b1111}    // unlock
+};
+
 VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : memory(programMemory), ip(0)
 {
 }
