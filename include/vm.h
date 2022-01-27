@@ -75,12 +75,15 @@ public:
     VM_BYTE getBitFromCodeMemory();
     VM_QWORD getBitsFromCodeMemory(int);
 
-    INSTRUCTION decodeIns();
+    VM_BYTE decodeInstructionCode();
+    bool isInstructionValid(VM_BYTE) const;
     ARGUMENT decodeArg();
     VM_BYTE decodeRegIndex();
     VM_BYTE decodeMemSize();
     VM_QWORD decodeConstant();
     VM_DWORD decodeAddress();
+    VM_BYTE convertEndian(VM_BYTE);
+    VM_BYTE convertEndian(VM_BYTE, int);
 
     void setIp(VM_DWORD);
     void printBits(VM_DWORD);
