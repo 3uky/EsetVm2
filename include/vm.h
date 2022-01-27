@@ -75,6 +75,7 @@ public:
     void setIp(VM_DWORD);
 
     void decodeHeader();
+    bool isMagicValueValid() const;
     VM_BYTE decodeInstructionCode();
     bool isInstructionValid(VM_BYTE) const;
     ARGUMENT decodeArg();

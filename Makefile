@@ -1,26 +1,25 @@
-# Define required macros here
-SHELL = /bin/sh
-
-OBJS =  main.o vm.o
-CFLAGS = -Wall -g -pthread
-CC = g++
-INCLUDES = -I include
-LIBS = -lm
 SRC_DIR = src
+OBJ_DIR = obj
 
-main: ${OBJS}
-	${CC} ${CFLAGS} ${INCLUDES} -o $@ ${OBJS} ${LIBS}
-.cpp.o:
-	${CC} ${CFLAGS} ${INCLUDES} -c $<
+ELF = esetvm2
+SRC = $(wildcard $(SRC_DIR)/*.cpp)
+OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
+CC = g++
+INCLUDES = -Iinclude
+CFLAGS   = -Wall -g -pthread
+LDLIBS   = -lm
+
+$(ELF): $(OBJ) 
+	$(CC) $(CFLAGS) $(INCLUDES) $^ $(LDLIBS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $@
 
 clean:
-	-rm -f *.o core *.core
+	@$(RM) -rv $(OBJ_DIR)
 
-# with separate src
-#g++ -Wall -fexceptions -g -Iinclude -c /home/buky/eset/EsetVm2/main.cpp -o obj/Debug/main.o
-#g++ -Wall -fexceptions -g -Iinclude -c /home/buky/eset/EsetVm2/src/decoder.cpp -o obj/Debug/src/decoder.o
-#g++ -Wall -fexceptions -g -Iinclude -c /home/buky/eset/EsetVm2/src/vm.cpp -o obj/Debug/src/vm.o
-#g++  -o bin/Debug/test obj/Debug/main.o obj/Debug/src/decoder.o obj/Debug/src/vm.o   
- 
-
-
+-include $(OBJ:.o=.d)

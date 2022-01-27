@@ -5,7 +5,7 @@
 #include <fstream>
 #include <bitset>
 
-#include "vm.h"
+#include "../include/vm.h"
 
 using namespace std;
 
@@ -27,7 +27,9 @@ int main()
     auto binary = loadBinary(filename);
 
     VirtualMachine vm(binary);
-    vm.decodeHeader();
+
+    //vm.decodeHeader();
+    cout << vm.isMagicValueValid() << endl;
 
     return 0;
 }
