@@ -52,11 +52,16 @@ int main()
     auto program = loadBinary(filename);
 
     VirtualMachine vm(program);
+    vm.setIp(304);
+    vm.printBits(24);
+    vm.setIp(310);
+    auto arg1 = vm.decodeArg();
+    auto arg2 = vm.decodeArg();
+    auto arg3 = vm.decodeArg();
 
-    vm.printBits(64);
-    vm.setIp(0);
+//    vm.decodeAddress()
     //std::cout << std::bitset<8>(vm.decodeArg());
-    std::cout << std::bitset<64>(vm.decodeConstant());
+    //std::cout << std::bitset<64>(vm.decodeConstant());
     //vm.setIp(1);
     //vm().printBits(24);
 
