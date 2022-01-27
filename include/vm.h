@@ -34,9 +34,6 @@ typedef struct {
     //VM_QWORD sp;
 } REGISTERS, *PREGISTERS;
 
-
-
-
 enum RegType { mem=1, reg=0 };
 enum MemSize { byte=0b00, word=0b01, dword=0b10, qword=0b11 };
 
@@ -74,7 +71,10 @@ public:
 public:
     VM_BYTE getBitFromCodeMemory();
     VM_QWORD getBitsFromCodeMemory(int);
+    VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
+    void setIp(VM_DWORD);
 
+    void decodeHeader();
     VM_BYTE decodeInstructionCode();
     bool isInstructionValid(VM_BYTE) const;
     ARGUMENT decodeArg();
@@ -82,11 +82,15 @@ public:
     VM_BYTE decodeMemSize();
     VM_QWORD decodeConstant();
     VM_DWORD decodeAddress();
+
     VM_BYTE convertEndian(VM_BYTE);
     VM_BYTE convertEndian(VM_BYTE, int);
 
-    void setIp(VM_DWORD);
     void printBits(VM_DWORD);
+
+    VM_WORD swapWord(VM_WORD);
+    VM_DWORD swapDword(VM_DWORD);
+    VM_QWORD swapQword(VM_QWORD);
 };
 
 #endif // VIRTUALMACHINE_H

@@ -1,10 +1,11 @@
-#include "vm.h"
 #include <bitset>
+
+#include "vm.h"
 
 //enum InsType { mov, loadConst, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, }
 
 namespace Decoder {
-    std::unordered_set<VM_BYTE> validInstructions = {
+    const std::unordered_set<VM_BYTE> validInstructions = {
         {0b000},    // mov
         {0b001},    // loadConst
         {0b010001}, // add
@@ -60,6 +61,53 @@ VM_QWORD VirtualMachine::getBitsFromCodeMemory_BigEndianOrder(int numberOfBits)
         bits = (bits << 1) | VM_QWORD(getBitFromCodeMemory());
     }
     return bits;
+}
+#include <vector>
+#include <string>
+void VirtualMachine::decodeHeader()
+{
+    std::string magic = std::string(memory.begin(), memory.begin()+8);
+    std::cout << magic << std::endl;
+    if(magic == "ESET-VM2")
+        std::cout << "magic value is ok" << std::endl;
+
+    setIp(64);
+
+    auto sizeData = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
+    auto sizeCode = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
+    auto sizeInit = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
+
+    std::cout << int(sizeData) << std::endl;
+    std::cout << int(sizeCode) << std::endl;
+    std::cout << int(sizeInit) << std::endl;
+}
+
+VM_WORD VirtualMachine::swapWord(VM_WORD a)
+{
+    a = ((a & 0x00FF) << 8) | ((a & 0xFF00) >> 8);
+    return a;
+}
+
+VM_DWORD VirtualMachine::swapDword(VM_DWORD a)
+{
+    a = ((a & 0x000000FF) << 24) |
+        ((a & 0x0000FF00) <<  8) |
+        ((a & 0x00FF0000) >>  8) |
+        ((a & 0xFF000000) >> 24);
+    return a;
+}
+
+VM_QWORD VirtualMachine::swapQword(VM_QWORD a)
+{
+    a = ((a & 0x00000000000000FFULL) << 56) |
+        ((a & 0x000000000000FF00ULL) << 40) |
+        ((a & 0x0000000000FF0000ULL) << 24) |
+        ((a & 0x00000000FF000000ULL) <<  8) |
+        ((a & 0x000000FF00000000ULL) >>  8) |
+        ((a & 0x0000FF0000000000ULL) >> 24) |
+        ((a & 0x00FF000000000000ULL) >> 40) |
+        ((a & 0xFF00000000000000ULL) >> 56);
+    return a;
 }
 
 // first check 3 bits long opcode then 4 bits, 5 bits, 6 bits long opcodes, throw if not found
