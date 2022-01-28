@@ -1,14 +1,12 @@
 #ifndef VIRTUALMACHINE_H
 #define VIRTUALMACHINE_H
 
-#include <iostream>
-#include <string.h>
-#include <stdexcept>
 #include <vector>
 #include <array>
 
 #include "global.h"
 #include "memory.h"
+#include "decoder.h"
 
 typedef struct {
     /* Here will be stored a data, that program is needed */
@@ -29,10 +27,6 @@ typedef struct { // tbd
     //VM_QWORD sp;
 } REGISTERS, *PREGISTERS;
 
-// tbd: decoder
-enum RegType { mem=1, reg=0 };
-enum MemSize { byte=0b00, word=0b01, dword=0b10, qword=0b11 };
-
 class VirtualMachine
 {
 private:
@@ -44,40 +38,14 @@ private:
     std::array<int64_t, REGS_COUNT> reg;
 
     Memory memory;
+    Decoder decoder;
 
     // MEMORY CONTROLLERS
     VM_DWORD ip;
+    void setIp(VM_DWORD);
 
 public:
     VirtualMachine(std::vector<char>& programBytes);
-
-public:
-    void setIp(VM_DWORD);
-
-    // decoder
-    VM_BYTE getBitFromCodeMemory();
-    VM_QWORD getBitsFromCodeMemory(int);
-    VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
-
-    HEADER decodeHeader();
-    VM_BYTE decodeInstructionCode();
-    ARGUMENT decodeArg();
-    VM_BYTE decodeRegIndex();
-    VM_BYTE decodeMemSize();
-    VM_QWORD decodeConstant();
-    VM_DWORD decodeAddress();
-
-    bool isInstructionValid(VM_BYTE) const;
-
-    VM_BYTE convertEndian(VM_BYTE);
-    VM_BYTE convertEndian(VM_BYTE, int);
-
-    VM_WORD swapWord(VM_WORD);
-    VM_DWORD swapDword(VM_DWORD);
-    VM_QWORD swapQword(VM_QWORD);
-
-    // others
-    void printBits(VM_DWORD);
 };
 
 #endif // VIRTUALMACHINE_H

@@ -27,4 +27,6 @@ typedef struct {
     VM_BYTE index;
 } INSTRUCTION;
 
+//enum InsType { mov, loadConst, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, }
+
 #endif // GLOBAL_H_INCLUDED
