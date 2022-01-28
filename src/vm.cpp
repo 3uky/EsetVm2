@@ -68,19 +68,31 @@ bool VirtualMachine::isMagicValueValid() const
     return std::string(memory.begin(), memory.begin()+8) == "ESET-VM2";
 }
 
+bool VirtualMachine::isHeadeSizesValid() const
+{
+    return (header.dataSize >= header.initialDataSize) && ((HEADER_SIZE + header.codeSize + header.dataSize + header.initialDataSize) == memory.size());
+}
+
+bool VirtualMachine::isHeaderValid() const
+{
+    return isMagicValueValid() && isHeadeSizesValid();
+}
+
 void VirtualMachine::decodeHeader()
 {
     // set bit pointer after magic value (8B=64b)
     setIp(64);
 
-    auto sizeData = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
-    auto sizeCode = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
-    auto sizeInit = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
+    header.dataSize = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
+    header.codeSize = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
+    header.initialDataSize = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
+}
 
-    // tbd initialize structure
-    std::cout << int(sizeData) << std::endl;
-    std::cout << int(sizeCode) << std::endl;
-    std::cout << int(sizeInit) << std::endl;
+void VirtualMachine::printHeaderSize() const
+{
+    std::cout << "Data size: " << int(header.dataSize) << std::endl;
+    std::cout << "Code size: " << int(header.codeSize) << std::endl;
+    std::cout << "Initial Data size: " << int(header.initialDataSize) << std::endl;
 }
 
 // first check 3 bits long opcode then 4 bits, 5 bits, 6 bits long opcodes, throw if not found

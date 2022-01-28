@@ -14,6 +14,7 @@ typedef uint32_t VM_DWORD;
 typedef uint64_t VM_QWORD;
 
 const int REGS_COUNT=16;
+const int HEADER_SIZE=20; // magic 8B + dataSize 4B + codeSize 4B + initialDataSize 4B = 20B
 
 typedef struct {
     /* Here will be stored a data, that program is needed */
@@ -48,6 +49,12 @@ typedef struct {
     VM_BYTE index;
 } INSTRUCTION;
 
+typedef struct {
+    VM_DWORD codeSize;
+    VM_DWORD dataSize;
+    VM_DWORD initialDataSize;
+} HEADER;
+
 class VirtualMachine
 {
 private:
@@ -57,9 +64,9 @@ private:
 
     REGISTERS registers;
     //ADDRESS_SPACE memory;
-    //HEADER header;
+    HEADER header;
 
-    std::vector<char> memory;
+    std::vector<char>& memory;
     std::array<int64_t, REGS_COUNT> reg;
 
     // MEMORY CONTROLLERS
@@ -69,15 +76,22 @@ public:
     VirtualMachine(std::vector<char>& programBytes);
 
 public:
-    VM_BYTE getBitFromCodeMemory();
-    VM_QWORD getBitsFromCodeMemory(int);
-    VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
     void setIp(VM_DWORD);
 
-    void decodeHeader();
+    // memory
     bool isMagicValueValid() const;
     VM_BYTE decodeInstructionCode();
     bool isInstructionValid(VM_BYTE) const;
+    bool isHeadeSizesValid() const;
+    bool isHeaderValid() const;
+    void printHeaderSize() const;
+
+    // decoder
+    VM_BYTE getBitFromCodeMemory();
+    VM_QWORD getBitsFromCodeMemory(int);
+    VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
+
+    void decodeHeader();
     ARGUMENT decodeArg();
     VM_BYTE decodeRegIndex();
     VM_BYTE decodeMemSize();
@@ -87,11 +101,12 @@ public:
     VM_BYTE convertEndian(VM_BYTE);
     VM_BYTE convertEndian(VM_BYTE, int);
 
-    void printBits(VM_DWORD);
-
     VM_WORD swapWord(VM_WORD);
     VM_DWORD swapDword(VM_DWORD);
     VM_QWORD swapQword(VM_QWORD);
+
+    // others
+    void printBits(VM_DWORD);
 };
 
 #endif // VIRTUALMACHINE_H
