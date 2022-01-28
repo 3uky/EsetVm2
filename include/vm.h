@@ -27,8 +27,6 @@ public:
     void run();
 
 private:
-    // MEMORY CONTROLLERS
-    REGISTERS registers;
     std::array<int64_t, REGS_COUNT> reg;
     VM_DWORD ip;
 
@@ -39,7 +37,7 @@ private:
     void initializeMemory();
     void initializeRegisters();
 
-    int64_t getArgumentValue(Argument);
+    int64_t getValue(Argument) const;
 };
 
 #endif // VIRTUALMACHINE_H

@@ -20,11 +20,11 @@ bool Argument::isMemory() const
 }
 
 /*
-void Argument::print() const
+void Argument::print(Register &reg, Memory &mem) const
 {
-    if(arg.type == argument::type::reg)
-        cout << "reg[" << arg.index << "]: " << reg[arg.index] << endl;
-    else if(arg.type == argument::type::mem)
-        cout << "mem[" << arg.address << "]: " << endl; //tbd
+    if(type.isRegister)
+        cout << "reg[" << index << "]: " << reg[index] << endl;
+    else
+        cout << "mem[" << address << "]: " << mem.data[address] << endl;
 }
 */

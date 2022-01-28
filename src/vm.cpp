@@ -4,8 +4,6 @@
 #include "../include/vm.h"
 #include "../include/argument.h"
 
-
-
 using namespace std;
 
 VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg({0,}), ip(0), memory(programMemory), decoder(memory, ip)
@@ -28,21 +26,19 @@ void VirtualMachine::initializeMemory()
     }
 }
 
-int64_t VirtualMachine::getArgumentValue(Argument arg)
+int64_t VirtualMachine::getValue(Argument arg) const
 {
     if(arg.isRegister())
         return reg[arg.index];
-
     else
-        return 0;//return memory.data[arg.address];
+        return 0; //return memory.data[arg.address];
 }
 
 void VirtualMachine::run()
 {
     setIp(20*8); // tbd improve code mem and get rid of it
 
-    auto noInst = 3;
-    for (int i=0; i<noInst; i++)
+    for (int i=0; i < 3; i++) // while(1)
     {
         auto inst = decoder.decodeInstructionCode();
         cout << "Instruction: " << int(inst) << endl;
@@ -66,11 +62,8 @@ void VirtualMachine::run()
                 Argument arg2 = decoder.decodeArg();
                 Argument arg3 = decoder.decodeArg();
 
-                auto arg1v = getArgumentValue(arg1);
-                auto arg2v = getArgumentValue(arg2);
-
                 if(arg3.isRegister())
-                    reg[arg2.index] = arg1v + arg2v;
+                    reg[arg2.index] = getValue(arg1) + getValue(arg2);
                 else
                     ; //tbd
 
