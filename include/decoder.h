@@ -10,6 +10,19 @@ public:
     Memory& memory;
     VM_DWORD& ip;
 
+public:
+    Decoder(Memory&, VM_DWORD&);
+
+    HEADER decodeHeader();
+    VM_BYTE decodeInstructionCode();
+    ARGUMENT decodeArg();
+    VM_BYTE decodeRegIndex();
+    VM_BYTE decodeMemSize();
+    VM_QWORD decodeConstant();
+    VM_DWORD decodeAddress();
+
+    void printBits(VM_DWORD);
+
 private:
     void setIp(VM_DWORD);
 
@@ -25,19 +38,6 @@ private:
     VM_WORD swapWord(VM_WORD);
     VM_DWORD swapDword(VM_DWORD);
     VM_QWORD swapQword(VM_QWORD);
-
-public:
-    Decoder(Memory&, VM_DWORD&);
-
-    HEADER decodeHeader();
-    VM_BYTE decodeInstructionCode();
-    ARGUMENT decodeArg();
-    VM_BYTE decodeRegIndex();
-    VM_BYTE decodeMemSize();
-    VM_QWORD decodeConstant();
-    VM_DWORD decodeAddress();
-
-    void printBits(VM_DWORD);
 };
 
 #endif // DECODER_H

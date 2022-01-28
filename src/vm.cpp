@@ -2,19 +2,23 @@
 
 #include "../include/vm.h"
 
-#include <unordered_set>
+using namespace std;
 
-// global
-//enum InsType { mov, loadConst, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, }
-
-VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : memory(programMemory), decoder(memory, ip), ip(0)
+VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : ip(0), memory(programMemory), decoder(memory, ip)
 {
-        memory.setHeader(decoder.decodeHeader());
-        memory.printHeaderSize();
-        std::cout << memory.isHeaderValid() << std::endl;
+    initializeMemory();
 }
 
 void VirtualMachine::setIp(VM_DWORD newIp)
 {
     ip = newIp;
+}
+
+void VirtualMachine::initializeMemory()
+{
+    memory.setHeader(decoder.decodeHeader());
+    if(!memory.isHeaderValid()) {
+        memory.printHeaderSize();
+        throw runtime_error(std::string("Memory validation failed"));
+    }
 }

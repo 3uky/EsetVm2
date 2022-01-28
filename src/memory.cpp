@@ -2,12 +2,9 @@
 
 Memory::Memory(std::vector<char>& programMemory) : memory(programMemory), code(programMemory) // tbd
 {
-    // initial header
     // initial code
     // initial data
     // initial initial data
-
-    // checks
 }
 
 void Memory::setHeader(HEADER initHeader)

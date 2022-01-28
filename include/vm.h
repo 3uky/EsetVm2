@@ -29,23 +29,24 @@ typedef struct { // tbd
 
 class VirtualMachine
 {
+public:
+    VirtualMachine(std::vector<char>& programBytes);
+
 private:
     // new
     bool isVMwork;
     bool isMainThread;
 
+    // MEMORY CONTROLLERS
     REGISTERS registers;
     std::array<int64_t, REGS_COUNT> reg;
+    VM_DWORD ip;
 
     Memory memory;
     Decoder decoder;
 
-    // MEMORY CONTROLLERS
-    VM_DWORD ip;
     void setIp(VM_DWORD);
-
-public:
-    VirtualMachine(std::vector<char>& programBytes);
+    void initializeMemory();
 };
 
 #endif // VIRTUALMACHINE_H

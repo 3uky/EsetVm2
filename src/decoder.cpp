@@ -9,6 +9,11 @@ Decoder::Decoder(Memory& mem, VM_DWORD &inputIp) : memory(mem), ip(inputIp)
 {
 }
 
+void Decoder::setIp(VM_DWORD newIp)
+{
+    ip = newIp;
+}
+
 VM_BYTE Decoder::getBitFromCodeMemory()
 {
     auto currentByte = memory.code[ip / 8];
@@ -128,27 +133,6 @@ VM_QWORD Decoder::decodeConstant()
     return getBitsFromCodeMemory(64);
 }
 
-void Decoder::setIp(VM_DWORD newIp)
-{
-    ip = newIp;
-}
-
-void Decoder::printBits(VM_DWORD numberOfBits)
-{
-    for(VM_DWORD i=0; i < numberOfBits; i++) {
-        bool a = getBitFromCodeMemory();
-
-        if (i % (8*6) == 0 && i != 0)
-            std::cout << std::endl;
-
-        std::cout << a;
-
-        if ((i+1) % 8 == 0 && i != 0)
-            std::cout << " ";
-    }
-    std::cout << std::endl;
-}
-
 VM_BYTE Decoder::convertEndian(VM_BYTE byte)
 {
     return convertEndian(byte, 8);
@@ -197,4 +181,20 @@ VM_QWORD Decoder::swapQword(VM_QWORD a)
         ((a & 0x00FF000000000000ULL) >> 40) |
         ((a & 0xFF00000000000000ULL) >> 56);
     return a;
+}
+
+void Decoder::printBits(VM_DWORD numberOfBits)
+{
+    for(VM_DWORD i=0; i < numberOfBits; i++) {
+        bool a = getBitFromCodeMemory();
+
+        if (i % (8*6) == 0 && i != 0)
+            std::cout << std::endl;
+
+        std::cout << a;
+
+        if ((i+1) % 8 == 0 && i != 0)
+            std::cout << " ";
+    }
+    std::cout << std::endl;
 }
