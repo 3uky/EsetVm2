@@ -32,6 +32,8 @@ class VirtualMachine
 public:
     VirtualMachine(std::vector<char>& programBytes);
 
+    void run();
+
 private:
     // new
     bool isVMwork;
@@ -47,6 +49,7 @@ private:
 
     void setIp(VM_DWORD);
     void initializeMemory();
+    void initializeRegisters();
 };
 
 #endif // VIRTUALMACHINE_H

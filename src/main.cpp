@@ -37,6 +37,7 @@ int main(int argc,char* argv[])
         const string filename = "./task/samples/precompiled/math.evm";
         auto programBytes = loadBinary(filename);
         VirtualMachine vm(programBytes);
+        vm.run();
     }
     catch (const exception& e) {
         cout << e.what() << endl;

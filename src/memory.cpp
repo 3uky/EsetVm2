@@ -1,6 +1,10 @@
 #include "../include/memory.h"
 
-Memory::Memory(std::vector<char>& programMemory) : memory(programMemory), code(programMemory) // tbd
+using namespace std;
+
+const int HEADER_SIZE=20; // magic 8B + dataSize 4B + codeSize 4B + initialDataSize 4B = 20B
+
+Memory::Memory(vector<char>& programMemory) : memory(programMemory), code(programMemory) // tbd
 {
     // initial code
     // initial data
@@ -14,7 +18,7 @@ void Memory::setHeader(HEADER initHeader)
 
 bool Memory::isMagicValueValid() const
 {
-    return std::string(memory.begin(), memory.begin()+8) == "ESET-VM2";
+    return string(memory.begin(), memory.begin()+8) == "ESET-VM2";
 }
 
 bool Memory::isHeadeSizesValid() const
@@ -27,9 +31,11 @@ bool Memory::isHeaderValid() const
     return isMagicValueValid() && isHeadeSizesValid();
 }
 
-void Memory::printHeaderSize() const
+void Memory::printSizes() const
 {
-    std::cout << "Data size: " << int(header.dataSize) << std::endl;
-    std::cout << "Code size: " << int(header.codeSize) << std::endl;
-    std::cout << "Initial Data size: " << int(header.initialDataSize) << std::endl;
+    cout << "Binary file size: " << memory.size() << endl << endl;
+    cout << "Magic size: " << HEADER_SIZE << endl;
+    cout << "Data size: " << int(header.dataSize) << endl;
+    cout << "Code size: " << int(header.codeSize) << endl;
+    cout << "Initial Data size: " << int(header.initialDataSize) << endl;
 }

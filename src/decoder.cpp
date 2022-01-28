@@ -2,9 +2,6 @@
 
 #include <unordered_set>
 
-enum RegType { mem=1, reg=0 };
-enum MemSize { byte=0b00, word=0b01, dword=0b10, qword=0b11 };
-
 Decoder::Decoder(Memory& mem, VM_DWORD &inputIp) : memory(mem), ip(inputIp)
 {
 }
@@ -103,9 +100,9 @@ ARGUMENT Decoder::decodeArg()
     ARGUMENT arg = {0,};
 
     arg.type = getBitFromCodeMemory();
-    if(arg.type == RegType::reg)
+    if(arg.type == argument::type::reg)
         arg.index = decodeRegIndex();
-    else if(arg.type == RegType::mem) {
+    else if(arg.type == argument::type::mem) {
         arg.memSize = decodeMemSize();
         arg.index = decodeRegIndex();
     }

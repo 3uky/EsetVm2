@@ -5,13 +5,12 @@
 
 #include "global.h"
 
-const int HEADER_SIZE=20; // magic 8B + dataSize 4B + codeSize 4B + initialDataSize 4B = 20B
-
 class Memory
 {
 public:
     std::vector<char>& memory;
     std::vector<char>& code;
+    //std::array<char>& data;
 
 private:
     HEADER header;
@@ -24,7 +23,7 @@ public:
 
     void setHeader(HEADER);
     bool isHeaderValid() const;
-    void printHeaderSize() const;
+    void printSizes() const;
 };
 
 #endif // MEMORY_H
