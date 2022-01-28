@@ -2,6 +2,9 @@
 
 #include "../include/vm.h"
 
+#include <unordered_set>
+
+// global
 //enum InsType { mov, loadConst, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, }
 
 namespace Decoder {
@@ -33,11 +36,14 @@ namespace Decoder {
 
 VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : memory(programMemory), ip(0)
 {
+        memory.setHeader(decodeHeader());
+        memory.printHeaderSize();
+        std::cout << memory.isHeaderValid() << std::endl;
 }
 
 VM_BYTE VirtualMachine::getBitFromCodeMemory()
 {
-    auto currentByte = memory[ip / 8];
+    auto currentByte = memory.code[ip / 8];
     auto mask = 0b10000000 >> (ip % 8);
     auto b = (currentByte & mask) >> (7 - (ip % 8));
     ip++;
@@ -63,36 +69,15 @@ VM_QWORD VirtualMachine::getBitsFromCodeMemory_BigEndianOrder(int numberOfBits)
     return bits;
 }
 
-bool VirtualMachine::isMagicValueValid() const
-{
-    return std::string(memory.begin(), memory.begin()+8) == "ESET-VM2";
-}
-
-bool VirtualMachine::isHeadeSizesValid() const
-{
-    return (header.dataSize >= header.initialDataSize) && ((HEADER_SIZE + header.codeSize + header.dataSize + header.initialDataSize) == memory.size());
-}
-
-bool VirtualMachine::isHeaderValid() const
-{
-    return isMagicValueValid() && isHeadeSizesValid();
-}
-
-void VirtualMachine::decodeHeader()
+HEADER VirtualMachine::decodeHeader()
 {
     // set bit pointer after magic value (8B=64b)
     setIp(64);
-
+    HEADER header = {0,};
     header.dataSize = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
     header.codeSize = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
     header.initialDataSize = swapDword(getBitsFromCodeMemory_BigEndianOrder(32));
-}
-
-void VirtualMachine::printHeaderSize() const
-{
-    std::cout << "Data size: " << int(header.dataSize) << std::endl;
-    std::cout << "Code size: " << int(header.codeSize) << std::endl;
-    std::cout << "Initial Data size: " << int(header.initialDataSize) << std::endl;
+    return header;
 }
 
 // first check 3 bits long opcode then 4 bits, 5 bits, 6 bits long opcodes, throw if not found

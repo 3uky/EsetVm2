@@ -28,8 +28,5 @@ int main()
 
     VirtualMachine vm(binary);
 
-    //vm.decodeHeader();
-    cout << vm.isMagicValueValid() << endl;
-
     return 0;
 }

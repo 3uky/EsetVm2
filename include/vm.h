@@ -6,15 +6,9 @@
 #include <stdexcept>
 #include <vector>
 #include <array>
-#include <unordered_set>
 
-typedef uint8_t VM_BYTE;
-typedef uint16_t VM_WORD;
-typedef uint32_t VM_DWORD;
-typedef uint64_t VM_QWORD;
-
-const int REGS_COUNT=16;
-const int HEADER_SIZE=20; // magic 8B + dataSize 4B + codeSize 4B + initialDataSize 4B = 20B
+#include "global.h"
+#include "memory.h"
 
 typedef struct {
     /* Here will be stored a data, that program is needed */
@@ -25,7 +19,7 @@ typedef struct {
     VM_BYTE *codeArray;
 } ADDRESS_SPACE, *PADDRESS_SPACE;
 
-typedef struct {
+typedef struct { // tbd
     /* Here will be stored all registers */
     VM_QWORD regArray[REGS_COUNT];
     /* Program Counter */
@@ -35,25 +29,9 @@ typedef struct {
     //VM_QWORD sp;
 } REGISTERS, *PREGISTERS;
 
+// tbd: decoder
 enum RegType { mem=1, reg=0 };
 enum MemSize { byte=0b00, word=0b01, dword=0b10, qword=0b11 };
-
-typedef struct {
-    VM_BYTE index;
-    VM_BYTE type;
-    VM_BYTE memSize;
-    VM_DWORD address;
-} ARGUMENT;
-
-typedef struct {
-    VM_BYTE index;
-} INSTRUCTION;
-
-typedef struct {
-    VM_DWORD codeSize;
-    VM_DWORD dataSize;
-    VM_DWORD initialDataSize;
-} HEADER;
 
 class VirtualMachine
 {
@@ -63,11 +41,9 @@ private:
     bool isMainThread;
 
     REGISTERS registers;
-    //ADDRESS_SPACE memory;
-    HEADER header;
-
-    std::vector<char>& memory;
     std::array<int64_t, REGS_COUNT> reg;
+
+    Memory memory;
 
     // MEMORY CONTROLLERS
     VM_DWORD ip;
@@ -78,25 +54,20 @@ public:
 public:
     void setIp(VM_DWORD);
 
-    // memory
-    bool isMagicValueValid() const;
-    VM_BYTE decodeInstructionCode();
-    bool isInstructionValid(VM_BYTE) const;
-    bool isHeadeSizesValid() const;
-    bool isHeaderValid() const;
-    void printHeaderSize() const;
-
     // decoder
     VM_BYTE getBitFromCodeMemory();
     VM_QWORD getBitsFromCodeMemory(int);
     VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
 
-    void decodeHeader();
+    HEADER decodeHeader();
+    VM_BYTE decodeInstructionCode();
     ARGUMENT decodeArg();
     VM_BYTE decodeRegIndex();
     VM_BYTE decodeMemSize();
     VM_QWORD decodeConstant();
     VM_DWORD decodeAddress();
+
+    bool isInstructionValid(VM_BYTE) const;
 
     VM_BYTE convertEndian(VM_BYTE);
     VM_BYTE convertEndian(VM_BYTE, int);
