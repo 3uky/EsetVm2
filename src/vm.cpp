@@ -44,6 +44,8 @@ void VirtualMachine::run()
         cout << "Instruction: " << int(inst) << endl;
         switch(inst)
         {
+            case instruction::type::mov:
+                break;
             case instruction::type::loadConstant:
             {
                 auto constant = decoder.decodeConstant();
@@ -70,30 +72,29 @@ void VirtualMachine::run()
                 break;
             }
             case instruction::type::sub:
-            {
-            }
             case instruction::type::div:
-            {
-                break;
-            }
             case instruction::type::mod:
-            {
-                break;
-            }
             case instruction::type::mul:
-            {
-                break;
-            }
-            /*
+            case instruction::type::compare:
+            case instruction::type::jump:
+            case instruction::type::jumpEqual:
+            case instruction::type::read:
+            case instruction::type::write:
+            case instruction::type::consoleRead:
             case instruction::type::consoleWrite:
-            {
-            }
-            */
-            case instruction::type::htl:
+            case instruction::type::createThread:
+            case instruction::type::joinThread:
+            case instruction::type::sleep:
+            case instruction::type::call:
+            case instruction::type::ret:
+            case instruction::type::lock:
+            case instruction::type::unlock:
+                break;
+            case instruction::type::hlt:
                 return;
 
             default:
-                throw runtime_error(std::string("Unknown instruction\nopcode: " + inst));
+                throw runtime_error(std::string("Unknown instruction"));
         }
     }
 }

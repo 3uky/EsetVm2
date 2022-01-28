@@ -15,7 +15,7 @@ public:
     Decoder(Memory&, VM_DWORD&);
 
     HEADER decodeHeader();
-    VM_BYTE decodeInstructionCode();
+    instruction::type decodeInstructionCode();
     Argument decodeArg();
     VM_BYTE decodeRegIndex();
     VM_BYTE decodeMemSize();
@@ -31,7 +31,8 @@ private:
     VM_QWORD getBitsFromCodeMemory(int);
     VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
 
-    bool isInstructionValid(VM_BYTE) const;
+    bool isInstructionValid(VM_BYTE, int) const;
+    instruction::type getInstruction(VM_BYTE, int);
 
     VM_BYTE convertEndian(VM_BYTE);
     VM_BYTE convertEndian(VM_BYTE, int);
