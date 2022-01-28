@@ -9,11 +9,18 @@
 
 using namespace std;
 
-vector<char> loadBinary(string filename)
+void checkUserInput(int argc)
+{
+    if(argc != 2) {
+        throw runtime_error(std::string("Wrong number of input arguments\nUsage: esetvm2 {filename.evm}"));
+    }
+}
+
+vector<char> loadBinary(const string& filename)
 {
 	ifstream f(filename, ios::in | ios::binary);
     if (!f.is_open()) {
-        throw;
+        throw runtime_error(std::string("Cannot open file: ") + filename);
     }
 	vector<char> binary(istreambuf_iterator<char>(f), (istreambuf_iterator<char>()));
 	f.close();
@@ -21,12 +28,19 @@ vector<char> loadBinary(string filename)
 	return binary;
 }
 
-int main()
+int main(int argc,char* argv[])
 {
-    auto filename = "./task/samples/precompiled/math.evm";
-    auto binary = loadBinary(filename);
 
-    VirtualMachine vm(binary);
+    try {
+        //checkUserInput(argc);
+        //auto filename = argv[1];
+        const string filename = "./task/samples/precompiled/math.evm";
+        auto programBytes = loadBinary(filename);
+        VirtualMachine vm(programBytes);
+    }
+    catch (const exception& e) {
+        cout << e.what() << endl;
+    }
 
     return 0;
 }
