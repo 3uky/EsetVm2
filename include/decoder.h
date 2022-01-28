@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "memory.h"
+#include "argument.h"
 
 class Decoder
 {
@@ -15,7 +16,7 @@ public:
 
     HEADER decodeHeader();
     VM_BYTE decodeInstructionCode();
-    ARGUMENT decodeArg();
+    Argument decodeArg();
     VM_BYTE decodeRegIndex();
     VM_BYTE decodeMemSize();
     VM_QWORD decodeConstant();

@@ -1,9 +1,10 @@
 #include <string>
+#include <iostream>
 
 #include "../include/vm.h"
+#include "../include/argument.h"
 
-#include <string>
-#include <iostream>
+
 
 using namespace std;
 
@@ -27,6 +28,15 @@ void VirtualMachine::initializeMemory()
     }
 }
 
+int64_t VirtualMachine::getArgumentValue(Argument arg)
+{
+    if(arg.isRegister())
+        return reg[arg.index];
+
+    else
+        return 0;//return memory.data[arg.address];
+}
+
 void VirtualMachine::run()
 {
     setIp(20*8); // tbd improve code mem and get rid of it
@@ -41,54 +51,45 @@ void VirtualMachine::run()
             case instruction::type::loadConstant:
             {
                 auto constant = decoder.decodeConstant();
-                ARGUMENT arg1 = decoder.decodeArg();
+                auto arg1 = decoder.decodeArg();
 
-                //cout << "constant: " << constant << endl;
-                // printArgument(arg1);
-
-                if(arg1.type == argument::type::reg) {
+                if(arg1.isRegister())
                     reg[arg1.index] = constant;
-                    cout << "reg[" << arg1.index << "]: " << reg[arg1.index] << endl;
-                }
-                if(arg1.type == argument::type::mem) {
-                    //tbd
-                }
+                else if(arg1.isMemory())
+                    ;//tbd
+
                 break;
             }
             case instruction::type::add:
             {
-                std::array<ARGUMENT, 3> args;
+                Argument arg1 = decoder.decodeArg();
+                Argument arg2 = decoder.decodeArg();
+                Argument arg3 = decoder.decodeArg();
 
-                for(auto arg : args) {
-                    arg = decoder.decodeArg();
+                auto arg1v = getArgumentValue(arg1);
+                auto arg2v = getArgumentValue(arg2);
 
-                    if(arg.type == argument::type::reg) {
-                        //arg11 = reg[arg1.index];
-                        cout << "reg[" << arg.index << "]: " << reg[arg.index] << endl;
-                    }
-                    else if(arg.type == argument::type::mem) {
-                    //tbd
-                    }
-                }
+                if(arg3.isRegister())
+                    reg[arg2.index] = arg1v + arg2v;
+                else
+                    ; //tbd
+
                 break;
-
-
-
-
-
-
             }
             case instruction::type::sub:
             {
             }
             case instruction::type::div:
             {
+                break;
             }
             case instruction::type::mod:
             {
+                break;
             }
             case instruction::type::mul:
             {
+                break;
             }
             /*
             case instruction::type::consoleWrite:

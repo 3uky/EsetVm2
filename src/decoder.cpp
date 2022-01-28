@@ -1,6 +1,7 @@
-#include "decoder.h"
-
 #include <unordered_set>
+
+#include "decoder.h"
+#include "argument.h"
 
 Decoder::Decoder(Memory& mem, VM_DWORD &inputIp) : memory(mem), ip(inputIp)
 {
@@ -95,19 +96,16 @@ bool Decoder::isInstructionValid(VM_BYTE instructionCode) const
     return validInstructions.find(instructionCode) != validInstructions.end();
 }
 
-ARGUMENT Decoder::decodeArg()
+Argument Decoder::decodeArg()
 {
-    ARGUMENT arg = {0,};
-
-    arg.type = getBitFromCodeMemory();
-    if(arg.type == argument::type::reg)
-        arg.index = decodeRegIndex();
-    else if(arg.type == argument::type::mem) {
-        arg.memSize = decodeMemSize();
-        arg.index = decodeRegIndex();
+    if(getBitFromCodeMemory() == Argument::type::reg) {
+        return Argument(Argument::type::reg, decodeRegIndex());
     }
-
-    return arg;
+    else { // memory
+        VM_BYTE memSize = decodeMemSize();
+        VM_BYTE index = decodeRegIndex();
+        return Argument(Argument::type::mem, index, memSize);
+    }
 }
 
 VM_BYTE Decoder::decodeRegIndex()

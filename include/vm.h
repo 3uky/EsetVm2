@@ -7,15 +7,7 @@
 #include "global.h"
 #include "memory.h"
 #include "decoder.h"
-
-typedef struct {
-    /* Here will be stored a data, that program is needed */
-    VM_BYTE *dataArray;
-    /* Here will be stack */
-    //VM_QWORD stackArray[STACK_SIZE];
-    /* Here will be stored a program's code */
-    VM_BYTE *codeArray;
-} ADDRESS_SPACE, *PADDRESS_SPACE;
+#include "argument.h"
 
 typedef struct { // tbd
     /* Here will be stored all registers */
@@ -35,10 +27,6 @@ public:
     void run();
 
 private:
-    // new
-    bool isVMwork;
-    bool isMainThread;
-
     // MEMORY CONTROLLERS
     REGISTERS registers;
     std::array<int64_t, REGS_COUNT> reg;
@@ -50,6 +38,8 @@ private:
     void setIp(VM_DWORD);
     void initializeMemory();
     void initializeRegisters();
+
+    int64_t getArgumentValue(Argument);
 };
 
 #endif // VIRTUALMACHINE_H

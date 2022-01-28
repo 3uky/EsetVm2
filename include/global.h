@@ -10,33 +10,6 @@ typedef uint16_t VM_WORD;
 typedef uint32_t VM_DWORD;
 typedef uint64_t VM_QWORD;
 
-typedef struct {
-    VM_DWORD codeSize;
-    VM_DWORD dataSize;
-    VM_DWORD initialDataSize;
-} HEADER;
-
-typedef struct {
-    int index;
-    VM_BYTE type;
-    VM_BYTE memSize;
-    VM_DWORD address;
-} ARGUMENT;
-
-namespace argument {
-    enum type {
-        mem = 1,
-        reg = 0
-    };
-
-    enum memSize {
-        byte = 0b00,
-        word = 0b01,
-        dword = 0b10,
-        qword = 0b11
-    };
-}
-
 namespace instruction {
     enum type { // tbd Instruction class
         mov = 0b000,
