@@ -29,6 +29,8 @@ class Argument
 
         bool isRegister() const;
         bool isMemory() const;
+
+        void print() const;
 };
 
 #endif // ARGUMENT_H

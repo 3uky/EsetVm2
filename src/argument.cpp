@@ -23,6 +23,14 @@ bool Argument::isMemory() const
     return (type == type::mem);
 }
 
+void Argument::print() const
+{
+    if(isRegister())
+        std::cout << "reg[" << index << "]";
+    else if(isMemory())
+        std::cout << "memory.data[" << address << "]";
+}
+
 /*
 void Argument::print(Register &reg, Memory &mem) const
 {
