@@ -42,6 +42,7 @@ void Instruction::run(Decoder& decoder, Registers& reg, Memory& memory)
     decode(decoder);
     execute(reg, memory);
     printExpression();
+    printResult(reg, memory);
 }
 
 void Instruction::printName() const
@@ -50,10 +51,16 @@ void Instruction::printName() const
         cout << "Instruction: " << name[iType] << endl;
 }
 
+void Instruction::printResult(Registers& reg, Memory& memory) const
+{
+    if(DEBUG)
+        reg.print();
+}
+
 int64_t Instruction::getValue(Argument arg, Registers& reg, Memory& memory) const
 {
     if(arg.isRegister())
-        return reg.reg[arg.index];
+        return reg[arg.index];
     else
         return memory.data[arg.address];
 }
@@ -74,7 +81,7 @@ void LoadConstant::decode(Decoder& decoder)
 void LoadConstant::execute(Registers& reg, Memory& memory)
 {
     if(arg1.isRegister())
-        reg.reg[arg1.index] = constant;
+        reg[arg1.index] = constant;
     else if(arg1.isMemory())
         memory.data[arg1.address] = constant;
 
@@ -107,7 +114,7 @@ void Add::decode(Decoder& decoder)
 void Add::execute(Registers& reg, Memory& memory)
 {
     if(arg3.isRegister())
-        reg.reg[arg2.index] = getValue(arg1, reg, memory) + getValue(arg2, reg, memory);
+        reg[arg3.index] = getValue(arg1, reg, memory) + getValue(arg2, reg, memory);
     else
         ; //tbd
 }

@@ -30,7 +30,7 @@ protected:
 
     void printName() const;
     virtual void printExpression() const = 0;
-
+    void printResult(Registers&, Memory&) const;
 };
 
 class LoadConstant : public Instruction
