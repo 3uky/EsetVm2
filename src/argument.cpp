@@ -1,6 +1,10 @@
 #include "../include/argument.h"
 #include "../include/global.h"
 
+Argument::Argument() : index(0), type(0)
+{
+}
+
 Argument::Argument(VM_BYTE iType, int iIndex) : index(iIndex), type(iType)
 {
 }

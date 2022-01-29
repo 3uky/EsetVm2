@@ -23,6 +23,7 @@ class Argument
         VM_BYTE memSize;
         VM_DWORD address;
 
+        Argument();
         Argument(VM_BYTE, int);
         Argument(VM_BYTE, int, VM_BYTE);
 
