@@ -35,8 +35,6 @@ private:
     void setIp(VM_DWORD);
     void initializeMemory();
     void initializeRegisters();
-
-    int64_t getValue(Argument) const;
 };
 
 #endif // VIRTUALMACHINE_H

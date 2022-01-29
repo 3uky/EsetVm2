@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include "../include/vm.h"
-#include "../include/argument.h"
 #include "../include/instruction.h"
 
 using namespace std;
@@ -41,15 +40,8 @@ void VirtualMachine::run()
             }
             case instruction::type::add:
             {
-                Argument arg1 = decoder.decodeArg();
-                Argument arg2 = decoder.decodeArg();
-                Argument arg3 = decoder.decodeArg();
-
-                if(arg3.isRegister())
-                    reg[arg2.index] = getValue(arg1) + getValue(arg2);
-                else
-                    ; //tbd
-
+                Add iAdd;
+                iAdd.run(decoder, reg, memory);
                 break;
             }
             case instruction::type::sub:
@@ -83,13 +75,4 @@ void VirtualMachine::run()
 void VirtualMachine::setIp(VM_DWORD newIp)
 {
     ip = newIp;
-}
-
-
-int64_t VirtualMachine::getValue(Argument arg) const
-{
-    if(arg.isRegister())
-        return reg[arg.index];
-    else
-        return 0; //return memory.data[arg.address];
 }

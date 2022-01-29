@@ -51,6 +51,16 @@ void Instruction::printName() const
         cout << "Instruction: " << name[iType] << endl;
 }
 
+int64_t Instruction::getValue(Argument arg, std::array<int64_t, REGS_COUNT>& reg, Memory& memory) const
+{
+    if(arg.isRegister())
+        return reg[arg.index];
+    else
+        return memory.data[arg.address];
+}
+
+
+
 LoadConstant::LoadConstant()
 {
     iType = instruction::type::loadConstant;
@@ -79,5 +89,40 @@ void LoadConstant::printExpression() const
             cout << "Expression:  reg[" << arg1.index << "] = 0x" << std::hex << constant << endl;
         else if(arg1.isMemory())
             cout << "Expression:  memory.data[" << arg1.address << "] = 0x" << std::hex << constant << endl;
+    }
+}
+
+
+Add::Add()
+{
+    iType = instruction::type::add;
+}
+
+void Add::decode(Decoder& decoder)
+{
+    arg1 = decoder.decodeArg();
+    arg2 = decoder.decodeArg();
+    arg3 = decoder.decodeArg();
+}
+
+void Add::execute(std::array<int64_t, REGS_COUNT>& reg, Memory& memory)
+{
+    if(arg3.isRegister())
+        reg[arg2.index] = getValue(arg1, reg, memory) + getValue(arg2, reg, memory);
+    else
+        ; //tbd
+}
+
+void Add::printExpression() const
+{
+    if(DEBUG)
+    {
+        cout << "Expression: ";
+        arg1.print();
+        cout << " = ";
+        arg2.print();
+        cout << " + ";
+        arg3.print();
+        cout << endl;
     }
 }
