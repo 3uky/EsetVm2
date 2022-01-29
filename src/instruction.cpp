@@ -3,8 +3,6 @@
 #include <iostream>
 
 #include "../include/instruction.h"
-#include "../include/global.h"
-#include "../include/decoder.h"
 
 using namespace std;
 
@@ -37,7 +35,7 @@ Instruction::Instruction()
 {
 }
 
-void Instruction::run(Decoder& decoder, std::array<int64_t, REGS_COUNT>& reg, Memory& memory)
+void Instruction::run(Decoder& decoder, Registers& reg, Memory& memory)
 {
     printName();
     decode(decoder);
@@ -51,10 +49,10 @@ void Instruction::printName() const
         cout << "Instruction: " << name[iType] << endl;
 }
 
-int64_t Instruction::getValue(Argument arg, std::array<int64_t, REGS_COUNT>& reg, Memory& memory) const
+int64_t Instruction::getValue(Argument arg, Registers& reg, Memory& memory) const
 {
     if(arg.isRegister())
-        return reg[arg.index];
+        return reg.reg[arg.index];
     else
         return memory.data[arg.address];
 }
@@ -72,10 +70,10 @@ void LoadConstant::decode(Decoder& decoder)
     arg1 = decoder.decodeArg();
 }
 
-void LoadConstant::execute(std::array<int64_t, REGS_COUNT>& reg, Memory& memory)
+void LoadConstant::execute(Registers& reg, Memory& memory)
 {
     if(arg1.isRegister())
-        reg[arg1.index] = constant;
+        reg.reg[arg1.index] = constant;
     else if(arg1.isMemory())
         memory.data[arg1.address] = constant;
 
@@ -105,10 +103,10 @@ void Add::decode(Decoder& decoder)
     arg3 = decoder.decodeArg();
 }
 
-void Add::execute(std::array<int64_t, REGS_COUNT>& reg, Memory& memory)
+void Add::execute(Registers& reg, Memory& memory)
 {
     if(arg3.isRegister())
-        reg[arg2.index] = getValue(arg1, reg, memory) + getValue(arg2, reg, memory);
+        reg.reg[arg2.index] = getValue(arg1, reg, memory) + getValue(arg2, reg, memory);
     else
         ; //tbd
 }

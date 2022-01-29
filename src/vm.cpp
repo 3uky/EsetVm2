@@ -6,7 +6,7 @@
 
 using namespace std;
 
-VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg({0,}), ip(0), memory(programMemory), decoder(memory, ip)
+VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg(), memory(programMemory), decoder(memory, reg)
 {
     initializeMemory();
 }
@@ -68,9 +68,4 @@ void VirtualMachine::run()
                 throw runtime_error(std::string("Unknown instruction"));
         }
     }
-}
-
-void VirtualMachine::setIp(VM_DWORD newIp)
-{
-    ip = newIp;
 }

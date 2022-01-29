@@ -4,9 +4,11 @@
 #include <array>
 #include <iostream>
 
+#include "global.h"
 #include "decoder.h"
+#include "registers.h"
 #include "memory.h"
-#include "vm.h"
+#include "argument.h"
 
 class Instruction
 {
@@ -15,11 +17,11 @@ public:
 
     Instruction();
 
-    void run(Decoder&, std::array<int64_t, REGS_COUNT>&, Memory&);
+    void run(Decoder&, Registers&, Memory&);
     virtual void decode(Decoder&) = 0;
-    virtual void execute(std::array<int64_t, REGS_COUNT>&, Memory&) = 0;
+    virtual void execute(Registers&, Memory&) = 0;
 
-    int64_t getValue(Argument, std::array<int64_t, REGS_COUNT>& reg, Memory& memory) const;
+    int64_t getValue(Argument, Registers& reg, Memory& memory) const;
 
     void printName() const;
     virtual void printExpression() const = 0;
@@ -34,7 +36,7 @@ public:
     LoadConstant();
 
     virtual void decode(Decoder&);
-    virtual void execute(std::array<int64_t, REGS_COUNT>&, Memory&);
+    virtual void execute(Registers&, Memory&);
     virtual void printExpression() const;
 };
 
@@ -48,7 +50,7 @@ public:
     Add();
 
     virtual void decode(Decoder&);
-    virtual void execute(std::array<int64_t, REGS_COUNT>&, Memory&);
+    virtual void execute(Registers&, Memory&);
     virtual void printExpression() const;
 };
 

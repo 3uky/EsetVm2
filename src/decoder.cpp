@@ -1,7 +1,6 @@
 #include <map>
 
 #include "../include/decoder.h"
-#include "../include/argument.h"
 
 using namespace std;
 
@@ -30,13 +29,8 @@ std::map<std::pair<VM_BYTE, int>, instruction::type> validInstructions = {
     { {0b1111, 4}, instruction::type::unlock}
 };
 
-Decoder::Decoder(Memory& mem, VM_DWORD &inputIp) : memory(mem), ip(inputIp)
+Decoder::Decoder(Memory& mem, Registers& reg) : memory(mem), ip(reg.ip)
 {
-}
-
-void Decoder::setIp(VM_DWORD newIp)
-{
-    ip = newIp;
 }
 
 VM_BYTE Decoder::getBitFromCodeMemory()
@@ -89,11 +83,11 @@ HEADER Decoder::decodeHeader()
 {
     HEADER header = {0,};
 
-    setIp(64); // set bit pointer after magic value (8B=64b)
+    ip = 64; // set bit pointer after magic value (8B=64b)
     header.dataSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
     header.codeSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
     header.initialDataSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
-    setIp(0); // reset bit pointer for code memory decoding
+    ip = 0; // reset bit pointer for code memory decoding
     return header;
 }
 

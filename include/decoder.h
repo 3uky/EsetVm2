@@ -4,6 +4,7 @@
 #include "global.h"
 #include "memory.h"
 #include "argument.h"
+#include "registers.h"
 
 class Decoder
 {
@@ -12,7 +13,7 @@ public:
     VM_DWORD& ip;
 
 public:
-    Decoder(Memory&, VM_DWORD&);
+    Decoder(Memory&, Registers&);
 
     HEADER decodeHeader();
     instruction::type decodeInstructionCode();
@@ -25,8 +26,6 @@ public:
     void printBits(VM_DWORD);
 
 private:
-    void setIp(VM_DWORD); // tbd: replace with reference
-
     VM_BYTE getBitFromCodeMemory();
     VM_QWORD getBitsFromCodeMemory(int);
     VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
