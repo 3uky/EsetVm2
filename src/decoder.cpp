@@ -1,33 +1,49 @@
 #include <map>
 
 #include "../include/decoder.h"
+// #include "../include/decoding_tables.h" // tbd move tables here
 
 using namespace std;
 
-std::map<std::pair<VM_BYTE, int>, instruction::type> validInstructions = {
-    { {0b000, 3}, instruction::type::mov },
-    { {0b001, 3}, instruction::type::loadConstant },
-    { {0b010001, 6}, instruction::type::add },
-    { {0b010010, 6}, instruction::type::sub },
-    { {0b010011, 6}, instruction::type::div },
-    { {0b010100, 6}, instruction::type::mod },
-    { {0b010101, 6}, instruction::type::mul },
-    { {0b01100, 5}, instruction::type::compare },
-    { {0b01101, 5}, instruction::type::jump },
-    { {0b01110, 5}, instruction::type::jumpEqual },
-    { {0b10000, 5}, instruction::type::read },
-    { {0b10001, 5}, instruction::type::write },
-    { {0b10010, 5}, instruction::type::consoleRead },
-    { {0b10011, 5}, instruction::type::consoleWrite },
-    { {0b10100, 5}, instruction::type::createThread },
-    { {0b10101, 5}, instruction::type::joinThread },
-    { {0b10110, 5}, instruction::type::hlt },
-    { {0b10111, 5}, instruction::type::sleep },
-    { {0b1100, 4}, instruction::type::call },
-    { {0b1101, 4}, instruction::type::ret },
-    { {0b1110, 4}, instruction::type::lock },
-    { {0b1111, 4}, instruction::type::unlock}
-};
+namespace instruction {
+    std::map<std::pair<VM_BYTE, int>, instruction::type> table = {
+        { {0b000, 3}, type::mov },
+        { {0b001, 3}, type::loadConstant },
+        { {0b010001, 6}, type::add },
+        { {0b010010, 6}, type::sub },
+        { {0b010011, 6}, type::div },
+        { {0b010100, 6}, type::mod },
+        { {0b010101, 6}, type::mul },
+        { {0b01100, 5}, type::compare },
+        { {0b01101, 5}, type::jump },
+        { {0b01110, 5}, type::jumpEqual },
+        { {0b10000, 5}, type::read },
+        { {0b10001, 5}, type::write },
+        { {0b10010, 5}, type::consoleRead },
+        { {0b10011, 5}, type::consoleWrite },
+        { {0b10100, 5}, type::createThread },
+        { {0b10101, 5}, type::joinThread },
+        { {0b10110, 5}, type::hlt },
+        { {0b10111, 5}, type::sleep },
+        { {0b1100, 4}, type::call },
+        { {0b1101, 4}, type::ret },
+        { {0b1110, 4}, type::lock },
+        { {0b1111, 4}, type::unlock}
+    };
+}
+
+namespace argument {
+    std::map<VM_BYTE, Argument::memSize> sizeTable = {
+        { 0b00, Argument::memSize::byte },
+        { 0b01, Argument::memSize::word },
+        { 0b10, Argument::memSize::dword },
+        { 0b11, Argument::memSize::qword }
+    };
+    std::map<VM_BYTE, Argument::type> typeTable = {
+        { 1, Argument::type::mem },
+        { 0, Argument::type::reg }
+    };
+}
 
 Decoder::Decoder(Memory& mem, Registers& reg) : memory(mem), ip(reg.ip)
 {
@@ -108,23 +124,26 @@ instruction::type Decoder::decodeInstructionCode()
 
 bool Decoder::isInstructionValid(VM_BYTE iCode, int iSize) const
 {
-    return validInstructions.find(std::make_pair(iCode, iSize)) != validInstructions.end();
+    return instruction::table.find(std::make_pair(iCode, iSize)) != instruction::table.end();
 }
 
 instruction::type Decoder::getInstruction(VM_BYTE iCode, int iSize)
 {
-    return validInstructions[{iCode, iSize}];
+    return instruction::table[{iCode, iSize}];
 }
 
 Argument Decoder::decodeArg()
 {
-    if(getBitFromCodeMemory() == Argument::type::reg) {
-        return Argument(Argument::type::reg, decodeRegIndex());
+    auto argType = argument::typeTable[getBitFromCodeMemory()];
+
+    if(argType == Argument::type::reg) {
+        auto regIndex = decodeRegIndex();
+        return Argument(argType, regIndex);
     }
-    else { // memory
-        VM_BYTE memSize = decodeMemSize();
+    else { // argType == Argument::type::mem
+        auto memSize = argument::sizeTable[decodeMemSize()];
         VM_BYTE index = decodeRegIndex();
-        return Argument(Argument::type::mem, index, memSize);
+        return Argument(argType, index, memSize);
     }
 }
 

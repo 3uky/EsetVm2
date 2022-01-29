@@ -10,7 +10,7 @@ typedef uint16_t VM_WORD;
 typedef uint32_t VM_DWORD;
 typedef uint64_t VM_QWORD;
 
-namespace instruction
+namespace instruction // tbd move to instruction
 {
     enum type { mov, loadConstant, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, joinThread, hlt, sleep, call, ret, lock, unlock};
 }

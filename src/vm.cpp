@@ -11,7 +11,7 @@ VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg(), memory
     initializeMemory();
 }
 
-void VirtualMachine::initializeMemory()
+void VirtualMachine::initializeMemory() //tbd move to memory
 {
     memory.setHeader(decoder.decodeHeader());
     if(!memory.isHeaderValid()) {
