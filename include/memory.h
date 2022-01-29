@@ -30,7 +30,7 @@ public:
     void setHeader(HEADER);
     bool isHeaderValid() const;
 
-    void initialDataMemory();
+    void initiateDataMemory();
 
     void printSizes() const;
 };

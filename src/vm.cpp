@@ -18,6 +18,7 @@ void VirtualMachine::initializeMemory()
         memory.printSizes();
         throw runtime_error(std::string("Memory validation failed"));
     }
+    memory.initiateDataMemory();
 }
 
 void VirtualMachine::run()

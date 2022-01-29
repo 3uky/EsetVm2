@@ -29,10 +29,9 @@ bool Memory::isHeaderValid() const
     return isMagicValueValid() && isHeadeSizesValid();
 }
 
-void Memory::initialDataMemory()
+void Memory::initiateDataMemory()
 {
-    if(isHeadeSizesValid())
-        data.resize(header.dataSize); // prepare data memory with space initialized by 0 values
+    data.resize(header.dataSize);
 }
 
 void Memory::printSizes() const
