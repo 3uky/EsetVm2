@@ -7,7 +7,7 @@
 #include "global.h"
 #include "memory.h"
 #include "decoder.h"
-#include "argument.h"
+#include "instruction.h"
 
 typedef struct { // tbd
     /* Here will be stored all registers */
