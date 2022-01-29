@@ -35,6 +35,7 @@ int main(int argc,char* argv[])
         //checkUserInput(argc);
         //auto filename = argv[1];
         const string filename = "./task/samples/precompiled/math.evm";
+        //         const string filename = "./analysis/my.evm";
         auto programBytes = loadBinary(filename);
         VirtualMachine vm(programBytes);
         vm.run();

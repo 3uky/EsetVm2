@@ -7,11 +7,29 @@ const int HEADER_SIZE=20; // magic 8B + dataSize 4B + codeSize 4B + initialDataS
 
 Memory::Memory(vector<char>& programMemory) : binary(programMemory), code(binary.begin() + HEADER_SIZE, binary.end())
 {
+    initializeHeader();
+    checkHeader();
+    initiateDataMemory();
 }
 
-void Memory::setHeader(HEADER initHeader)
+void Memory::initializeHeader()
 {
-    header = initHeader;
+    header.codeSize = readDword(8);
+    header.dataSize = readDword(12);
+    header.initialDataSize = readDword(16);
+}
+
+void Memory::checkHeader()
+{
+    if(!isHeaderValid()) {
+        printSizes();
+        throw runtime_error(std::string("Memory validation failed"));
+    }
+}
+
+VM_DWORD Memory::readDword(int i) const
+{
+    return (binary[i]) | (binary[i+1] << 8) | (binary[i+2] << 16) | (binary[i+3] << 24);
 }
 
 bool Memory::isMagicValueValid() const
@@ -38,7 +56,7 @@ void Memory::printSizes() const
 {
     cout << "Binary file size: " << binary.size() << endl << endl;
     cout << "Magic size: " << HEADER_SIZE << endl;
-    cout << "Data size: " << int(header.dataSize) << endl;
-    cout << "Code size: " << int(header.codeSize) << endl;
-    cout << "Initial Data size: " << int(header.initialDataSize) << endl;
+    cout << "Data size: " << header.dataSize << endl;
+    cout << "Code size: " << header.codeSize << endl;
+    cout << "Initial Data size: " << header.initialDataSize << endl;
 }

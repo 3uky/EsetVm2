@@ -18,21 +18,23 @@ public:
     std::vector<char> code;
     std::vector<char> data;
 
+    Memory(std::vector<char>&);
+
 private:
     HEADER header;
 
+    void initializeHeader();
+    void checkHeader();
+    VM_DWORD readDword(int) const;
+
+    bool isHeaderValid() const;
     bool isMagicValueValid() const;
     bool isHeadeSizesValid() const;
 
-public:
-    Memory(std::vector<char>&);
-
-    void setHeader(HEADER);
-    bool isHeaderValid() const;
+    void printSizes() const;
 
     void initiateDataMemory();
 
-    void printSizes() const;
 };
 
 #endif // MEMORY_H

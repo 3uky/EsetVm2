@@ -8,17 +8,6 @@ using namespace std;
 
 VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg(), memory(programMemory), decoder(memory, reg)
 {
-    initializeMemory();
-}
-
-void VirtualMachine::initializeMemory() //tbd move to memory
-{
-    memory.setHeader(decoder.decodeHeader());
-    if(!memory.isHeaderValid()) {
-        memory.printSizes();
-        throw runtime_error(std::string("Memory validation failed"));
-    }
-    memory.initiateDataMemory();
 }
 
 void VirtualMachine::run()

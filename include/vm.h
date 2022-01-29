@@ -2,7 +2,6 @@
 #define VIRTUALMACHINE_H
 
 #include <vector>
-#include <array>
 
 #include "global.h"
 #include "registers.h"
@@ -20,9 +19,6 @@ private:
     Registers reg;
     Memory memory;
     Decoder decoder;
-
-    void initializeMemory();
-    void initializeRegisters();
 };
 
 #endif // VIRTUALMACHINE_H
