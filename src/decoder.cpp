@@ -18,7 +18,7 @@ VM_BYTE Decoder::getBitFromMemory()
     return bit;
 }
 
-VM_QWORD Decoder::getBitsFromMemory(int noBits, endian order=endian::little) // default read in little endian
+VM_QWORD Decoder::getBitsFromMemory(int noBits, endian order=endian::little)
 {
     VM_QWORD bits = 0;
 
@@ -48,7 +48,7 @@ Instruction::type Decoder::decodeInstructionCode()
         iCode = (iCode << 1) | getBitFromMemory();
     }
 
-    throw;
+    throw runtime_error(std::string("Cannot decode instruction!"));
 }
 
 bool Decoder::isInstructionValid(VM_BYTE iCode, int iSize) const
@@ -95,6 +95,10 @@ VM_QWORD Decoder::decodeConstant()
 {
     return getBitsFromMemory(64);
 }
+
+
+
+
 
 VM_BYTE Decoder::convertEndian(VM_BYTE byte)
 {
