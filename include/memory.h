@@ -29,6 +29,9 @@ public:
 
     void setHeader(HEADER);
     bool isHeaderValid() const;
+
+    void initialDataMemory();
+
     void printSizes() const;
 };
 

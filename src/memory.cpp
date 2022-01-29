@@ -28,6 +28,12 @@ bool Memory::isHeaderValid() const
     return isMagicValueValid() && isHeadeSizesValid();
 }
 
+void Memory::initialDataMemory()
+{
+    if(isHeadeSizesValid())
+        data.resize(header.dataSize); // prepare data memory with space initialized by 0 values
+}
+
 void Memory::printSizes() const
 {
     cout << "Binary file size: " << memory.size() << endl << endl;
