@@ -1,34 +1,39 @@
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 
-#include "decoder.h"
+#include <array>
 
-class Decoder;
+#include "decoder.h"
+#include "memory.h"
+#include "vm.h"
 
 class Instruction
 {
-    public:
-        instruction::type inst;
+public:
+    instruction::type iType;
 
-        Instruction();
+    Instruction();
 
-        void run();
+    void run(Decoder&, std::array<int64_t, REGS_COUNT>&, Memory&);
 
-        virtual void decode() = 0;
-        virtual void execute() = 0;
+    virtual void decode(Decoder&) = 0;
+    virtual void execute(std::array<int64_t, REGS_COUNT>&, Memory&) = 0;
 
-        void printInstruction() const;
-        virtual void printExpression() const = 0;
+    void printName() const;
+    virtual void printExpression() const = 0;
 };
 
-class iLoadConstant : public Instruction
+class LoadConstant : public Instruction
 {
-        VM_QWORD constant;
-        Argument arg1;
+public:
+    VM_QWORD constant;
+    Argument arg1;
 
-        virtual void decode(Decoder&);
-        virtual void execute();
-        virtual void printExpression() const;
+    LoadConstant();
+
+    virtual void decode(Decoder&);
+    virtual void execute(std::array<int64_t, REGS_COUNT>&, Memory&);
+    virtual void printExpression() const;
 };
 
 #endif // INSTRUCTION_H

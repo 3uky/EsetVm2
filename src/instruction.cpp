@@ -1,6 +1,5 @@
 #include <map>
 #include <string>
-
 #include <iostream>
 
 #include "../include/instruction.h"
@@ -38,40 +37,47 @@ Instruction::Instruction()
 {
 }
 
-void Instruction::run()
+void Instruction::run(Decoder& decoder, std::array<int64_t, REGS_COUNT>& reg, Memory& memory)
 {
-    if(DEBUG)
-        printInstruction();
-    decode();
-    if(DEBUG)
-        printExpression();
-    execute();
+    printName();
+    decode(decoder);
+    execute(reg, memory);
+    printExpression();
 }
 
-void Instruction::printInstruction() const
+void Instruction::printName() const
 {
-    cout << "Instruction: " << name[inst] << endl;
+    if(DEBUG)
+        cout << "Instruction: " << name[iType] << endl;
 }
 
+LoadConstant::LoadConstant()
+{
+    iType = instruction::type::loadConstant;
+}
 
-void iLoadConstant::decode(Decoder& decoder)
+void LoadConstant::decode(Decoder& decoder)
 {
     constant = decoder.decodeConstant();
     arg1 = decoder.decodeArg();
 }
 
-void iLoadConstant::execute() // &Memory
+void LoadConstant::execute(std::array<int64_t, REGS_COUNT>& reg, Memory& memory)
 {
     if(arg1.isRegister())
-        ;//reg[arg1.index] = constant;
+        reg[arg1.index] = constant;
     else if(arg1.isMemory())
-        ;//memory.data[arg1.address] = constant
+        memory.data[arg1.address] = constant;
+
 }
 
-void iLoadConstant::printExpression() const
+void LoadConstant::printExpression() const
 {
-    if(arg1.isRegister())
-        cout << "reg[" << arg1.index << "] = " <<constant;
-    else if(arg1.isMemory())
-        ;//tbd
+    if(DEBUG)
+    {
+        if(arg1.isRegister())
+            cout << "Expression:  reg[" << arg1.index << "] = 0x" << std::hex << constant << endl;
+        else if(arg1.isMemory())
+            cout << "Expression:  memory.data[" << arg1.address << "] = 0x" << std::hex << constant << endl;
+    }
 }

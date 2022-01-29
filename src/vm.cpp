@@ -3,6 +3,7 @@
 
 #include "../include/vm.h"
 #include "../include/argument.h"
+#include "../include/instruction.h"
 
 using namespace std;
 
@@ -34,14 +35,8 @@ void VirtualMachine::run()
                 break;
             case instruction::type::loadConstant:
             {
-                auto constant = decoder.decodeConstant();
-                auto arg1 = decoder.decodeArg();
-
-                if(arg1.isRegister())
-                    reg[arg1.index] = constant;
-                else if(arg1.isMemory())
-                    ;//tbd
-
+                LoadConstant test;
+                test.run(decoder, reg, memory);
                 break;
             }
             case instruction::type::add:
