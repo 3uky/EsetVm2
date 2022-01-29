@@ -21,7 +21,7 @@ bool Memory::isMagicValueValid() const
 
 bool Memory::isHeadeSizesValid() const
 {
-    return (header.dataSize >= header.initialDataSize) && ((HEADER_SIZE + header.codeSize + header.dataSize + header.initialDataSize) == binary.size());
+    return (header.dataSize >= header.initialDataSize) && ((HEADER_SIZE + header.codeSize + header.initialDataSize) == binary.size());
 }
 
 bool Memory::isHeaderValid() const
