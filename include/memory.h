@@ -14,7 +14,7 @@ typedef struct {
 class Memory
 {
 public:
-    std::vector<char>& memory;
+    std::vector<char>& binary;
     std::vector<char> code;
     std::vector<char> data;
 

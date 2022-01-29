@@ -22,8 +22,6 @@ void VirtualMachine::initializeMemory()
 
 void VirtualMachine::run()
 {
-    setIp(0); // tbd improve code mem and get rid of it
-
     for (int i=0; i < 3; i++) // while(1)
     {
         auto inst = decoder.decodeInstructionCode();

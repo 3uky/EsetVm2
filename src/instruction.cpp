@@ -86,9 +86,9 @@ void LoadConstant::printExpression() const
     if(DEBUG)
     {
         if(arg1.isRegister())
-            cout << "Expression:  reg[" << arg1.index << "] = 0x" << std::hex << constant << endl;
+            cout << "Expression : reg[" << arg1.index << "] = 0x" << std::hex << constant << endl;
         else if(arg1.isMemory())
-            cout << "Expression:  memory.data[" << arg1.address << "] = 0x" << std::hex << constant << endl;
+            cout << "Expression : memory.data[" << arg1.address << "] = 0x" << std::hex << constant << endl;
     }
 }
 
@@ -117,7 +117,7 @@ void Add::printExpression() const
 {
     if(DEBUG)
     {
-        cout << "Expression: ";
+        cout << "Expression : ";
         arg1.print();
         cout << " = ";
         arg2.print();

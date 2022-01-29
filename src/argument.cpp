@@ -30,13 +30,3 @@ void Argument::print() const
     else if(isMemory())
         std::cout << "memory.data[" << address << "]";
 }
-
-/*
-void Argument::print(Register &reg, Memory &mem) const
-{
-    if(type.isRegister)
-        cout << "reg[" << index << "]: " << reg[index] << endl;
-    else
-        cout << "mem[" << address << "]: " << mem.data[address] << endl;
-}
-*/

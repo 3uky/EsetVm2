@@ -69,7 +69,7 @@ VM_QWORD Decoder::getBitsFromCodeMemory_BigEndianOrder(int numberOfBits)
 
 VM_BYTE Decoder::getBitFromMemory() // tbd template or default argument with memory type...
 {
-    auto currentByte = memory.memory[ip / 8];
+    auto currentByte = memory.binary[ip / 8];
     auto mask = 0b10000000 >> (ip % 8);
     auto b = (currentByte & mask) >> (7 - (ip % 8));
     ip++;
@@ -93,7 +93,7 @@ HEADER Decoder::decodeHeader()
     header.dataSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
     header.codeSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
     header.initialDataSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
-
+    setIp(0); // reset bit pointer for code memory decoding
     return header;
 }
 
