@@ -3,32 +3,33 @@
 #include <iostream>
 
 #include "../include/instruction.h"
+#include "../include/decoder.h"
 
 using namespace std;
 
-std::map<instruction::type, string> name = {
-    {instruction::type::mov, "mov"},
-    {instruction::type::loadConstant, "loadConstant"},
-    {instruction::type::add, "add"},
-    {instruction::type::sub, "sub"},
-    {instruction::type::div, "div"},
-    {instruction::type::mod, "mod"},
-    {instruction::type::mul, "mul"},
-    {instruction::type::compare, "compare"},
-    {instruction::type::jump, "jump"},
-    {instruction::type::jumpEqual, "jumpEqual"},
-    {instruction::type::read, "read"},
-    {instruction::type::write, "write"},
-    {instruction::type::consoleRead, "consoleRead"},
-    {instruction::type::consoleWrite, "cosnoleWrite"},
-    {instruction::type::createThread, "createThread"},
-    {instruction::type::joinThread, "joinThread"},
-    {instruction::type::hlt, "hlt"},
-    {instruction::type::sleep, "sleep"},
-    {instruction::type::call, "call"},
-    {instruction::type::ret, "ret"},
-    {instruction::type::lock, "lock"},
-    {instruction::type::unlock, "unlock"}
+std::map<Instruction::type, string> name = {
+    {Instruction::type::mov, "mov"},
+    {Instruction::type::loadConstant, "loadConstant"},
+    {Instruction::type::add, "add"},
+    {Instruction::type::sub, "sub"},
+    {Instruction::type::div, "div"},
+    {Instruction::type::mod, "mod"},
+    {Instruction::type::mul, "mul"},
+    {Instruction::type::compare, "compare"},
+    {Instruction::type::jump, "jump"},
+    {Instruction::type::jumpEqual, "jumpEqual"},
+    {Instruction::type::read, "read"},
+    {Instruction::type::write, "write"},
+    {Instruction::type::consoleRead, "consoleRead"},
+    {Instruction::type::consoleWrite, "cosnoleWrite"},
+    {Instruction::type::createThread, "createThread"},
+    {Instruction::type::joinThread, "joinThread"},
+    {Instruction::type::hlt, "hlt"},
+    {Instruction::type::sleep, "sleep"},
+    {Instruction::type::call, "call"},
+    {Instruction::type::ret, "ret"},
+    {Instruction::type::lock, "lock"},
+    {Instruction::type::unlock, "unlock"}
 };
 
 Instruction::Instruction()
@@ -61,7 +62,7 @@ int64_t Instruction::getValue(Argument arg, Registers& reg, Memory& memory) cons
 
 LoadConstant::LoadConstant()
 {
-    iType = instruction::type::loadConstant;
+    iType = Instruction::type::loadConstant;
 }
 
 void LoadConstant::decode(Decoder& decoder)
@@ -93,7 +94,7 @@ void LoadConstant::printExpression() const
 
 Add::Add()
 {
-    iType = instruction::type::add;
+    iType = Instruction::type::add;
 }
 
 void Add::decode(Decoder& decoder)

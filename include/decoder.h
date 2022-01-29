@@ -5,6 +5,7 @@
 #include "memory.h"
 #include "argument.h"
 #include "registers.h"
+#include "instruction.h"
 
 class Decoder
 {
@@ -16,7 +17,7 @@ public:
     Decoder(Memory&, Registers&);
 
     HEADER decodeHeader();
-    instruction::type decodeInstructionCode();
+    Instruction::type decodeInstructionCode();
     Argument decodeArg();
     VM_BYTE decodeRegIndex();
     VM_BYTE decodeMemSize();
@@ -34,7 +35,7 @@ private:
     VM_QWORD getBitsFromMemory_BigEndianOrder(int);
 
     bool isInstructionValid(VM_BYTE, int) const;
-    instruction::type getInstruction(VM_BYTE, int);
+    Instruction::type getInstruction(VM_BYTE, int);
 
     VM_BYTE convertEndian(VM_BYTE);
     VM_BYTE convertEndian(VM_BYTE, int);

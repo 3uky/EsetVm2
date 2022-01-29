@@ -6,29 +6,29 @@
 using namespace std;
 
 namespace instruction {
-    std::map<std::pair<VM_BYTE, int>, instruction::type> table = {
-        { {0b000, 3}, type::mov },
-        { {0b001, 3}, type::loadConstant },
-        { {0b010001, 6}, type::add },
-        { {0b010010, 6}, type::sub },
-        { {0b010011, 6}, type::div },
-        { {0b010100, 6}, type::mod },
-        { {0b010101, 6}, type::mul },
-        { {0b01100, 5}, type::compare },
-        { {0b01101, 5}, type::jump },
-        { {0b01110, 5}, type::jumpEqual },
-        { {0b10000, 5}, type::read },
-        { {0b10001, 5}, type::write },
-        { {0b10010, 5}, type::consoleRead },
-        { {0b10011, 5}, type::consoleWrite },
-        { {0b10100, 5}, type::createThread },
-        { {0b10101, 5}, type::joinThread },
-        { {0b10110, 5}, type::hlt },
-        { {0b10111, 5}, type::sleep },
-        { {0b1100, 4}, type::call },
-        { {0b1101, 4}, type::ret },
-        { {0b1110, 4}, type::lock },
-        { {0b1111, 4}, type::unlock}
+    std::map<std::pair<VM_BYTE, int>, Instruction::type> table = {
+        { {0b000, 3}, Instruction::type::mov },
+        { {0b001, 3}, Instruction::type::loadConstant },
+        { {0b010001, 6}, Instruction::type::add },
+        { {0b010010, 6}, Instruction::type::sub },
+        { {0b010011, 6}, Instruction::type::div },
+        { {0b010100, 6}, Instruction::type::mod },
+        { {0b010101, 6}, Instruction::type::mul },
+        { {0b01100, 5}, Instruction::type::compare },
+        { {0b01101, 5}, Instruction::type::jump },
+        { {0b01110, 5}, Instruction::type::jumpEqual },
+        { {0b10000, 5}, Instruction::type::read },
+        { {0b10001, 5}, Instruction::type::write },
+        { {0b10010, 5}, Instruction::type::consoleRead },
+        { {0b10011, 5}, Instruction::type::consoleWrite },
+        { {0b10100, 5}, Instruction::type::createThread },
+        { {0b10101, 5}, Instruction::type::joinThread },
+        { {0b10110, 5}, Instruction::type::hlt },
+        { {0b10111, 5}, Instruction::type::sleep },
+        { {0b1100, 4}, Instruction::type::call },
+        { {0b1101, 4}, Instruction::type::ret },
+        { {0b1110, 4}, Instruction::type::lock },
+        { {0b1111, 4}, Instruction::type::unlock}
     };
 }
 
@@ -108,7 +108,7 @@ HEADER Decoder::decodeHeader()
 }
 
 // first check 3 bits long opcode then 4 bits, 5 bits, 6 bits long opcodes, throw if not found
-instruction::type Decoder::decodeInstructionCode()
+Instruction::type Decoder::decodeInstructionCode()
 {
     VM_BYTE iCode = getBitsFromCodeMemory_BigEndianOrder(3);
 
@@ -127,7 +127,7 @@ bool Decoder::isInstructionValid(VM_BYTE iCode, int iSize) const
     return instruction::table.find(std::make_pair(iCode, iSize)) != instruction::table.end();
 }
 
-instruction::type Decoder::getInstruction(VM_BYTE iCode, int iSize)
+Instruction::type Decoder::getInstruction(VM_BYTE iCode, int iSize)
 {
     return instruction::table[{iCode, iSize}];
 }

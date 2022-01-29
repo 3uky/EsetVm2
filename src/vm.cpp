@@ -29,40 +29,40 @@ void VirtualMachine::run()
         cout << "Instruction: " << int(inst) << endl;
         switch(inst)
         {
-            case instruction::type::mov:
+            case Instruction::type::mov:
                 break;
-            case instruction::type::loadConstant:
+            case Instruction::type::loadConstant:
             {
                 LoadConstant test;
                 test.run(decoder, reg, memory);
                 break;
             }
-            case instruction::type::add:
+            case Instruction::type::add:
             {
                 Add iAdd;
                 iAdd.run(decoder, reg, memory);
                 break;
             }
-            case instruction::type::sub:
-            case instruction::type::div:
-            case instruction::type::mod:
-            case instruction::type::mul:
-            case instruction::type::compare:
-            case instruction::type::jump:
-            case instruction::type::jumpEqual:
-            case instruction::type::read:
-            case instruction::type::write:
-            case instruction::type::consoleRead:
-            case instruction::type::consoleWrite:
-            case instruction::type::createThread:
-            case instruction::type::joinThread:
-            case instruction::type::sleep:
-            case instruction::type::call:
-            case instruction::type::ret:
-            case instruction::type::lock:
-            case instruction::type::unlock:
+            case Instruction::type::sub:
+            case Instruction::type::div:
+            case Instruction::type::mod:
+            case Instruction::type::mul:
+            case Instruction::type::compare:
+            case Instruction::type::jump:
+            case Instruction::type::jumpEqual:
+            case Instruction::type::read:
+            case Instruction::type::write:
+            case Instruction::type::consoleRead:
+            case Instruction::type::consoleWrite:
+            case Instruction::type::createThread:
+            case Instruction::type::joinThread:
+            case Instruction::type::sleep:
+            case Instruction::type::call:
+            case Instruction::type::ret:
+            case Instruction::type::lock:
+            case Instruction::type::unlock:
                 break;
-            case instruction::type::hlt:
+            case Instruction::type::hlt:
                 return;
 
             default:
