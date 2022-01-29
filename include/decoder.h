@@ -16,7 +16,6 @@ public:
 public:
     Decoder(Memory&, Registers&);
 
-    HEADER decodeHeader();
     Instruction::type decodeInstructionCode();
     Argument decodeArg();
     VM_BYTE decodeRegIndex();
@@ -24,22 +23,18 @@ public:
     VM_QWORD decodeConstant();
     VM_DWORD decodeAddress();
 
-    void printBits(VM_DWORD);
-
 private:
-    VM_BYTE getBitFromCodeMemory();
-    VM_QWORD getBitsFromCodeMemory(int);
-    VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
-
+    enum endian { little, big };
     VM_BYTE getBitFromMemory();
-    VM_QWORD getBitsFromMemory_BigEndianOrder(int);
+    VM_QWORD getBitsFromMemory(int, endian);
 
     bool isInstructionValid(VM_BYTE, int) const;
     Instruction::type getInstruction(VM_BYTE, int);
 
+    // unused
+    void printBits(VM_DWORD);
     VM_BYTE convertEndian(VM_BYTE);
     VM_BYTE convertEndian(VM_BYTE, int);
-
     VM_WORD swapWord(VM_WORD);
     VM_DWORD swapDword(VM_DWORD);
     VM_QWORD swapQword(VM_QWORD);

@@ -9,74 +9,43 @@ Decoder::Decoder(Memory& mem, Registers& reg) : memory(mem), ip(reg.ip)
 {
 }
 
-VM_BYTE Decoder::getBitFromCodeMemory()
+VM_BYTE Decoder::getBitFromMemory()
 {
     auto currentByte = memory.code[ip / 8];
     auto mask = 0b10000000 >> (ip % 8);
-    auto b = (currentByte & mask) >> (7 - (ip % 8));
+    auto bit = (currentByte & mask) >> (7 - (ip % 8));
     ip++;
-    return b;
+    return bit;
 }
 
-// https://stackoverflow.com/questions/9290823/bitwise-shift-operation-in-c-on-uint64-t-variable
-VM_QWORD Decoder::getBitsFromCodeMemory(int numberOfBits)
+VM_QWORD Decoder::getBitsFromMemory(int noBits, endian order=endian::little) // default read in little endian
 {
     VM_QWORD bits = 0;
-    for (int i=0; i < numberOfBits; i++) {
-        bits |= (VM_QWORD(getBitFromCodeMemory()) << i);
+
+    if(order == endian::little)   // 010001 -> 10001
+    {
+        for (int i=0; i < noBits; i++)
+            bits |= (VM_QWORD(getBitFromMemory()) << i);
     }
-    return bits;
-}
-
-VM_QWORD Decoder::getBitsFromCodeMemory_BigEndianOrder(int numberOfBits)
-{
-    VM_QWORD bits = 0;
-    for (int i=0; i < numberOfBits; i++) {
-        bits = (bits << 1) | VM_QWORD(getBitFromCodeMemory());
+    else if(order == endian::big) // 010001 -> 010001
+    {
+        for (int i=0; i < noBits; i++)
+            bits = (bits << 1) | VM_QWORD(getBitFromMemory());
     }
+
     return bits;
-}
-
-VM_BYTE Decoder::getBitFromMemory() // tbd template or default argument with memory type...
-{
-    auto currentByte = memory.binary[ip / 8];
-    auto mask = 0b10000000 >> (ip % 8);
-    auto b = (currentByte & mask) >> (7 - (ip % 8));
-    ip++;
-    return b;
-}
-
-VM_QWORD Decoder::getBitsFromMemory_BigEndianOrder(int numberOfBits)
-{
-    VM_QWORD bits = 0;
-    for (int i=0; i < numberOfBits; i++) {
-        bits = (bits << 1) | VM_QWORD(getBitFromMemory());
-    }
-    return bits;
-}
-
-HEADER Decoder::decodeHeader()
-{
-    HEADER header = {0,};
-
-    ip = 64; // set bit pointer after magic value (8B=64b)
-    header.dataSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
-    header.codeSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
-    header.initialDataSize = swapDword(getBitsFromMemory_BigEndianOrder(32));
-    ip = 0; // reset bit pointer for code memory decoding
-    return header;
 }
 
 // first check 3 bits long opcode then 4 bits, 5 bits, 6 bits long opcodes, throw if not found
 Instruction::type Decoder::decodeInstructionCode()
 {
-    VM_BYTE iCode = getBitsFromCodeMemory_BigEndianOrder(3);
+    VM_BYTE iCode = getBitsFromMemory(3, endian::big);
 
     for(int iSize = 3; iSize < 7; iSize++)
     {
         if(isInstructionValid(iCode, iSize))
             return getInstruction(iCode, iSize);
-        iCode = (iCode << 1) | getBitsFromCodeMemory_BigEndianOrder(1);
+        iCode = (iCode << 1) | getBitFromMemory();
     }
 
     throw;
@@ -94,7 +63,7 @@ Instruction::type Decoder::getInstruction(VM_BYTE iCode, int iSize)
 
 Argument Decoder::decodeArg()
 {
-    auto argType = argument::typeTable[getBitFromCodeMemory()];
+    auto argType = argument::typeTable[getBitFromMemory()];
 
     if(argType == Argument::type::reg) {
         auto regIndex = decodeRegIndex();
@@ -109,22 +78,22 @@ Argument Decoder::decodeArg()
 
 VM_BYTE Decoder::decodeRegIndex()
 {
-    return getBitsFromCodeMemory(4);
+    return getBitsFromMemory(4);
 }
 
 VM_BYTE Decoder::decodeMemSize()
 {
-    return getBitsFromCodeMemory_BigEndianOrder(2);
+    return getBitsFromMemory(2, endian::big);
 }
 
 VM_DWORD Decoder::decodeAddress()
 {
-    return getBitsFromCodeMemory(32);
+    return getBitsFromMemory(32);
 }
 
 VM_QWORD Decoder::decodeConstant()
 {
-    return getBitsFromCodeMemory(64);
+    return getBitsFromMemory(64);
 }
 
 VM_BYTE Decoder::convertEndian(VM_BYTE byte)
@@ -132,7 +101,7 @@ VM_BYTE Decoder::convertEndian(VM_BYTE byte)
     return convertEndian(byte, 8);
 }
 
-VM_BYTE Decoder::convertEndian(VM_BYTE byte, int numberOfBits)
+VM_BYTE Decoder::convertEndian(VM_BYTE byte, int numberOfBits=8)
 {
     VM_BYTE converted = 0;
     VM_BYTE mask = 0b10000000;
@@ -180,7 +149,7 @@ VM_QWORD Decoder::swapQword(VM_QWORD a)
 void Decoder::printBits(VM_DWORD numberOfBits)
 {
     for(VM_DWORD i=0; i < numberOfBits; i++) {
-        bool a = getBitFromCodeMemory();
+        bool a = getBitFromMemory();
 
         if (i % (8*6) == 0 && i != 0)
             std::cout << std::endl;
