@@ -4,11 +4,8 @@ using namespace std;
 
 const int HEADER_SIZE=20; // magic 8B + dataSize 4B + codeSize 4B + initialDataSize 4B = 20B
 
-Memory::Memory(vector<char>& programMemory) : memory(programMemory), code(programMemory) // tbd
+Memory::Memory(vector<char>& programMemory) : memory(programMemory), code(memory.begin() + HEADER_SIZE, memory.end())
 {
-    // initial code
-    // initial data
-    // initial initial data
 }
 
 void Memory::setHeader(HEADER initHeader)

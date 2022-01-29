@@ -9,12 +9,6 @@ using namespace std;
 VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg({0,}), ip(0), memory(programMemory), decoder(memory, ip)
 {
     initializeMemory();
-    //initializeRegisters();
-}
-
-void VirtualMachine::setIp(VM_DWORD newIp)
-{
-    ip = newIp;
 }
 
 void VirtualMachine::initializeMemory()
@@ -26,17 +20,9 @@ void VirtualMachine::initializeMemory()
     }
 }
 
-int64_t VirtualMachine::getValue(Argument arg) const
-{
-    if(arg.isRegister())
-        return reg[arg.index];
-    else
-        return 0; //return memory.data[arg.address];
-}
-
 void VirtualMachine::run()
 {
-    setIp(20*8); // tbd improve code mem and get rid of it
+    setIp(0); // tbd improve code mem and get rid of it
 
     for (int i=0; i < 3; i++) // while(1)
     {
@@ -97,4 +83,18 @@ void VirtualMachine::run()
                 throw runtime_error(std::string("Unknown instruction"));
         }
     }
+}
+
+void VirtualMachine::setIp(VM_DWORD newIp)
+{
+    ip = newIp;
+}
+
+
+int64_t VirtualMachine::getValue(Argument arg) const
+{
+    if(arg.isRegister())
+        return reg[arg.index];
+    else
+        return 0; //return memory.data[arg.address];
 }

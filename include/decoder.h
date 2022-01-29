@@ -4,6 +4,7 @@
 #include "global.h"
 #include "memory.h"
 #include "argument.h"
+#include "instruction.h"
 
 class Decoder
 {
@@ -30,6 +31,9 @@ private:
     VM_BYTE getBitFromCodeMemory();
     VM_QWORD getBitsFromCodeMemory(int);
     VM_QWORD getBitsFromCodeMemory_BigEndianOrder(int);
+
+    VM_BYTE getBitFromMemory();
+    VM_QWORD getBitsFromMemory_BigEndianOrder(int);
 
     bool isInstructionValid(VM_BYTE, int) const;
     instruction::type getInstruction(VM_BYTE, int);
