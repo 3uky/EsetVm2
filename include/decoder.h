@@ -4,7 +4,6 @@
 #include "global.h"
 #include "memory.h"
 #include "argument.h"
-#include "instruction.h"
 
 class Decoder
 {
@@ -26,7 +25,7 @@ public:
     void printBits(VM_DWORD);
 
 private:
-    void setIp(VM_DWORD);
+    void setIp(VM_DWORD); // tbd: replace with reference
 
     VM_BYTE getBitFromCodeMemory();
     VM_QWORD getBitsFromCodeMemory(int);

@@ -1,7 +1,7 @@
 #include <map>
 
-#include "decoder.h"
-#include "argument.h"
+#include "../include/decoder.h"
+#include "../include/argument.h"
 
 using namespace std;
 

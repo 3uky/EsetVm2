@@ -9,15 +9,14 @@
 #include "decoder.h"
 #include "instruction.h"
 
-typedef struct { // tbd
+typedef struct {
     /* Here will be stored all registers */
-    VM_QWORD regArray[REGS_COUNT];
-    /* Program Counter */
-    VM_QWORD pc;
+    std::array<int64_t, REGS_COUNT> arr;
     /* Instruction Pointer / Bit Pointer */
+    VM_DWORD ip;
     /* Stack Pointer */
-    //VM_QWORD sp;
-} REGISTERS, *PREGISTERS;
+    VM_QWORD sp;
+} REGISTERS;
 
 class VirtualMachine
 {
