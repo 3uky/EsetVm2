@@ -25,11 +25,11 @@ protected:
 
     virtual void decode(Decoder&) = 0;
     virtual void execute(Registers&, Memory&) = 0;
+    virtual void printExpression() const = 0;
 
     int64_t getValue(Argument, Registers& reg, Memory& memory) const;
 
     void printName() const;
-    virtual void printExpression() const = 0;
     void printResult(Registers&, Memory&) const;
 };
 
@@ -47,19 +47,96 @@ private:
     virtual void printExpression() const;
 };
 
-class Add : public Instruction
+class Hlt : public Instruction
 {
 public:
-    Add();
-
+    Hlt() { iType = Instruction::hlt; };
 private:
+    virtual void decode(Decoder&) {};
+    virtual void execute(Registers&, Memory&) { exit(0); }; //tbd
+    virtual void printExpression() const { std::cout << "Halt" << std::endl; };
+};
+
+class ConsoleWrite : public Instruction
+{
+public:
+    ConsoleWrite();
+private:
+    Argument arg1;
+
+    virtual void decode(Decoder&);
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const {};
+};
+
+class Alu : public Instruction
+{
+public:
+    Alu();
+
+protected:
     Argument arg1;
     Argument arg2;
     Argument arg3;
 
     virtual void decode(Decoder&);
-    virtual void execute(Registers&, Memory&);
+    virtual void execute(Registers&, Memory&) = 0;
     virtual void printExpression() const;
+};
+
+class Add : public Alu
+{
+public:
+    Add();
+
+private:
+    virtual void execute(Registers&, Memory&);
+};
+
+class Sub : public Alu
+{
+public:
+    Sub();
+
+private:
+    virtual void execute(Registers&, Memory&);
+};
+
+class Div : public Alu
+{
+public:
+    Div();
+
+private:
+    virtual void execute(Registers&, Memory&);
+};
+
+class Mod : public Alu
+{
+public:
+    Mod();
+
+private:
+    virtual void execute(Registers&, Memory&);
+};
+
+class Mul : public Alu
+{
+public:
+    Mul();
+
+private:
+    virtual void execute(Registers&, Memory&);
+};
+
+class Compare : public Alu
+{
+public:
+    Compare();
+
+private:
+    virtual void execute(Registers&, Memory&);
+    int getCompareResult(Registers&, Memory&) const;
 };
 
 #endif // INSTRUCTION_H

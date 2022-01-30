@@ -16,8 +16,18 @@ std::map<Instruction::type, Instruction*> VirtualMachine::initializeEngine()
 {
     std::map<Instruction::type, Instruction*> instructions = {
         { Instruction::type::add, &iAdd },
-        { Instruction::type::loadConstant, &iLoadConstant}
+        { Instruction::type::sub, &iSub},
+        { Instruction::type::div, &iDiv},
+        { Instruction::type::mod, &iMod},
+        { Instruction::type::mul, &iMul},
+        { Instruction::type::compare, &iCompare},
+        { Instruction::type::consoleWrite, &iConsoleWrite},
+        { Instruction::type::loadConstant, &iLoadConstant},
+        { Instruction::type::hlt, &iHlt}
     };
+
+    // check if is init
+
     return instructions;
 }
 
@@ -25,10 +35,11 @@ void VirtualMachine::run()
 {
     auto instructions = initializeEngine();
 
-    for (int i=0; i < 3; i++) // while(1)
+    //for (int i=0; i < 4; i++)
+    while(1)
     {
         auto iType = decoder.decodeInstructionCode();
-        cout << "Instruction: " << int(iType) << endl;
+        //cout << "Instruction: " << int(iType) << endl;
         instructions[iType]->run(decoder, reg, memory);
     }
 }

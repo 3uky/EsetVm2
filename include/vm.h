@@ -22,7 +22,14 @@ private:
     Decoder decoder;
 
     Add iAdd;
+    Sub iSub;
+    Div iDiv;
+    Mod iMod;
+    Mul iMul;
+    Compare iCompare;
     LoadConstant iLoadConstant;
+    ConsoleWrite iConsoleWrite;
+    Hlt iHlt;
 
     std::map<Instruction::type, Instruction*> initializeEngine();
 };
