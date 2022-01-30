@@ -1,0 +1,16 @@
+.dataSize 16
+.code
+
+loadConst 0, r0
+#loadConst 4, r1
+#loadConst 8, r2
+loadConst 0x0123456789ABCDEF, r3
+
+mov r3, qword[r0]
+
+consoleWrite qword[r0]
+consoleWrite dword[r0]
+#consoleWrite word[r0]
+#consoleWrite byte[r0]
+
+hlt

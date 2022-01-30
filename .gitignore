@@ -39,6 +39,6 @@ test.*
 # other folders
 bac
 bin
-analysis
 
+*~
 *.swp

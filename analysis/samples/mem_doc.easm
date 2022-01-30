@@ -1,0 +1,19 @@
+.dataSize 16
+.code
+
+#initialization of memory
+loadConst 0, r0
+loadConst 0x44332211ddccbbaa, r3
+
+# memory: aa bb cc dd 11 22 33 44 55 00 00 00 00 00 00 00 00
+mov r3, qword[r0]
+
+# should have same value as r3 0x44332211ddccbbaa
+mov qword[r0], r5
+
+consoleWrite qword[r0]
+consoleWrite dword[r0]
+consoleWrite word[r0]
+consoleWrite byte[r0]
+
+hlt

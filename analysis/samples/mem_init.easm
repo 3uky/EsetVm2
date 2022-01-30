@@ -1,0 +1,4 @@
+.dataSize 2048
+.code
+
+hlt
