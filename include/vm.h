@@ -2,6 +2,7 @@
 #define VIRTUALMACHINE_H
 
 #include <vector>
+#include <map>
 
 #include "global.h"
 #include "registers.h"
@@ -19,6 +20,11 @@ private:
     Registers reg;
     Memory memory;
     Decoder decoder;
+
+    Add iAdd;
+    LoadConstant iLoadConstant;
+
+    std::map<Instruction::type, Instruction*> initializeEngine();
 };
 
 #endif // VIRTUALMACHINE_H

@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <map>
 
 #include "../include/vm.h"
 #include "../include/instruction.h"
@@ -10,52 +11,24 @@ VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg(), memory
 {
 }
 
+// tbd: engine.instructions[type]->run() move engine to separate class
+std::map<Instruction::type, Instruction*> VirtualMachine::initializeEngine()
+{
+    std::map<Instruction::type, Instruction*> instructions = {
+        { Instruction::type::add, &iAdd },
+        { Instruction::type::loadConstant, &iLoadConstant}
+    };
+    return instructions;
+}
+
 void VirtualMachine::run()
 {
+    auto instructions = initializeEngine();
+
     for (int i=0; i < 3; i++) // while(1)
     {
-        auto inst = decoder.decodeInstructionCode();
-        cout << "Instruction: " << int(inst) << endl;
-        switch(inst)
-        {
-            case Instruction::type::mov:
-                break;
-            case Instruction::type::loadConstant:
-            {
-                LoadConstant test;
-                test.run(decoder, reg, memory);
-                break;
-            }
-            case Instruction::type::add:
-            {
-                Add iAdd;
-                iAdd.run(decoder, reg, memory);
-                break;
-            }
-            case Instruction::type::sub:
-            case Instruction::type::div:
-            case Instruction::type::mod:
-            case Instruction::type::mul:
-            case Instruction::type::compare:
-            case Instruction::type::jump:
-            case Instruction::type::jumpEqual:
-            case Instruction::type::read:
-            case Instruction::type::write:
-            case Instruction::type::consoleRead:
-            case Instruction::type::consoleWrite:
-            case Instruction::type::createThread:
-            case Instruction::type::joinThread:
-            case Instruction::type::sleep:
-            case Instruction::type::call:
-            case Instruction::type::ret:
-            case Instruction::type::lock:
-            case Instruction::type::unlock:
-                break;
-            case Instruction::type::hlt:
-                return;
-
-            default:
-                throw runtime_error(std::string("Unknown instruction"));
-        }
+        auto iType = decoder.decodeInstructionCode();
+        cout << "Instruction: " << int(iType) << endl;
+        instructions[iType]->run(decoder, reg, memory);
     }
 }
