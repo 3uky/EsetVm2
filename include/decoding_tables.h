@@ -3,6 +3,7 @@
 
 #include "instruction.h"
 #include "argument.h"
+#include "memory"
 
 namespace instruction {
     std::map<std::pair<VM_BYTE, int>, Instruction::type> table = {
@@ -32,11 +33,11 @@ namespace instruction {
 }
 
 namespace argument {
-    std::map<VM_BYTE, Argument::memSize> sizeTable = {
-        { 0b00, Argument::memSize::byte },
-        { 0b01, Argument::memSize::word },
-        { 0b10, Argument::memSize::dword },
-        { 0b11, Argument::memSize::qword }
+    std::map<VM_BYTE, Memory::msize> sizeTable = {
+        { 0b00, Memory::msize::byte },
+        { 0b01, Memory::msize::word },
+        { 0b10, Memory::msize::dword },
+        { 0b11, Memory::msize::qword }
     };
     std::map<VM_BYTE, Argument::type> typeTable = {
         { 1, Argument::type::mem },

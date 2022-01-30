@@ -2,18 +2,24 @@
 #define ARGUMENT_H
 
 #include "global.h"
+#include "registers.h"
+#include "memory.h"
 
 class Argument
 {
 public:
     enum type { mem, reg } argType;
-    enum memSize { byte, word, dword, qword } argMemSize;
+    enum Memory::msize msize;
     int index;
-    VM_DWORD address;
+    VM_QWORD value;
+    int64_t address;
 
     Argument();
     Argument(type, int);
-    Argument(type, int, memSize);
+    Argument(type, int, Memory::msize);
+
+    VM_QWORD getValue(Registers&, Memory&);
+    int64_t getAddress(Registers&);
 
     bool isRegister() const;
     bool isMemory() const;

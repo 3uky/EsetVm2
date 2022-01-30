@@ -8,7 +8,7 @@ Argument::Argument(type iType, int iIndex) : argType(iType), index(iIndex)
 {
 }
 
-Argument::Argument(type iType, int iIndex, memSize iMemSize) : argType(iType), argMemSize(iMemSize), index(iIndex)
+Argument::Argument(type iType, int iIndex, Memory::msize iMemSize) : argType(iType), msize(iMemSize), index(iIndex)
 {
 }
 
@@ -27,5 +27,22 @@ void Argument::print() const
     if(isRegister())
         std::cout << "reg[" << index << "]";
     else if(isMemory())
-        std::cout << "memory.data[" << address << "]";
+        std::cout << "memory.data[" << "reg[" << index << "]]";
+}
+
+
+VM_QWORD Argument::getValue(Registers& reg, Memory& memory)
+{
+    if(isRegister())
+        value = reg[index];
+    else
+        value = memory.read(index, msize);
+
+    return value;
+}
+
+int64_t Argument::getAddress(Registers& reg)
+{
+    address = reg[index];
+    return address;
 }
