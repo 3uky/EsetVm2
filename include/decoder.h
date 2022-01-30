@@ -18,8 +18,6 @@ public:
 
     Instruction::type decodeInstructionCode();
     Argument decodeArg();
-    VM_BYTE decodeRegIndex();
-    VM_BYTE decodeMemSize();
     VM_QWORD decodeConstant();
     VM_DWORD decodeAddress();
 
@@ -28,16 +26,11 @@ private:
     VM_BYTE getBitFromMemory();
     VM_QWORD getBitsFromMemory(int, endian);
 
+    VM_BYTE decodeRegIndex();
+    VM_BYTE decodeMemSize();
+
     bool isInstructionValid(VM_BYTE, int) const;
     Instruction::type getInstruction(VM_BYTE, int);
-
-    // unused
-    void printBits(VM_DWORD);
-    VM_BYTE convertEndian(VM_BYTE);
-    VM_BYTE convertEndian(VM_BYTE, int);
-    VM_WORD swapWord(VM_WORD);
-    VM_DWORD swapDword(VM_DWORD);
-    VM_QWORD swapQword(VM_QWORD);
 };
 
 #endif // DECODER_H

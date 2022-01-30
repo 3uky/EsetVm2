@@ -36,11 +36,9 @@ void VirtualMachine::run()
 {
     auto instructions = initializeEngine();
 
-    //for (int i=0; i < 4; i++)
     while(1)
     {
         auto iType = decoder.decodeInstructionCode();
-        //cout << "Instruction: " << int(iType) << endl;
         instructions[iType]->run(decoder, reg, memory);
         if(instructions[iType]->isHlt())
             break;
