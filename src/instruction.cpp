@@ -109,10 +109,7 @@ void ConsoleWrite::decode(Decoder& decoder)
 
 void ConsoleWrite::execute(Registers& reg, Memory& memory)
 {
-    if(arg1.isRegister())
-        cout << setfill('0') << setw(16) << right << hex << reg[arg1.index] << endl;
-    else if(arg1.isMemory())
-        memory.print(arg1.getAddress(reg), arg1.msize);
+    cout << setfill('0') << setw(16) << right << hex << arg1.getValue(reg, memory) << endl;
 }
 
 Alu::Alu()
@@ -256,19 +253,28 @@ void Mov::decode(Decoder& decoder)
 
 void Mov::execute(Registers& reg, Memory& memory)
 {
+    VM_QWORD value = arg1.getValue(reg, memory);
+
     if(arg2.isRegister())
-        reg[arg2.index] = arg1.getValue(reg, memory);
+        reg[arg2.index] = value;
     else if(arg2.isMemory())
-        memory.write(arg2.getAddress(reg), arg2.msize, arg1.getValue(reg, memory));
+        memory.write(arg2.getAddress(reg), arg2.msize, value);
 }
 
 void Mov::printExpression() const
 {
+    std::map<Memory::msize, std::string> sizeTable = {
+        {Memory::msize::byte, "byte"},
+        {Memory::msize::word, "word"},
+        {Memory::msize::dword, "dword"},
+        {Memory::msize::qword, "qword"}
+    };
+
     if(DEBUG) {
         if(arg2.isRegister())
-            cout << "Expression : reg[" << arg2.index << "] = 0x" << arg1.value << endl;
+            cout << "Expression : reg[" << arg2.index << "] = 0x" << arg1.value << " arg1.msize= " << sizeTable[arg1.msize] << endl;
         else
-            cout << "Expression : memory.data[" << arg2.address << "] = 0x" << arg1.value << endl;
+            cout << "Expression : "<< sizeTable[arg2.msize] << "[" << arg2.address << "] = 0x" << arg1.value << endl;
     }
 }
 
