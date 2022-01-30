@@ -44,9 +44,9 @@ VM_QWORD Memory::read(int64_t i, Memory::msize msize) const
     else if(msize == Memory::msize::word)
         return (data[i]) | (data[i+1] << 8);
     else if(msize == Memory::msize::dword)
-        return (data[i]) | (data[i+1] << 8) | (data[i+2] << 16) | (data[i+3] << 24);
+        return VM_QWORD(data[i]) | (VM_QWORD(data[i+1]) << 8) | (VM_QWORD(data[i+2]) << 16) | (VM_QWORD(data[i+3]) << 24);
     else {
-        VM_QWORD res = ((data[i])) | ((data[i+1]) << 8) | ((data[i+2]) << 16) | ((data[i+3]) << 24) | (VM_QWORD(data[i+4]) << 32) | (VM_QWORD(data[i+5]) << 40) | (VM_QWORD(data[i+6]) << 48) | (VM_QWORD(data[i+7]) << 56);
+        VM_QWORD res = (VM_QWORD(data[i])) | (VM_QWORD(data[i+1]) << 8) | (VM_QWORD(data[i+2]) << 16) | (VM_QWORD(data[i+3]) << 24) | (VM_QWORD(data[i+4]) << 32) | (VM_QWORD(data[i+5]) << 40) | (VM_QWORD(data[i+6]) << 48) | (VM_QWORD(data[i+7]) << 56);
         return res;
     }
 }
@@ -59,24 +59,24 @@ void Memory::write(int64_t i, Memory::msize msize, VM_QWORD value)
     if(msize == Memory::msize::byte)
         data[i] = value;
     else if(msize == Memory::msize::word) {
-        data[i] = value >> 8;
-        data[i+1] = value;
+        data[i] = value;
+        data[i+1] = value >> 8;
     }
     else if(msize == Memory::msize::dword) {
-        data[i] = value >> 24;
-        data[i+1] = value >> 16;
-        data[i+2] = value >> 8;
-        data[i+3] = value;
+        data[i] = value;
+        data[i+1] = value >> 8;
+        data[i+2] = value >> 16;
+        data[i+3] = value >> 24;
     }
     else {
-        data[i] = value >> 56;
-        data[i+1] = value >> 48;
-        data[i+2] = value >> 40;
-        data[i+3] = value >> 32;
-        data[i+4] = value >> 24;
-        data[i+5] = value >> 16;
-        data[i+6] = value >> 8;
-        data[i+7] = value;
+        data[i] = value;
+        data[i+1] = value >> 8;
+        data[i+2] = value >> 16;
+        data[i+3] = value >> 24;
+        data[i+4] = value >> 32;
+        data[i+5] = value >> 40;
+        data[i+6] = value >> 48;
+        data[i+7] = value >> 56;
     }
 }
 

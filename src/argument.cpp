@@ -36,7 +36,7 @@ VM_QWORD Argument::getValue(Registers& reg, Memory& memory)
     if(isRegister())
         value = reg[index];
     else
-        value = memory.read(index, msize);
+        value = memory.read(getAddress(reg), msize);
 
     return value;
 }
