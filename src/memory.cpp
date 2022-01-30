@@ -1,5 +1,7 @@
 #include "../include/memory.h"
 
+#include <iomanip>
+
 using namespace std;
 
 const int MAGIC_SIZE=8;
@@ -14,9 +16,9 @@ Memory::Memory(vector<char>& programMemory) : binary(programMemory), code(binary
 
 void Memory::initializeHeader()
 {
-    header.codeSize = readDword(8);
-    header.dataSize = readDword(12);
-    header.initialDataSize = readDword(16);
+    header.codeSize = readDwordForHeader(8);
+    header.dataSize = readDwordForHeader(12);
+    header.initialDataSize = readDwordForHeader(16);
 }
 
 void Memory::checkHeader()
@@ -27,9 +29,55 @@ void Memory::checkHeader()
     }
 }
 
-VM_DWORD Memory::readDword(int i) const
+VM_DWORD Memory::readDwordForHeader(int i) const
 {
     return (binary[i]) | (binary[i+1] << 8) | (binary[i+2] << 16) | (binary[i+3] << 24);
+}
+
+VM_QWORD Memory::read(int64_t i, Memory::msize msize) const
+{
+    if((i + msize) > int64_t(data.size()))
+        throw runtime_error(std::string("Memory read out of bound!"));
+
+    if(msize == Memory::msize::byte)
+        return (data[i]);
+    else if(msize == Memory::msize::word)
+        return (data[i]) | (data[i+1] << 8);
+    else if(msize == Memory::msize::dword)
+        return (data[i]) | (data[i+1] << 8) | (data[i+2] << 16) | (data[i+3] << 24);
+    else {
+        VM_QWORD res = ((data[i])) | ((data[i+1]) << 8) | ((data[i+2]) << 16) | ((data[i+3]) << 24) | (VM_QWORD(data[i+4]) << 32) | (VM_QWORD(data[i+5]) << 40) | (VM_QWORD(data[i+6]) << 48) | (VM_QWORD(data[i+7]) << 56);
+        return res;
+    }
+}
+
+void Memory::write(int64_t i, Memory::msize msize, VM_QWORD value)
+{
+    if((i + msize) > int64_t(data.size()))
+        throw runtime_error(std::string("Memory write out of bound!"));
+
+    if(msize == Memory::msize::byte)
+        data[i] = value;
+    else if(msize == Memory::msize::word) {
+        data[i] = value >> 8;
+        data[i+1] = value;
+    }
+    else if(msize == Memory::msize::dword) {
+        data[i] = value >> 24;
+        data[i+1] = value >> 16;
+        data[i+2] = value >> 8;
+        data[i+3] = value;
+    }
+    else {
+        data[i] = value >> 56;
+        data[i+1] = value >> 48;
+        data[i+2] = value >> 40;
+        data[i+3] = value >> 32;
+        data[i+4] = value >> 24;
+        data[i+5] = value >> 16;
+        data[i+6] = value >> 8;
+        data[i+7] = value;
+    }
 }
 
 bool Memory::isMagicValueValid() const
@@ -59,4 +107,19 @@ void Memory::printSizes() const
     cout << "Data size: " << header.dataSize << endl;
     cout << "Code size: " << header.codeSize << endl;
     cout << "Initial Data size: " << header.initialDataSize << endl;
+}
+
+void Memory::print() const
+{
+    std::cout << "Memory = ";
+    for(auto& byte : data)
+        std::cout << setfill('0') << setw(2) << right << std::hex << int(byte);
+    std::cout << std::endl;
+}
+
+void Memory::print(int64_t adr, Memory::msize memSize) const
+{
+    for(int i = adr; i < (adr + memSize); i++)
+        std::cout << setfill('0') << setw(2) << right << std::hex << int(data[i]);
+    std::cout << std::endl;
 }

@@ -14,18 +14,25 @@ typedef struct {
 class Memory
 {
 public:
+    enum msize { byte=1, word=2, dword=4, qword=8 };
+
     std::vector<char>& binary;
     std::vector<char> code;
-    std::vector<char> data;
+    std::vector<VM_BYTE> data;
 
     Memory(std::vector<char>&);
+
+    VM_QWORD read(int64_t, Memory::msize) const;
+    void write(int64_t, Memory::msize, VM_QWORD);
+    void print(int64_t, Memory::msize memSize) const;
+    void print() const;
 
 private:
     HEADER header;
 
     void initializeHeader();
     void checkHeader();
-    VM_DWORD readDword(int) const;
+    VM_DWORD readDwordForHeader(int) const;
 
     bool isHeaderValid() const;
     bool isMagicValueValid() const;
@@ -34,7 +41,6 @@ private:
     void printSizes() const;
 
     void initiateDataMemory();
-
 };
 
 #endif // MEMORY_H
