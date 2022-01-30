@@ -21,6 +21,7 @@ private:
     Memory memory;
     Decoder decoder;
 
+    Mov iMov;
     Add iAdd;
     Sub iSub;
     Div iDiv;

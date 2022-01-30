@@ -15,6 +15,7 @@ VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg(), memory
 std::map<Instruction::type, Instruction*> VirtualMachine::initializeEngine()
 {
     std::map<Instruction::type, Instruction*> instructions = {
+        { Instruction::type::mov, &iMov},
         { Instruction::type::add, &iAdd },
         { Instruction::type::sub, &iSub},
         { Instruction::type::div, &iDiv},
@@ -41,5 +42,7 @@ void VirtualMachine::run()
         auto iType = decoder.decodeInstructionCode();
         //cout << "Instruction: " << int(iType) << endl;
         instructions[iType]->run(decoder, reg, memory);
+        if(instructions[iType]->isHlt())
+            break;
     }
 }

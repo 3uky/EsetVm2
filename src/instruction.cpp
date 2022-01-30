@@ -55,18 +55,16 @@ void Instruction::printName() const
 void Instruction::printResult(Registers& reg, Memory& memory) const
 {
     if(DEBUG)
+    {
+        memory.print();
         reg.print();
+    }
 }
 
-int64_t Instruction::getValue(Argument arg, Registers& reg, Memory& memory) const
+bool Instruction::isHlt() const
 {
-    if(arg.isRegister())
-        return reg[arg.index];
-    else
-        return memory.data[arg.address];
+    return iType == Instruction::type::hlt;
 }
-
-
 
 LoadConstant::LoadConstant()
 {
@@ -84,7 +82,7 @@ void LoadConstant::execute(Registers& reg, Memory& memory)
     if(arg1.isRegister())
         reg[arg1.index] = constant;
     else if(arg1.isMemory())
-        memory.data[arg1.address] = constant;
+        throw runtime_error(std::string("NOT IMPLEMENTED!")); //tbd
 
 }
 
@@ -95,7 +93,7 @@ void LoadConstant::printExpression() const
         if(arg1.isRegister())
             cout << "Expression : reg[" << arg1.index << "] = 0x" << std::hex << constant << endl;
         else if(arg1.isMemory())
-            cout << "Expression : memory.data[" << arg1.address << "] = 0x" << std::hex << constant << endl;
+            throw runtime_error(std::string("NOT IMPLEMENTED!")); // tbd cout << "Expression : memory.data[" << arg1.address << "] = 0x" << std::hex << constant << endl;
     }
 }
 
@@ -111,14 +109,10 @@ void ConsoleWrite::decode(Decoder& decoder)
 
 void ConsoleWrite::execute(Registers& reg, Memory& memory)
 {
-    auto value = 0;
-
     if(arg1.isRegister())
-        value = reg[arg1.index];
+        cout << setfill('0') << setw(16) << right << hex << reg[arg1.index] << endl;
     else if(arg1.isMemory())
-        value = memory.data[arg1.address];
-
-    cout << setfill('0') << setw(16) << right << hex << value << endl;
+        memory.print(arg1.getAddress(reg), arg1.msize);
 }
 
 Alu::Alu()
@@ -163,7 +157,7 @@ Add::Add()
 void Add::execute(Registers& reg, Memory& memory)
 {
     if(arg3.isRegister())
-        reg[arg3.index] = getValue(arg1, reg, memory) + getValue(arg2, reg, memory);
+        reg[arg3.index] = arg1.getValue(reg, memory) + arg1.getValue(reg, memory);
     else
         ; //tbd
 }
@@ -176,9 +170,9 @@ Sub::Sub()
 void Sub::execute(Registers& reg, Memory& memory)
 {
     if(arg3.isRegister())
-        reg[arg3.index] = getValue(arg1, reg, memory) - getValue(arg2, reg, memory);
+        reg[arg3.index] = arg1.getValue(reg, memory) - arg2.getValue(reg, memory);
     else
-        ; //tbd
+        throw runtime_error(std::string("NOT IMPLEMENTED!")); //tbd
 }
 
 Div::Div()
@@ -189,9 +183,9 @@ Div::Div()
 void Div::execute(Registers& reg, Memory& memory)
 {
     if(arg3.isRegister())
-        reg[arg3.index] = getValue(arg1, reg, memory) / getValue(arg2, reg, memory);
+        reg[arg3.index] = arg1.getValue(reg, memory) / arg2.getValue(reg, memory);
     else
-        ; //tbd
+        throw runtime_error(std::string("NOT IMPLEMENTED!")); //tbd
 }
 
 Mod::Mod()
@@ -202,9 +196,9 @@ Mod::Mod()
 void Mod::execute(Registers& reg, Memory& memory)
 {
     if(arg3.isRegister())
-        reg[arg3.index] = getValue(arg1, reg, memory) % getValue(arg2, reg, memory);
+        reg[arg3.index] = arg1.getValue(reg, memory) % arg2.getValue(reg, memory);
     else
-        ; //tbd
+        throw runtime_error(std::string("NOT IMPLEMENTED!")); //tbd
 }
 
 Mul::Mul()
@@ -215,9 +209,9 @@ Mul::Mul()
 void Mul::execute(Registers& reg, Memory& memory)
 {
     if(arg3.isRegister())
-        reg[arg3.index] = getValue(arg1, reg, memory) * getValue(arg2, reg, memory);
+        reg[arg3.index] = arg1.getValue(reg, memory) * arg2.getValue(reg, memory);
     else
-        ; //tbd
+        throw runtime_error(std::string("NOT IMPLEMENTED!")); //tbd
 }
 
 Compare::Compare()
@@ -230,13 +224,13 @@ void Compare::execute(Registers& reg, Memory& memory)
     if(arg3.isRegister())
         reg[arg3.index] = getCompareResult(reg, memory);
     else
-        ; //tbd
+        throw runtime_error(std::string("NOT IMPLEMENTED!")); //tbd
 }
 
-int Compare::getCompareResult(Registers& reg, Memory& memory) const
+int Compare::getCompareResult(Registers& reg, Memory& memory)
 {
-    auto arg1Val = getValue(arg1, reg, memory);
-    auto arg2Val = getValue(arg2, reg, memory);
+    auto arg1Val = arg1.getValue(reg, memory);
+    auto arg2Val = arg2.getValue(reg, memory);
     auto result = 0;
 
     if(arg1Val == arg2Val)
@@ -249,7 +243,34 @@ int Compare::getCompareResult(Registers& reg, Memory& memory) const
     return result;
 }
 
+Mov::Mov()
+{
+    iType = Instruction::type::mov;
+}
 
+void Mov::decode(Decoder& decoder)
+{
+    arg1 = decoder.decodeArg();
+    arg2 = decoder.decodeArg();
+}
+
+void Mov::execute(Registers& reg, Memory& memory)
+{
+    if(arg2.isRegister())
+        reg[arg2.index] = arg1.getValue(reg, memory);
+    else if(arg2.isMemory())
+        memory.write(arg2.getAddress(reg), arg2.msize, arg1.getValue(reg, memory));
+}
+
+void Mov::printExpression() const
+{
+    if(DEBUG) {
+        if(arg2.isRegister())
+            cout << "Expression : reg[" << arg2.index << "] = 0x" << arg1.value << endl;
+        else
+            cout << "Expression : memory.data[" << arg2.address << "] = 0x" << arg1.value << endl;
+    }
+}
 
 
 

@@ -19,6 +19,7 @@ public:
     Instruction();
 
     void run(Decoder&, Registers&, Memory&);
+    bool isHlt() const;
 
 protected:
     Instruction::type iType;
@@ -26,8 +27,6 @@ protected:
     virtual void decode(Decoder&) = 0;
     virtual void execute(Registers&, Memory&) = 0;
     virtual void printExpression() const = 0;
-
-    int64_t getValue(Argument, Registers& reg, Memory& memory) const;
 
     void printName() const;
     void printResult(Registers&, Memory&) const;
@@ -53,8 +52,8 @@ public:
     Hlt() { iType = Instruction::hlt; };
 private:
     virtual void decode(Decoder&) {};
-    virtual void execute(Registers&, Memory&) { exit(0); }; //tbd
-    virtual void printExpression() const { std::cout << "Halt" << std::endl; };
+    virtual void execute(Registers&, Memory&) {};
+    virtual void printExpression() const {};
 };
 
 class ConsoleWrite : public Instruction
@@ -136,7 +135,21 @@ public:
 
 private:
     virtual void execute(Registers&, Memory&);
-    int getCompareResult(Registers&, Memory&) const;
+    int getCompareResult(Registers&, Memory&);
+};
+
+class Mov : public Instruction
+{
+public:
+    Mov();
+
+private:
+    Argument arg1;
+    Argument arg2;
+
+    virtual void decode(Decoder&);
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const;
 };
 
 #endif // INSTRUCTION_H
