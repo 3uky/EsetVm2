@@ -1,0 +1,6 @@
+.dataSize 16
+.code
+
+consoleRead r3
+
+hlt
