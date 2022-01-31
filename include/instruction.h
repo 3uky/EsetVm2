@@ -147,8 +147,11 @@ public:
     Compare();
 
 private:
+    int result;
+
     virtual void execute(Registers&, Memory&);
     int getCompareResult(Registers&, Memory&);
+    void printExpression() const;
 };
 
 class Mov : public Instruction
@@ -193,6 +196,32 @@ private:
     virtual void execute(Registers&, Memory&);
     virtual void printExpression() const;
 };
+
+class Call : public Instruction
+{
+public:
+    Call();
+
+private:
+    VM_DWORD address;
+
+    virtual void decode(Decoder&);
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const;
+};
+
+class Ret : public Instruction
+{
+public:
+    Ret();
+
+private:
+    VM_DWORD returnAddress;
+    virtual void decode(Decoder&) {};
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const;
+};
+
 
 
 

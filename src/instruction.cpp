@@ -84,7 +84,7 @@ void LoadConstant::execute(Registers& reg, Memory& memory)
 
 void LoadConstant::printExpression() const
 {
-    cout << "Expression : " << arg1.getStr() << std::hex << constant << endl;
+    cout << "Expression : " << arg1.getStr() << " = 0x" << hex << constant << endl;
 }
 
 ConsoleWrite::ConsoleWrite()
@@ -210,18 +210,27 @@ void Compare::execute(Registers& reg, Memory& memory)
 
 int Compare::getCompareResult(Registers& reg, Memory& memory)
 {
-    auto arg1Val = arg1.getValue(reg, memory);
-    auto arg2Val = arg2.getValue(reg, memory);
-    auto result = 0;
+    VM_QWORD arg1Val = arg1.getValue(reg, memory);
+    VM_QWORD arg2Val = arg2.getValue(reg, memory);
 
-    if(arg1Val == arg2Val)
+    if(VM_QWORD(arg1Val) == VM_QWORD(arg2Val))
         result = 0;
-    else if(arg1Val < arg2Val)
+    else if(VM_QWORD(arg1Val) < VM_QWORD(arg2Val))
         result = -1;
-    else if(arg1Val > arg2Val)
+    else if(VM_QWORD(arg1Val) > VM_QWORD(arg2Val))
         result = 1;
 
     return result;
+}
+
+void Compare::printExpression() const
+{
+    if(result == 0)
+        cout << "Expression : " << arg1.getStr() << " == " << arg2.getStr() << " -> " << arg3.getStr() << " = 0" << endl;
+    if(result == -1)
+        cout << "Expression : " << arg1.getStr() << " < " << arg2.getStr() << " -> " << arg3.getStr() << " = -1" << endl;
+    if(result == 1)
+        cout << "Expression : " << arg1.getStr() << " > " << arg2.getStr() << " -> " << arg3.getStr() << " = 1" << endl;
 }
 
 Mov::Mov()
@@ -293,4 +302,43 @@ void JumpEqual::printExpression() const
         cout << "Expression : jump to address " << address << endl;
     else
         cout << "Expression : values are not equal NOP" << endl;
+}
+
+
+Call::Call()
+{
+    iType = Instruction::type::call;
+}
+
+void Call::decode(Decoder& decoder)
+{
+    address = decoder.decodeAddress();
+}
+
+void Call::execute(Registers& reg, Memory& memory)
+{
+    reg.sp.push(reg.ip);
+    reg.ip = address;
+}
+
+void Call::printExpression() const
+{
+    cout << "Expression : call -> " << address << endl;
+}
+
+Ret::Ret()
+{
+    iType = Instruction::type::ret;
+}
+
+void Ret::execute(Registers& reg, Memory& memory)
+{
+     returnAddress = reg.sp.top();
+     reg.sp.pop();
+     reg.ip = returnAddress;
+}
+
+void Ret::printExpression() const
+{
+    cout << "Expression : return -> " << returnAddress << endl;
 }

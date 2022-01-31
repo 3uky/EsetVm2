@@ -29,6 +29,8 @@ private:
     Mul iMul;
     Compare iCompare;
     Jump iJump;
+    Call iCall;
+    Ret iRet;
     JumpEqual iJumpEqual;
     LoadConstant iLoadConstant;
     ConsoleWrite iConsoleWrite;

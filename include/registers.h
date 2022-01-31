@@ -2,6 +2,7 @@
 #define REGISTERS_H
 
 #include <array>
+#include <stack>
 
 #include "global.h"
 
@@ -15,7 +16,7 @@ public:
     /* Instruction Pointer / Bit Pointer */
     VM_DWORD ip;
     /* Stack Pointer */
-    VM_QWORD sp;
+    std::stack<VM_DWORD> sp;
 
     int64_t& operator[](int index) {
         return reg[index];
@@ -23,6 +24,8 @@ public:
 
     void print() const {
         std::cout << "ip = " << std::dec << ip << std::endl;
+        if(!sp.empty())
+            std::cout << "sp = " << std::dec << sp.top() << std::endl;
         for (int i=0; i<REGS_COUNT; i++)
             std::cout << "reg[" << std::dec << i << "] = 0x" << std::hex << reg[i] << std::endl;
         std::cout << std::endl;
