@@ -17,7 +17,7 @@ public:
     Argument(type, int, Memory::msize);
 
     VM_QWORD getValue(Registers&, Memory&);
-
+    void storeResult(VM_QWORD value, Registers&, Memory&);
     const std::string getStr() const;
 
     bool isRegister() const;

@@ -24,7 +24,6 @@ public:
 
     VM_QWORD read(int64_t, Memory::msize) const;
     void write(int64_t, Memory::msize, VM_QWORD);
-    void print(int64_t, Memory::msize memSize) const;
     void print() const;
 
 private:

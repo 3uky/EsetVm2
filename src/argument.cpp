@@ -33,6 +33,14 @@ VM_QWORD Argument::getValue(Registers& reg, Memory& memory)
         return memory.read(reg[index], msize);
 }
 
+void Argument::storeResult(VM_QWORD value, Registers& reg, Memory& memory)
+{
+    if(isRegister())
+        reg[index] = value;
+    else if(isMemory())
+        memory.write(reg[index], msize, value);
+}
+
 const std::string Argument::getStr() const
 {
     std::stringstream ss;
