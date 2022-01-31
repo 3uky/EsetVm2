@@ -24,7 +24,7 @@ public:
 
     VM_QWORD read(int64_t, Memory::msize) const;
     void write(int64_t, Memory::msize, VM_QWORD);
-    void print() const;
+    void printData() const;
 
 private:
     HEADER header;
@@ -33,11 +33,9 @@ private:
     void checkHeader();
     VM_DWORD readDwordForHeader(int) const;
 
-    bool isHeaderValid() const;
     bool isMagicValueValid() const;
     bool isHeadeSizesValid() const;
-
-    void printSizes() const;
+    void printHeaderSizes() const;
 
     void initiateDataMemory();
 };
