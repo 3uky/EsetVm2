@@ -5,7 +5,7 @@
 #include "registers.h"
 #include "memory.h"
 
-class Argument
+class Argument // data access argument type
 {
 public:
     enum type { mem, reg } argType;

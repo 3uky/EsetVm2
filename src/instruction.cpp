@@ -8,31 +8,6 @@
 
 using namespace std;
 
-std::map<Instruction::type, string> name = {
-    {Instruction::type::mov, "mov"},
-    {Instruction::type::loadConstant, "loadConstant"},
-    {Instruction::type::add, "add"},
-    {Instruction::type::sub, "sub"},
-    {Instruction::type::div, "div"},
-    {Instruction::type::mod, "mod"},
-    {Instruction::type::mul, "mul"},
-    {Instruction::type::compare, "compare"},
-    {Instruction::type::jump, "jump"},
-    {Instruction::type::jumpEqual, "jumpEqual"},
-    {Instruction::type::read, "read"},
-    {Instruction::type::write, "write"},
-    {Instruction::type::consoleRead, "consoleRead"},
-    {Instruction::type::consoleWrite, "consoleWrite"},
-    {Instruction::type::createThread, "createThread"},
-    {Instruction::type::joinThread, "joinThread"},
-    {Instruction::type::hlt, "hlt"},
-    {Instruction::type::sleep, "sleep"},
-    {Instruction::type::call, "call"},
-    {Instruction::type::ret, "ret"},
-    {Instruction::type::lock, "lock"},
-    {Instruction::type::unlock, "unlock"}
-};
-
 Instruction::Instruction()
 {
 }
@@ -52,12 +27,37 @@ void Instruction::run(Decoder& decoder, Registers& reg, Memory& memory)
 
 void Instruction::printName() const
 {
+    static std::map<Instruction::type, string> name = {
+        {Instruction::type::mov, "mov"},
+        {Instruction::type::loadConstant, "loadConstant"},
+        {Instruction::type::add, "add"},
+        {Instruction::type::sub, "sub"},
+        {Instruction::type::div, "div"},
+        {Instruction::type::mod, "mod"},
+        {Instruction::type::mul, "mul"},
+        {Instruction::type::compare, "compare"},
+        {Instruction::type::jump, "jump"},
+        {Instruction::type::jumpEqual, "jumpEqual"},
+        {Instruction::type::read, "read"},
+        {Instruction::type::write, "write"},
+        {Instruction::type::consoleRead, "consoleRead"},
+        {Instruction::type::consoleWrite, "consoleWrite"},
+        {Instruction::type::createThread, "createThread"},
+        {Instruction::type::joinThread, "joinThread"},
+        {Instruction::type::hlt, "hlt"},
+        {Instruction::type::sleep, "sleep"},
+        {Instruction::type::call, "call"},
+        {Instruction::type::ret, "ret"},
+        {Instruction::type::lock, "lock"},
+        {Instruction::type::unlock, "unlock"}
+    };
+
     cout << "Instruction: " << name[iType] << endl;
 }
 
 void Instruction::printResult(Registers& reg, Memory& memory) const
 {
-    memory.print();
+    memory.printData();
     reg.print();
 }
 

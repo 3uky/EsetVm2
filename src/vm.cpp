@@ -27,8 +27,6 @@ std::map<Instruction::type, Instruction*> VirtualMachine::initializeEngine()
         { Instruction::type::hlt, &iHlt}
     };
 
-    // check if is init
-
     return instructions;
 }
 

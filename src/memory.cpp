@@ -9,7 +9,7 @@ const int HEADER_SIZE=20; // magic 8B + dataSize 4B + codeSize 4B + initialDataS
 const int CODE_OFFSET=8;
 const int DATA_OFFSET=12;
 const int INIT_DATA_OFFSET=16;
-const std::string MAGIC_VALUE = "ESET-VM2";
+const string MAGIC_VALUE = "ESET-VM2";
 
 Memory::Memory(vector<char>& programMemory) : binary(programMemory), code(binary.begin() + HEADER_SIZE, binary.end())
 {
@@ -33,9 +33,9 @@ VM_DWORD Memory::readDwordForHeader(int i) const
 void Memory::checkHeader()
 {
     if(!isMagicValueValid())
-        throw runtime_error(std::string("Header magic value isn't correct!"));
+        throw runtime_error(string("Header magic value isn't correct!"));
     if(!isHeadeSizesValid())
-        throw runtime_error(std::string("Header size check failed!"));
+        throw runtime_error(string("Header size check failed!"));
 }
 
 bool Memory::isMagicValueValid() const
@@ -85,8 +85,8 @@ void Memory::printHeaderSizes() const
 
 void Memory::printData() const
 {
-    std::cout << "Memory = ";
+    cout << "Memory = ";
     for(auto& byte : data)
-        std::cout << setfill('0') << setw(2) << right << std::hex << int(byte);
-    std::cout << std::endl;
+        cout << setfill('0') << setw(2) << right << hex << int(byte);
+    cout << endl;
 }

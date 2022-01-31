@@ -48,7 +48,7 @@ Instruction::type Decoder::decodeInstructionCode()
         iCode = (iCode << 1) | getBitFromMemory();
     }
 
-    throw runtime_error(std::string("Cannot decode instruction!"));
+    throw runtime_error(string("Cannot decode instruction!"));
 }
 
 bool Decoder::isInstructionValid(VM_BYTE iCode, int iSize) const
