@@ -30,6 +30,7 @@ private:
     Compare iCompare;
     LoadConstant iLoadConstant;
     ConsoleWrite iConsoleWrite;
+    ConsoleRead iConsoleRead;
     Hlt iHlt;
 
     std::map<Instruction::type, Instruction*> initializeEngine();

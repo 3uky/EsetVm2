@@ -102,6 +102,27 @@ void ConsoleWrite::execute(Registers& reg, Memory& memory)
     cout << setfill('0') << setw(16) << right << hex << arg1.getValue(reg, memory) << endl;
 }
 
+ConsoleRead::ConsoleRead()
+{
+    iType = Instruction::type::consoleRead;
+}
+
+void ConsoleRead::decode(Decoder& decoder)
+{
+    arg1 = decoder.decodeArg();
+}
+
+void ConsoleRead::execute(Registers& reg, Memory& memory)
+{
+    cin >> value;
+    arg1.storeResult(value, reg, memory);
+}
+
+void ConsoleRead::printExpression() const
+{
+    cout << "Expression : " << arg1.getStr() << " = " << value << endl;
+}
+
 Alu::Alu()
 {
 }

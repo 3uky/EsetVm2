@@ -68,6 +68,19 @@ private:
     virtual void printExpression() const {};
 };
 
+class ConsoleRead : public Instruction
+{
+public:
+    ConsoleRead();
+private:
+    Argument arg1;
+    VM_DWORD value;
+
+    virtual void decode(Decoder&);
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const;
+};
+
 class Alu : public Instruction
 {
 public:
