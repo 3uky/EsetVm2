@@ -1,5 +1,8 @@
 #include "../include/argument.h"
 
+#include <sstream>
+#include <map>
+
 Argument::Argument() : argType(type::reg), index(0)
 {
 }
@@ -22,27 +25,28 @@ bool Argument::isMemory() const
     return (argType == type::mem);
 }
 
-void Argument::print() const
-{
-    if(isRegister())
-        std::cout << "reg[" << index << "]";
-    else if(isMemory())
-        std::cout << "memory.data[" << "reg[" << index << "]]";
-}
-
-
 VM_QWORD Argument::getValue(Registers& reg, Memory& memory)
 {
     if(isRegister())
-        value = reg[index];
+        return reg[index];
     else
-        value = memory.read(getAddress(reg), msize);
-
-    return value;
+        return memory.read(reg[index], msize);
 }
 
-int64_t Argument::getAddress(Registers& reg)
+const std::string Argument::getStr() const
 {
-    address = reg[index];
-    return address;
+    std::stringstream ss;
+    static std::map<Memory::msize, std::string> sizeTable = {
+        {Memory::msize::byte, "byte"},
+        {Memory::msize::word, "word"},
+        {Memory::msize::dword, "dword"},
+        {Memory::msize::qword, "qword"}
+    };
+
+    if(isRegister())
+        ss << "r" << index;
+    else if(isMemory())
+        ss << sizeTable[msize] << "[r" << index << "]";
+
+    return ss.str();
 }

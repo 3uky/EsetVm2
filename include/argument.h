@@ -11,20 +11,17 @@ public:
     enum type { mem, reg } argType;
     enum Memory::msize msize;
     int index;
-    VM_QWORD value;
-    int64_t address;
 
     Argument();
     Argument(type, int);
     Argument(type, int, Memory::msize);
 
     VM_QWORD getValue(Registers&, Memory&);
-    int64_t getAddress(Registers&);
+
+    const std::string getStr() const;
 
     bool isRegister() const;
     bool isMemory() const;
-
-    void print() const;
 };
 
 #endif // ARGUMENT_H

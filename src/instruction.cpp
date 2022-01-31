@@ -86,6 +86,8 @@ void LoadConstant::execute(Registers& reg, Memory& memory)
 
 }
 
+//storeResult(target, value)
+
 void LoadConstant::printExpression() const
 {
     if(DEBUG)
@@ -135,15 +137,7 @@ void Alu::printExpression() const
     };
 
     if(DEBUG)
-    {
-        cout << "Expression : ";
-        arg1.print();
-        cout << " = ";
-        arg2.print();
-        cout << operand[iType];
-        arg3.print();
-        cout << endl;
-    }
+        std::cout << "Expression : " << arg1.getStr() << " = " << arg2.getStr() << operand[iType] << arg3.getStr() << std::endl;
 }
 
 Add::Add()
@@ -258,22 +252,11 @@ void Mov::execute(Registers& reg, Memory& memory)
     if(arg2.isRegister())
         reg[arg2.index] = value;
     else if(arg2.isMemory())
-        memory.write(arg2.getAddress(reg), arg2.msize, value);
+        memory.write(reg[arg2.index], arg2.msize, value);
 }
 
 void Mov::printExpression() const
 {
-    std::map<Memory::msize, std::string> sizeTable = {
-        {Memory::msize::byte, "byte"},
-        {Memory::msize::word, "word"},
-        {Memory::msize::dword, "dword"},
-        {Memory::msize::qword, "qword"}
-    };
-
-    if(DEBUG) {
-        if(arg2.isRegister())
-            cout << "Expression : reg[" << arg2.index << "] = 0x" << arg1.value << " arg1.msize= " << sizeTable[arg1.msize] << endl;
-        else
-            cout << "Expression : "<< sizeTable[arg2.msize] << "[" << arg2.address << "] = 0x" << arg1.value << endl;
-    }
+    if(DEBUG)
+        cout << "Expression : " << arg2.getStr() << " = " << arg1.getStr() << endl;
 }
