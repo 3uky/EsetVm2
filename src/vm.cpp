@@ -22,6 +22,8 @@ std::map<Instruction::type, Instruction*> VirtualMachine::initializeEngine()
         { Instruction::type::mod, &iMod},
         { Instruction::type::mul, &iMul},
         { Instruction::type::compare, &iCompare},
+        { Instruction::type::jump, &iJump},
+        { Instruction::type::jumpEqual, &iJumpEqual},
         { Instruction::type::consoleWrite, &iConsoleWrite},
         { Instruction::type::consoleRead, &iConsoleRead},
         { Instruction::type::loadConstant, &iLoadConstant},

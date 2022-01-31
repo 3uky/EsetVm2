@@ -165,4 +165,35 @@ private:
     virtual void printExpression() const;
 };
 
+class Jump : public Instruction
+{
+public:
+    Jump();
+
+private:
+    VM_DWORD address;
+
+    virtual void decode(Decoder&);
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const;
+};
+
+class JumpEqual : public Instruction
+{
+public:
+    JumpEqual();
+
+private:
+    VM_DWORD address;
+    Argument arg1;
+    Argument arg2;
+    bool jumping;
+
+    virtual void decode(Decoder&);
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const;
+};
+
+
+
 #endif // INSTRUCTION_H

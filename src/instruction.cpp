@@ -244,3 +244,53 @@ void Mov::printExpression() const
 {
     cout << "Expression : " << arg2.getStr() << " = " << arg1.getStr() << endl;
 }
+
+Jump::Jump()
+{
+    iType = Instruction::type::jump;
+}
+
+void Jump::decode(Decoder& decoder)
+{
+    address = decoder.decodeAddress();
+}
+
+void Jump::execute(Registers& reg, Memory& memory)
+{
+    reg.ip = address;
+}
+
+void Jump::printExpression() const
+{
+    cout << "Expression : jump to address " << address << endl;
+}
+
+JumpEqual::JumpEqual() : jumping(false)
+{
+    iType = Instruction::type::jump;
+}
+
+void JumpEqual::decode(Decoder& decoder)
+{
+    address = decoder.decodeAddress();
+    arg1 = decoder.decodeArg();
+    arg2 = decoder.decodeArg();
+}
+
+void JumpEqual::execute(Registers& reg, Memory& memory)
+{
+    if (arg1.getValue(reg, memory) == arg2.getValue(reg, memory)) {
+        jumping = true;
+        reg.ip = address;
+    }
+    else
+        jumping = false;
+}
+
+void JumpEqual::printExpression() const
+{
+    if (jumping)
+        cout << "Expression : jump to address " << address << endl;
+    else
+        cout << "Expression : values are not equal NOP" << endl;
+}

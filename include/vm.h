@@ -28,6 +28,8 @@ private:
     Mod iMod;
     Mul iMul;
     Compare iCompare;
+    Jump iJump;
+    JumpEqual iJumpEqual;
     LoadConstant iLoadConstant;
     ConsoleWrite iConsoleWrite;
     ConsoleRead iConsoleRead;
