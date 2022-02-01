@@ -30,15 +30,26 @@ vector<char> loadBinary(const string& filename)
 
 int main(int argc,char* argv[])
 {
-
+    string filename;
     try {
-        //checkUserInput(argc);
-        //auto filename = argv[1];
-        //const string filename = "./task/samples/precompiled/math.evm";
-        const string filename = "./task/samples/precompiled/memory.evm";
-        //const string filename = "./analysis/samples/precompiled/my.evm";
-        //const string filename = "./analysis/samples/precompiled/my_memory.evm";
-        //const string filename = "./analysis/samples/precompiled/my_memory2.evm";
+        if(argc < 2) {
+            //const string filename = "./task/samples/precompiled/math.evm";
+            //const string filename = "./task/samples/precompiled/memory.evm";
+            //const string filename = "./task/samples/precompiled/fibonacci_loop.evm";
+            filename = "./task/samples/precompiled/xor.evm";
+            //const string filename = "./task/samples/precompiled/xor-with-stack-frame.evm";
+            //const string filename = "./analysis/samples/precompiled/console_read.evm";
+            //const string filename = "./analysis/samples/precompiled/my.evm";
+            //const string filename = "./analysis/samples/precompiled/my_memory.evm";
+            //const string filename = "./analysis/samples/precompiled/my_memory2.evm";
+            //const string filename = "./analysis/samples/precompiled/mem_store.evm";
+            cout << filename << endl;
+        }
+        else {
+            checkUserInput(argc);
+            filename = argv[1];
+        }
+
         auto programBytes = loadBinary(filename);
         VirtualMachine vm(programBytes);
         vm.run();
