@@ -85,8 +85,17 @@ void Memory::printHeaderSizes() const
 
 void Memory::printData() const
 {
-    cout << "Memory = ";
-    for(auto& byte : data)
-        cout << setfill('0') << setw(2) << right << hex << int(byte);
-    cout << endl;
+    if(MEMORY_PRINT_LIMIT > data.size())
+    {
+        cout << "Memory = ";
+        for(auto& byte : data)
+            cout << setfill('0') << setw(2) << right << hex << int(byte);
+        cout << endl;
+    }
+    else {
+        cout << "Memory = ";
+        for(size_t i = 0; i < MEMORY_PRINT_LIMIT; i++)
+            cout << setfill('0') << setw(2) << right << hex << int(data[i]);
+        cout << " ..." << endl;
+    }
 }
