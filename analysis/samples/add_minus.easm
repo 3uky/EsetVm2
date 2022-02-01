@@ -1,0 +1,18 @@
+.dataSize 16
+.code
+
+loadConst 2, r0
+loadConst 5, r1
+
+sub r0, r1, r3
+
+loadConst 7, r0
+loadConst 10, r1
+
+sub r0, r1, r4
+
+compare r3, r4, r10
+
+consoleWrite r10
+
+hlt
