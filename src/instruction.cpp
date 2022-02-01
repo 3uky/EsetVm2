@@ -150,10 +150,10 @@ void Alu::printExpression() const
         { Instruction::type::mul, " * " },
         { Instruction::type::div, " / " },
         { Instruction::type::mod, " % " },
-        { Instruction::type::compare, " == " }
+        { Instruction::type::compare, " compare " }
     };
 
-    std::cout << "Expression : " << arg1.getStr() << " = " << arg2.getStr() << operand[iType] << arg3.getStr() << std::endl;
+    std::cout << "Expression : " << arg3.getStr() << " = " << arg1.getStr() << operand[iType] << arg2.getStr() << std::endl;
 }
 
 Add::Add()
