@@ -11,31 +11,42 @@ const int DATA_OFFSET=12;
 const int INIT_DATA_OFFSET=16;
 const string MAGIC_VALUE = "ESET-VM2";
 
-Memory::Memory(vector<char>& programMemory) : binary(programMemory), code(binary.begin() + HEADER_SIZE, binary.end())
+Memory::Memory(vector<char>& programMemory) : binary(programMemory)
 {
     initializeHeader();
     checkHeader();
+    initiateCodeMemory();
     initiateDataMemory();
 }
 
 void Memory::initializeHeader()
 {
+    head.insert(head.begin(), binary.begin(), binary.begin() + HEADER_SIZE);
+
     header.codeSize = readDwordForHeader(CODE_OFFSET);
     header.dataSize = readDwordForHeader(DATA_OFFSET);
     header.initialDataSize = readDwordForHeader(INIT_DATA_OFFSET);
 }
 
-VM_DWORD Memory::readDwordForHeader(int i) const
+VM_DWORD Memory::readDwordForHeader(int a) const
 {
-    return (binary[i]) | (binary[i+1] << 8) | (binary[i+2] << 16) | (binary[i+3] << 24);
+    VM_QWORD res = 0;
+    for(int i = 0; i < 4; i++)
+        res |= (VM_QWORD(head[a + i]) << (i * 8));
+
+    return res;
 }
 
 void Memory::checkHeader()
 {
-    if(!isMagicValueValid())
+    if(!isMagicValueValid()) {
+        printHeaderSizes();
         throw runtime_error(string("Header magic value isn't correct!"));
-    if(!isHeadeSizesValid())
+    }
+    if(!isHeadeSizesValid()) {
+        printHeaderSizes();
         throw runtime_error(string("Header size check failed!"));
+    }
 }
 
 bool Memory::isMagicValueValid() const
@@ -48,9 +59,17 @@ bool Memory::isHeadeSizesValid() const
     return (header.dataSize >= header.initialDataSize) && ((HEADER_SIZE + header.codeSize + header.initialDataSize) == binary.size());
 }
 
+void Memory::initiateCodeMemory()
+{
+    code.insert(code.begin(), binary.begin() + HEADER_SIZE, binary.begin() + HEADER_SIZE + header.codeSize);
+}
+
 void Memory::initiateDataMemory()
 {
     data.resize(header.dataSize);
+
+    if(header.initialDataSize > 0)
+        data.insert(data.begin(), binary.begin() + HEADER_SIZE + header.codeSize, binary.end()); // replace vector copy
 }
 
 VM_QWORD Memory::read(int64_t adr, Memory::msize msize) const
