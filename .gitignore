@@ -34,11 +34,15 @@ main
 esetvm2
 
 # CodeBlocks
-test.*
+test.cbp
+test.depend
+test.layout
 
 # other folders
 bac
 bin
 
+# other files
+note
 *~
 *.swp
