@@ -33,6 +33,7 @@ private:
     Ret iRet;
     JumpEqual iJumpEqual;
     LoadConstant iLoadConstant;
+    Read iRead;
     ConsoleWrite iConsoleWrite;
     ConsoleRead iConsoleRead;
     Hlt iHlt;

@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 
 #include "../include/instruction.h"
 #include "../include/decoder.h"
@@ -349,4 +350,56 @@ void Ret::execute(Registers& reg, Memory& memory)
 void Ret::printExpression() const
 {
     cout << "Expression : return -> " << returnAddress << endl;
+}
+
+Read::Read()
+{
+    iType = Instruction::type::read;
+}
+
+void Read::decode(Decoder& decoder)
+{
+    arg1 = decoder.decodeArg();
+    arg2 = decoder.decodeArg();
+    arg3 = decoder.decodeArg();
+    arg4 = decoder.decodeArg();
+}
+
+void Read::execute(Registers& reg, Memory& memory)
+{
+    filename = "task/samples/crc.bin";
+    auto fileOffset = arg1.getValue(reg, memory);
+    auto noBytes = arg2.getValue(reg, memory);
+    auto storageOffset = arg3.getValue(reg, memory);
+
+    std::vector<VM_BYTE> readed;
+    auto readedNoBytes = read(filename, fileOffset, noBytes, readed);
+
+    for (size_t i = 0; i < readed.size(); i++)
+        memory.write(storageOffset+i, Memory::msize::byte, readed[i]);
+
+    arg4.storeResult(readedNoBytes, reg, memory);
+}
+
+int Read::read(const string& filename, int storageOffset, int noBytes, std::vector<VM_BYTE>& readed)
+{
+	ifstream f(filename, ios::in | ios::binary);
+
+    if (!f.is_open())
+        throw runtime_error((std::string("Cannot open file: ") + filename));
+
+    readed.resize(noBytes);
+
+    f.seekg(storageOffset);
+    f.read(reinterpret_cast<char*>(readed.data()), noBytes);
+    f.close();
+
+    readed.resize(f.gcount());
+
+	return f.gcount();
+}
+
+void Read::printExpression() const
+{
+    cout << "Expression : read " << arg1.getStr() << ", " << arg2.getStr() << ", " << arg3.getStr() << ", " << arg4.getStr() << "  file=" << filename << endl;
 }

@@ -223,7 +223,24 @@ private:
     virtual void printExpression() const;
 };
 
+class Read : public Instruction
+{
+public:
+    Read();
 
+private:
+    Argument arg1;
+    Argument arg2;
+    Argument arg3;
+    Argument arg4;
 
+    std::string filename;
+
+    virtual void decode(Decoder&);
+    virtual void execute(Registers&, Memory&);
+    virtual void printExpression() const;
+
+    int read(const std::string&, int, int, std::vector<VM_BYTE>&);
+};
 
 #endif // INSTRUCTION_H
