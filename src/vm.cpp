@@ -41,6 +41,7 @@ void VirtualMachine::run()
 
     while(1)
     {
+        reg.instcount++;
         auto iType = decoder.decodeInstructionCode();
         instructions[iType]->run(decoder, reg, memory);
         if(instructions[iType]->isHlt())

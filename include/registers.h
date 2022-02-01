@@ -22,13 +22,18 @@ public:
         return reg[index];
     }
 
+    uint64_t instcount;
+
     void print() const {
         std::cout << "ip = " << std::dec << ip << std::endl;
         if(!sp.empty())
             std::cout << "sp = " << std::dec << sp.top() << std::endl;
         for (int i=0; i<REGS_COUNT; i++)
-            std::cout << "reg[" << std::dec << i << "] = 0x" << std::hex << reg[i] << std::endl;
+            std::cout << "r[" << std::dec << i << "] = 0x" << std::hex << reg[i] << std::endl;
         std::cout << std::endl;
+    }
+    void printInstCounter() const {
+        std::cout << std::dec << instcount << ": ";
     }
 };
 
