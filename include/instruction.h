@@ -29,6 +29,7 @@ protected:
     virtual void printExpression() const = 0;
 
     void printName() const;
+    void printInstructionCounter(Registers&) const;
     void printResult(Registers&, Memory&) const;
 };
 

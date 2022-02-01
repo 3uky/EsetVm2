@@ -14,12 +14,15 @@ Instruction::Instruction()
 
 void Instruction::run(Decoder& decoder, Registers& reg, Memory& memory)
 {
+    if(DEBUG) {
+        printInstructionCounter(reg);
+        printName();
+    }
+
     decode(decoder);
     execute(reg, memory);
 
-    if(DEBUG)
-    {
-        printName();
+    if(DEBUG) {
         printExpression();
         printResult(reg, memory);
     }
@@ -53,6 +56,11 @@ void Instruction::printName() const
     };
 
     cout << "Instruction: " << name[iType] << endl;
+}
+
+void Instruction::printInstructionCounter(Registers& reg) const
+{
+    reg.printInstCounter();
 }
 
 void Instruction::printResult(Registers& reg, Memory& memory) const
@@ -120,7 +128,7 @@ void ConsoleRead::execute(Registers& reg, Memory& memory)
 
 void ConsoleRead::printExpression() const
 {
-    cout << "Expression : " << arg1.getStr() << " = " << value << endl;
+    cout << "Expression : " << arg1.getStr() << " = " << dec << value << " (0x" << hex << value << ")" << endl;
 }
 
 Alu::Alu()
@@ -210,14 +218,14 @@ void Compare::execute(Registers& reg, Memory& memory)
 
 int Compare::getCompareResult(Registers& reg, Memory& memory)
 {
-    VM_QWORD arg1Val = arg1.getValue(reg, memory);
-    VM_QWORD arg2Val = arg2.getValue(reg, memory);
+    int64_t arg1Val = arg1.getValue(reg, memory);
+    int64_t arg2Val = arg2.getValue(reg, memory);
 
-    if(VM_QWORD(arg1Val) == VM_QWORD(arg2Val))
+    if(arg1Val == arg2Val)
         result = 0;
-    else if(VM_QWORD(arg1Val) < VM_QWORD(arg2Val))
+    else if(arg1Val < arg2Val)
         result = -1;
-    else if(VM_QWORD(arg1Val) > VM_QWORD(arg2Val))
+    else if(arg1Val > arg2Val)
         result = 1;
 
     return result;
