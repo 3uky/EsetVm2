@@ -9,6 +9,7 @@
 #include "io.h"
 #include "memory.h"
 #include "decoder.h"
+#include "engine.h"
 
 class VirtualMachine
 {
@@ -22,27 +23,7 @@ private:
     IO io;
     Memory memory;
     Decoder decoder;
-
-    //Engine engine;
-
-    Mov iMov;
-    Add iAdd;
-    Sub iSub;
-    Div iDiv;
-    Mod iMod;
-    Mul iMul;
-    Compare iCompare;
-    Jump iJump;
-    Call iCall;
-    Ret iRet;
-    JumpEqual iJumpEqual;
-    LoadConstant iLoadConstant;
-    Read iRead;
-    ConsoleWrite iConsoleWrite;
-    ConsoleRead iConsoleRead;
-    Hlt iHlt;
-
-    std::map<Instruction::Type, Instruction*> initializeEngine();
+    Engine engine;
 };
 
 #endif // VIRTUALMACHINE_H
