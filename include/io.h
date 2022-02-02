@@ -17,6 +17,7 @@ public:
     unsigned int getFileSize() const;
 
 private:
+    void InitializeFilenameBinary();
     void InitializeFilesize();
 
     std::string& getFileName(Filetype);
