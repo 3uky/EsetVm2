@@ -6,29 +6,29 @@
 #include "memory"
 
 namespace instruction {
-    std::map<std::pair<VM_BYTE, int>, Instruction::type> table = {
-        { {0b000, 3}, Instruction::type::mov },
-        { {0b001, 3}, Instruction::type::loadConstant },
-        { {0b010001, 6}, Instruction::type::add },
-        { {0b010010, 6}, Instruction::type::sub },
-        { {0b010011, 6}, Instruction::type::div },
-        { {0b010100, 6}, Instruction::type::mod },
-        { {0b010101, 6}, Instruction::type::mul },
-        { {0b01100, 5}, Instruction::type::compare },
-        { {0b01101, 5}, Instruction::type::jump },
-        { {0b01110, 5}, Instruction::type::jumpEqual },
-        { {0b10000, 5}, Instruction::type::read },
-        { {0b10001, 5}, Instruction::type::write },
-        { {0b10010, 5}, Instruction::type::consoleRead },
-        { {0b10011, 5}, Instruction::type::consoleWrite },
-        { {0b10100, 5}, Instruction::type::createThread },
-        { {0b10101, 5}, Instruction::type::joinThread },
-        { {0b10110, 5}, Instruction::type::hlt },
-        { {0b10111, 5}, Instruction::type::sleep },
-        { {0b1100, 4}, Instruction::type::call },
-        { {0b1101, 4}, Instruction::type::ret },
-        { {0b1110, 4}, Instruction::type::lock },
-        { {0b1111, 4}, Instruction::type::unlock}
+    std::map<std::pair<VM_BYTE, int>, Instruction::Type> table = {
+        { {0b000, 3}, Instruction::Type::mov },
+        { {0b001, 3}, Instruction::Type::loadConstant },
+        { {0b010001, 6}, Instruction::Type::add },
+        { {0b010010, 6}, Instruction::Type::sub },
+        { {0b010011, 6}, Instruction::Type::div },
+        { {0b010100, 6}, Instruction::Type::mod },
+        { {0b010101, 6}, Instruction::Type::mul },
+        { {0b01100, 5}, Instruction::Type::compare },
+        { {0b01101, 5}, Instruction::Type::jump },
+        { {0b01110, 5}, Instruction::Type::jumpEqual },
+        { {0b10000, 5}, Instruction::Type::read },
+        { {0b10001, 5}, Instruction::Type::write },
+        { {0b10010, 5}, Instruction::Type::consoleRead },
+        { {0b10011, 5}, Instruction::Type::consoleWrite },
+        { {0b10100, 5}, Instruction::Type::createThread },
+        { {0b10101, 5}, Instruction::Type::joinThread },
+        { {0b10110, 5}, Instruction::Type::hlt },
+        { {0b10111, 5}, Instruction::Type::sleep },
+        { {0b1100, 4}, Instruction::Type::call },
+        { {0b1101, 4}, Instruction::Type::ret },
+        { {0b1110, 4}, Instruction::Type::lock },
+        { {0b1111, 4}, Instruction::Type::unlock}
     };
 }
 

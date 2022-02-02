@@ -11,25 +11,25 @@ VirtualMachine::VirtualMachine(std::string& filename) : reg(), io(filename), mem
 }
 
 // tbd: engine.instructions[type]->run() move engine to separate class
-std::map<Instruction::type, Instruction*> VirtualMachine::initializeEngine()
+std::map<Instruction::Type, Instruction*> VirtualMachine::initializeEngine()
 {
-    std::map<Instruction::type, Instruction*> instructions = {
-        { Instruction::type::mov, &iMov},
-        { Instruction::type::add, &iAdd },
-        { Instruction::type::sub, &iSub},
-        { Instruction::type::div, &iDiv},
-        { Instruction::type::mod, &iMod},
-        { Instruction::type::mul, &iMul},
-        { Instruction::type::compare, &iCompare},
-        { Instruction::type::jump, &iJump},
-        { Instruction::type::jumpEqual, &iJumpEqual},
-        { Instruction::type::call, &iCall},
-        { Instruction::type::ret, &iRet},
-        { Instruction::type::read, &iRead},
-        { Instruction::type::consoleWrite, &iConsoleWrite},
-        { Instruction::type::consoleRead, &iConsoleRead},
-        { Instruction::type::loadConstant, &iLoadConstant},
-        { Instruction::type::hlt, &iHlt}
+    std::map<Instruction::Type, Instruction*> instructions = {
+        { Instruction::Type::mov, &iMov},
+        { Instruction::Type::add, &iAdd },
+        { Instruction::Type::sub, &iSub},
+        { Instruction::Type::div, &iDiv},
+        { Instruction::Type::mod, &iMod},
+        { Instruction::Type::mul, &iMul},
+        { Instruction::Type::compare, &iCompare},
+        { Instruction::Type::jump, &iJump},
+        { Instruction::Type::jumpEqual, &iJumpEqual},
+        { Instruction::Type::call, &iCall},
+        { Instruction::Type::ret, &iRet},
+        { Instruction::Type::read, &iRead},
+        { Instruction::Type::consoleWrite, &iConsoleWrite},
+        { Instruction::Type::consoleRead, &iConsoleRead},
+        { Instruction::Type::loadConstant, &iLoadConstant},
+        { Instruction::Type::hlt, &iHlt}
     };
 
     return instructions;

@@ -31,29 +31,29 @@ void Instruction::run(Decoder& decoder, Registers& reg, Memory& memory)
 
 void Instruction::printName() const
 {
-    static std::map<Instruction::type, string> name = {
-        {Instruction::type::mov, "mov"},
-        {Instruction::type::loadConstant, "loadConstant"},
-        {Instruction::type::add, "add"},
-        {Instruction::type::sub, "sub"},
-        {Instruction::type::div, "div"},
-        {Instruction::type::mod, "mod"},
-        {Instruction::type::mul, "mul"},
-        {Instruction::type::compare, "compare"},
-        {Instruction::type::jump, "jump"},
-        {Instruction::type::jumpEqual, "jumpEqual"},
-        {Instruction::type::read, "read"},
-        {Instruction::type::write, "write"},
-        {Instruction::type::consoleRead, "consoleRead"},
-        {Instruction::type::consoleWrite, "consoleWrite"},
-        {Instruction::type::createThread, "createThread"},
-        {Instruction::type::joinThread, "joinThread"},
-        {Instruction::type::hlt, "hlt"},
-        {Instruction::type::sleep, "sleep"},
-        {Instruction::type::call, "call"},
-        {Instruction::type::ret, "ret"},
-        {Instruction::type::lock, "lock"},
-        {Instruction::type::unlock, "unlock"}
+    static std::map<Instruction::Type, string> name = {
+        {Instruction::Type::mov, "mov"},
+        {Instruction::Type::loadConstant, "loadConstant"},
+        {Instruction::Type::add, "add"},
+        {Instruction::Type::sub, "sub"},
+        {Instruction::Type::div, "div"},
+        {Instruction::Type::mod, "mod"},
+        {Instruction::Type::mul, "mul"},
+        {Instruction::Type::compare, "compare"},
+        {Instruction::Type::jump, "jump"},
+        {Instruction::Type::jumpEqual, "jumpEqual"},
+        {Instruction::Type::read, "read"},
+        {Instruction::Type::write, "write"},
+        {Instruction::Type::consoleRead, "consoleRead"},
+        {Instruction::Type::consoleWrite, "consoleWrite"},
+        {Instruction::Type::createThread, "createThread"},
+        {Instruction::Type::joinThread, "joinThread"},
+        {Instruction::Type::hlt, "hlt"},
+        {Instruction::Type::sleep, "sleep"},
+        {Instruction::Type::call, "call"},
+        {Instruction::Type::ret, "ret"},
+        {Instruction::Type::lock, "lock"},
+        {Instruction::Type::unlock, "unlock"}
     };
 
     cout << "Instruction: " << name[iType] << endl;
@@ -72,12 +72,12 @@ void Instruction::printResult(Registers& reg, Memory& memory) const
 
 bool Instruction::isHlt() const
 {
-    return iType == Instruction::type::hlt;
+    return iType == Instruction::Type::hlt;
 }
 
 LoadConstant::LoadConstant()
 {
-    iType = Instruction::type::loadConstant;
+    iType = Instruction::Type::loadConstant;
 }
 
 void LoadConstant::decode(Decoder& decoder)
@@ -98,7 +98,7 @@ void LoadConstant::printExpression() const
 
 ConsoleWrite::ConsoleWrite()
 {
-    iType = Instruction::type::consoleWrite;
+    iType = Instruction::Type::consoleWrite;
 }
 
 void ConsoleWrite::decode(Decoder& decoder)
@@ -113,7 +113,7 @@ void ConsoleWrite::execute(Registers& reg, Memory& memory)
 
 ConsoleRead::ConsoleRead()
 {
-    iType = Instruction::type::consoleRead;
+    iType = Instruction::Type::consoleRead;
 }
 
 void ConsoleRead::decode(Decoder& decoder)
@@ -145,13 +145,13 @@ void Alu::decode(Decoder& decoder)
 
 void Alu::printExpression() const
 {
-    static map<Instruction::type, std::string> operand = {
-        { Instruction::type::add, " + " },
-        { Instruction::type::sub, " - " },
-        { Instruction::type::mul, " * " },
-        { Instruction::type::div, " / " },
-        { Instruction::type::mod, " % " },
-        { Instruction::type::compare, " compare " }
+    static map<Instruction::Type, std::string> operand = {
+        { Instruction::Type::add, " + " },
+        { Instruction::Type::sub, " - " },
+        { Instruction::Type::mul, " * " },
+        { Instruction::Type::div, " / " },
+        { Instruction::Type::mod, " % " },
+        { Instruction::Type::compare, " compare " }
     };
 
     std::cout << "Expression : " << arg3.getStr() << " = " << arg1.getStr() << operand[iType] << arg2.getStr() << std::endl;
@@ -159,7 +159,7 @@ void Alu::printExpression() const
 
 Add::Add()
 {
-    iType = Instruction::type::add;
+    iType = Instruction::Type::add;
 }
 
 void Add::execute(Registers& reg, Memory& memory)
@@ -169,7 +169,7 @@ void Add::execute(Registers& reg, Memory& memory)
 
 Sub::Sub()
 {
-    iType = Instruction::type::sub;
+    iType = Instruction::Type::sub;
 }
 
 void Sub::execute(Registers& reg, Memory& memory)
@@ -179,7 +179,7 @@ void Sub::execute(Registers& reg, Memory& memory)
 
 Div::Div()
 {
-    iType = Instruction::type::div;
+    iType = Instruction::Type::div;
 }
 
 void Div::execute(Registers& reg, Memory& memory)
@@ -189,7 +189,7 @@ void Div::execute(Registers& reg, Memory& memory)
 
 Mod::Mod()
 {
-    iType = Instruction::type::mod;
+    iType = Instruction::Type::mod;
 }
 
 void Mod::execute(Registers& reg, Memory& memory)
@@ -199,7 +199,7 @@ void Mod::execute(Registers& reg, Memory& memory)
 
 Mul::Mul()
 {
-    iType = Instruction::type::mul;
+    iType = Instruction::Type::mul;
 }
 
 void Mul::execute(Registers& reg, Memory& memory)
@@ -209,7 +209,7 @@ void Mul::execute(Registers& reg, Memory& memory)
 
 Compare::Compare()
 {
-    iType = Instruction::type::compare;
+    iType = Instruction::Type::compare;
 }
 
 void Compare::execute(Registers& reg, Memory& memory)
@@ -244,7 +244,7 @@ void Compare::printExpression() const
 
 Mov::Mov()
 {
-    iType = Instruction::type::mov;
+    iType = Instruction::Type::mov;
 }
 
 void Mov::decode(Decoder& decoder)
@@ -265,7 +265,7 @@ void Mov::printExpression() const
 
 Jump::Jump()
 {
-    iType = Instruction::type::jump;
+    iType = Instruction::Type::jump;
 }
 
 void Jump::decode(Decoder& decoder)
@@ -285,7 +285,7 @@ void Jump::printExpression() const
 
 JumpEqual::JumpEqual() : jumping(false)
 {
-    iType = Instruction::type::jump;
+    iType = Instruction::Type::jump;
 }
 
 void JumpEqual::decode(Decoder& decoder)
@@ -316,7 +316,7 @@ void JumpEqual::printExpression() const
 
 Call::Call()
 {
-    iType = Instruction::type::call;
+    iType = Instruction::Type::call;
 }
 
 void Call::decode(Decoder& decoder)
@@ -337,7 +337,7 @@ void Call::printExpression() const
 
 Ret::Ret()
 {
-    iType = Instruction::type::ret;
+    iType = Instruction::Type::ret;
 }
 
 void Ret::execute(Registers& reg, Memory& memory)
@@ -354,7 +354,7 @@ void Ret::printExpression() const
 
 Read::Read()
 {
-    iType = Instruction::type::read;
+    iType = Instruction::Type::read;
 }
 
 void Read::decode(Decoder& decoder)

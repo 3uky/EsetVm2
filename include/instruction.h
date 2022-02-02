@@ -14,7 +14,7 @@ class Decoder;
 class Instruction
 {
 public:
-    enum type { mov, loadConstant, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, joinThread, hlt, sleep, call, ret, lock, unlock};
+    enum Type { mov, loadConstant, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, joinThread, hlt, sleep, call, ret, lock, unlock};
 
     Instruction();
 
@@ -22,7 +22,7 @@ public:
     bool isHlt() const;
 
 protected:
-    Instruction::type iType;
+    Instruction::Type iType;
 
     virtual void decode(Decoder&) = 0;
     virtual void execute(Registers&, Memory&) = 0;

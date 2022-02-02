@@ -37,7 +37,7 @@ VM_QWORD Decoder::getBitsFromMemory(int noBits, endian order=endian::little)
 }
 
 // first check 3 bits long opcode then 4 bits, 5 bits, 6 bits long opcodes, throw if not found
-Instruction::type Decoder::decodeInstructionCode()
+Instruction::Type Decoder::decodeInstructionCode()
 {
     VM_BYTE iCode = getBitsFromMemory(3, endian::big);
 
@@ -56,7 +56,7 @@ bool Decoder::isInstructionValid(VM_BYTE iCode, int iSize) const
     return instruction::table.find(std::make_pair(iCode, iSize)) != instruction::table.end();
 }
 
-Instruction::type Decoder::getInstruction(VM_BYTE iCode, int iSize)
+Instruction::Type Decoder::getInstruction(VM_BYTE iCode, int iSize)
 {
     return instruction::table[{iCode, iSize}];
 }

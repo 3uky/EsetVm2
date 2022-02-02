@@ -42,7 +42,7 @@ private:
     ConsoleRead iConsoleRead;
     Hlt iHlt;
 
-    std::map<Instruction::type, Instruction*> initializeEngine();
+    std::map<Instruction::Type, Instruction*> initializeEngine();
 };
 
 #endif // VIRTUALMACHINE_H

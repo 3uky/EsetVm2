@@ -16,7 +16,7 @@ public:
 public:
     Decoder(Memory&, Registers&);
 
-    Instruction::type decodeInstructionCode();
+    Instruction::Type decodeInstructionCode();
     Argument decodeArg();
     VM_QWORD decodeConstant();
     VM_DWORD decodeAddress();
@@ -30,7 +30,7 @@ private:
     VM_BYTE decodeMemSize();
 
     bool isInstructionValid(VM_BYTE, int) const;
-    Instruction::type getInstruction(VM_BYTE, int);
+    Instruction::Type getInstruction(VM_BYTE, int);
 };
 
 #endif // DECODER_H
