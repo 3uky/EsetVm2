@@ -54,10 +54,10 @@ LoadConstant::LoadConstant(Engine& eng) : Instruction(eng)
     iType = Instruction::Type::loadConstant;
 }
 
-void LoadConstant::decode()
+void LoadConstant::decode(Registers& reg)
 {
-    constant = engine.decoder.decodeConstant();
-    arg1 = engine.decoder.decodeArg();
+    constant = engine.decoder.decodeConstant(reg);
+    arg1 = engine.decoder.decodeArg(reg);
 }
 
 void LoadConstant::execute(Registers& reg)
@@ -75,9 +75,9 @@ ConsoleWrite::ConsoleWrite(Engine& eng) : Instruction(eng)
     iType = Instruction::Type::consoleWrite;
 }
 
-void ConsoleWrite::decode()
+void ConsoleWrite::decode(Registers& reg)
 {
-    arg1 = engine.decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg(reg);
 }
 
 void ConsoleWrite::execute(Registers& reg)
@@ -90,9 +90,9 @@ ConsoleRead::ConsoleRead(Engine& eng) : Instruction(eng)
     iType = Instruction::Type::consoleRead;
 }
 
-void ConsoleRead::decode()
+void ConsoleRead::decode(Registers& reg)
 {
-    arg1 = engine.decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg(reg);
 }
 
 void ConsoleRead::execute(Registers& reg)
@@ -110,11 +110,11 @@ Alu::Alu(Engine& eng) : Instruction(eng)
 {
 }
 
-void Alu::decode()
+void Alu::decode(Registers& reg)
 {
-    arg1 = engine.decoder.decodeArg();
-    arg2 = engine.decoder.decodeArg();
-    arg3 = engine.decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg(reg);
+    arg2 = engine.decoder.decodeArg(reg);
+    arg3 = engine.decoder.decodeArg(reg);
 }
 
 void Alu::printExpression() const
@@ -221,10 +221,10 @@ Mov::Mov(Engine& eng) : Instruction(eng)
     iType = Instruction::Type::mov;
 }
 
-void Mov::decode()
+void Mov::decode(Registers& reg)
 {
-    arg1 = engine.decoder.decodeArg();
-    arg2 = engine.decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg(reg);
+    arg2 = engine.decoder.decodeArg(reg);
 }
 
 void Mov::execute(Registers& reg)
@@ -242,9 +242,9 @@ Jump::Jump(Engine& eng) : Instruction(eng)
     iType = Instruction::Type::jump;
 }
 
-void Jump::decode()
+void Jump::decode(Registers& reg)
 {
-    address = engine.decoder.decodeAddress();
+    address = engine.decoder.decodeAddress(reg);
 }
 
 void Jump::execute(Registers& reg)
@@ -263,11 +263,11 @@ JumpEqual::JumpEqual(Engine& eng) : Instruction(eng)
     jumping = false;
 }
 
-void JumpEqual::decode()
+void JumpEqual::decode(Registers& reg)
 {
-    address = engine.decoder.decodeAddress();
-    arg1 = engine.decoder.decodeArg();
-    arg2 = engine.decoder.decodeArg();
+    address = engine.decoder.decodeAddress(reg);
+    arg1 = engine.decoder.decodeArg(reg);
+    arg2 = engine.decoder.decodeArg(reg);
 }
 
 void JumpEqual::execute(Registers& reg)
@@ -294,9 +294,9 @@ Call::Call(Engine& eng) : Instruction(eng)
     iType = Instruction::Type::call;
 }
 
-void Call::decode()
+void Call::decode(Registers& reg)
 {
-    address = engine.decoder.decodeAddress();
+    address = engine.decoder.decodeAddress(reg);
 }
 
 void Call::execute(Registers& reg)
@@ -332,12 +332,12 @@ Read::Read(Engine& eng) : Instruction(eng)
     iType = Instruction::Type::read;
 }
 
-void Read::decode()
+void Read::decode(Registers& reg)
 {
-    arg1 = engine.decoder.decodeArg();
-    arg2 = engine.decoder.decodeArg();
-    arg3 = engine.decoder.decodeArg();
-    arg4 = engine.decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg(reg);
+    arg2 = engine.decoder.decodeArg(reg);
+    arg3 = engine.decoder.decodeArg(reg);
+    arg4 = engine.decoder.decodeArg(reg);
 }
 
 void Read::execute(Registers& reg)

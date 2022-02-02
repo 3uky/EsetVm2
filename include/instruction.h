@@ -19,7 +19,7 @@ public:
 
     Instruction(Engine&);
 
-    virtual void decode() = 0;
+    virtual void decode(Registers&) = 0;
     virtual void execute(Registers&) = 0;
     virtual void printExpression() const = 0;
 
@@ -40,7 +40,7 @@ private:
     VM_QWORD constant;
     Argument arg1;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -50,7 +50,7 @@ class Hlt : public Instruction
 public:
     Hlt(Engine& eng) : Instruction(eng) { iType = Instruction::hlt; };
 private:
-    virtual void decode() {};
+    virtual void decode(Registers&) {};
     virtual void execute(Registers&) {};
     virtual void printExpression() const {};
 };
@@ -62,7 +62,7 @@ public:
 private:
     Argument arg1;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const {};
 };
@@ -75,7 +75,7 @@ private:
     Argument arg1;
     VM_DWORD value;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -90,7 +90,7 @@ protected:
     Argument arg2;
     Argument arg3;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&) = 0;
     virtual void printExpression() const;
 };
@@ -162,7 +162,7 @@ private:
     Argument arg1;
     Argument arg2;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -175,7 +175,7 @@ public:
 private:
     VM_DWORD address;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -191,7 +191,7 @@ private:
     Argument arg2;
     bool jumping;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -204,7 +204,7 @@ public:
 private:
     VM_DWORD address;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -216,7 +216,7 @@ public:
 
 private:
     VM_DWORD returnAddress;
-    virtual void decode() {};
+    virtual void decode(Registers&) {};
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -234,7 +234,7 @@ private:
 
     std::string filename;
 
-    virtual void decode();
+    virtual void decode(Registers&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };

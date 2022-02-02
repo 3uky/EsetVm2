@@ -30,7 +30,7 @@ Engine::Engine(Memory& mem, Decoder& dec, IO& iio) : memory(mem), decoder(dec), 
 Instruction::Type Engine::executeNextInstruction(Registers& reg)
 {
     reg.instcount++;
-    auto type = decoder.decodeInstructionCode();
+    auto type = decoder.decodeInstructionCode(reg);
     if(instructions[type] == nullptr)
         throw std::runtime_error(std::string("Engine tried access uninitialized instruction pointer!"));
 
@@ -39,7 +39,7 @@ Instruction::Type Engine::executeNextInstruction(Registers& reg)
         instructions[type]->printName();
     }
 
-    instructions[type]->decode();
+    instructions[type]->decode(reg);
     instructions[type]->execute(reg);
 
     if(DEBUG) {

@@ -11,23 +11,22 @@ class Decoder
 {
 public:
     Memory& memory;
-    VM_DWORD& ip;
 
 public:
-    Decoder(Memory&, Registers&);
+    Decoder(Memory&);
 
-    Instruction::Type decodeInstructionCode();
-    Argument decodeArg();
-    VM_QWORD decodeConstant();
-    VM_DWORD decodeAddress();
+    Instruction::Type decodeInstructionCode(Registers&);
+    Argument decodeArg(Registers&);
+    VM_QWORD decodeConstant(Registers&);
+    VM_DWORD decodeAddress(Registers&);
 
 private:
     enum endian { little, big };
-    VM_BYTE getBitFromMemory();
-    VM_QWORD getBitsFromMemory(int, endian);
+    VM_BYTE getBitFromMemory(Registers&);
+    VM_QWORD getBitsFromMemory(Registers&, int, endian);
 
-    VM_BYTE decodeRegIndex();
-    VM_BYTE decodeMemSize();
+    VM_BYTE decodeRegIndex(Registers&);
+    VM_BYTE decodeMemSize(Registers&);
 
     bool isInstructionValid(VM_BYTE, int) const;
     Instruction::Type getInstruction(VM_BYTE, int);
