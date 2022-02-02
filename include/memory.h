@@ -17,14 +17,13 @@ class Memory
 public:
     enum msize { byte=1, word=2, dword=4, qword=8 };
 
+    Memory(IO&);
+
     IO &io;
 
-    std::vector<char> binary; // tbd
     std::vector<VM_BYTE> head;
     std::vector<VM_BYTE> code;
     std::vector<VM_BYTE> data;
-
-    Memory(IO&);
 
     VM_QWORD read(int64_t, Memory::msize) const;
     void write(int64_t, Memory::msize, VM_QWORD);
@@ -32,18 +31,17 @@ public:
     void printHeaderSizes() const;
 
 private:
-
     HEADER header;
 
-    void initializeHeader(); // tbd: initiate from file without vector copy
+    void initiateHeader();
     void checkHeader();
     VM_DWORD readDwordForHeader(int) const; // tbd: replace with read
 
     bool isMagicValueValid() const;
     bool isHeadeSizesValid() const;
 
-    void initiateCodeMemory(); // tbd: initiate from file without vector copy
-    void initiateDataMemory(); // tbd: initiate from file without vector copy
+    void initiateCodeMemory();
+    void initiateDataMemory();
 };
 
 #endif // MEMORY_H

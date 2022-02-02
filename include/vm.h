@@ -1,14 +1,14 @@
 #ifndef VIRTUALMACHINE_H
 #define VIRTUALMACHINE_H
 
-#include <vector>
+#include <string>
 #include <map>
 
 #include "global.h"
 #include "registers.h"
+#include "io.h"
 #include "memory.h"
 #include "decoder.h"
-#include "io.h"
 
 class VirtualMachine
 {

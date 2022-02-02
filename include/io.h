@@ -9,14 +9,20 @@
 class IO
 {
 public:
+    enum Filetype { evm, bin };
+
     IO(std::string& ifilename);
 
-    std::vector<char> loadBinary();
-    int read(int, int, std::vector<VM_BYTE>&);
+    unsigned int read(unsigned int, unsigned int, std::vector<VM_BYTE>&, Filetype type=Filetype::evm);
+    unsigned int getFileSize() const;
 
 private:
+    void InitializeFilesize();
+
+    std::string& getFileName(Filetype);
     std::string& filename;
     std::string filenameBinary;
+    unsigned int filesize;
 };
 
 #endif // IO_H

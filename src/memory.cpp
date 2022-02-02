@@ -11,21 +11,22 @@ const int DATA_OFFSET=12;
 const int INIT_DATA_OFFSET=16;
 const string MAGIC_VALUE = "ESET-VM2";
 
-Memory::Memory(IO& iio) : io(iio), binary(io.loadBinary())
+Memory::Memory(IO& iio) : io(iio)
 {
-    initializeHeader();
-    checkHeader();
+    initiateHeader();
     initiateCodeMemory();
     initiateDataMemory();
 }
 
-void Memory::initializeHeader()
+void Memory::initiateHeader()
 {
-    head.insert(head.begin(), binary.begin(), binary.begin() + HEADER_SIZE);
+    io.read(0, HEADER_SIZE, head);
 
     header.codeSize = readDwordForHeader(CODE_OFFSET);
     header.dataSize = readDwordForHeader(DATA_OFFSET);
     header.initialDataSize = readDwordForHeader(INIT_DATA_OFFSET);
+
+    checkHeader();
 }
 
 VM_DWORD Memory::readDwordForHeader(int a) const
@@ -51,25 +52,25 @@ void Memory::checkHeader()
 
 bool Memory::isMagicValueValid() const
 {
-    return string(binary.begin(), binary.begin() + MAGIC_SIZE) == MAGIC_VALUE;
+    return string(head.begin(), head.begin() + MAGIC_SIZE) == MAGIC_VALUE;
 }
 
 bool Memory::isHeadeSizesValid() const
 {
-    return (header.dataSize >= header.initialDataSize) && ((HEADER_SIZE + header.codeSize + header.initialDataSize) == binary.size());
+    return (header.dataSize >= header.initialDataSize) && ((HEADER_SIZE + header.codeSize + header.initialDataSize) == io.getFileSize());
 }
 
 void Memory::initiateCodeMemory()
 {
-    code.insert(code.begin(), binary.begin() + HEADER_SIZE, binary.begin() + HEADER_SIZE + header.codeSize);
+    io.read(HEADER_SIZE, header.codeSize, code);
 }
 
 void Memory::initiateDataMemory()
 {
-    data.resize(header.dataSize);
-
     if(header.initialDataSize > 0)
-        data.insert(data.begin(), binary.begin() + HEADER_SIZE + header.codeSize, binary.end()); // replace vector copy
+        io.read(HEADER_SIZE + header.codeSize, header.initialDataSize, data);
+
+    data.resize(header.dataSize);
 }
 
 VM_QWORD Memory::read(int64_t adr, Memory::msize msize) const
@@ -95,7 +96,7 @@ void Memory::write(int64_t adr, Memory::msize msize, VM_QWORD value)
 
 void Memory::printHeaderSizes() const
 {
-    cout << "Binary file size: " << binary.size() << endl << endl;
+    cout << "Binary file size: " << io.getFileSize() << endl << endl;
     cout << "Magic size: " << HEADER_SIZE << endl;
     cout << "Data size: " << header.dataSize << endl;
     cout << "Code size: " << header.codeSize << endl;

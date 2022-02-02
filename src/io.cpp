@@ -1,31 +1,38 @@
 #include "io.h"
 
 #include <fstream>
+#include <filesystem> //tbd filesystem::path(filename).filename();
 
-IO::IO(std::string& ifilename) : filename(ifilename)
+using namespace std;
+
+IO::IO(string& ifilename) : filename(ifilename)
 {
-    filenameBinary = "task/samples/crc.bin"; // tbd
+    filenameBinary = "./task/samples/crc.bin"; //tbd
+    InitializeFilesize();
 }
 
-std::vector<char> IO::loadBinary()
+void IO::InitializeFilesize()
 {
-    std::ifstream f(filename, std::ios::in | std::ios::binary);
-    if (!f.is_open()) {
-        throw std::runtime_error((std::string("Cannot open file: ") + filename));
-    }
-    std::vector<char> binary(std::istreambuf_iterator<char>(f), (std::istreambuf_iterator<char>()));
-    f.close();
-
-    return binary;
-}
-
-int IO::read(int storageOffset, int noBytes, std::vector<VM_BYTE>& readed)
-{
-
-    std::ifstream f(filenameBinary, std::ios::in | std::ios::binary);
+    ifstream f(filename, ios::in | ios::binary);
 
     if (!f.is_open())
-        throw std::runtime_error((std::string("Cannot open file: ") + filenameBinary));
+        throw runtime_error(string("Cannot open file: ") + filename);
+
+    f.seekg (0, f.end);
+    filesize = f.tellg();
+    f.seekg (0, f.beg);
+
+    f.close();
+}
+
+unsigned int IO::read(unsigned int storageOffset, unsigned int noBytes, vector<VM_BYTE>& readed, Filetype type)
+{
+    auto& filename = getFileName(type);
+
+    ifstream f(filename, ios::in | ios::binary);
+
+    if (!f.is_open())
+        throw runtime_error(string("Cannot open file: ") + filename);
 
     readed.resize(noBytes);
 
@@ -37,3 +44,30 @@ int IO::read(int storageOffset, int noBytes, std::vector<VM_BYTE>& readed)
 
     return f.gcount();
 }
+
+std::string& IO::getFileName(Filetype type)
+{
+    if(type == Filetype::evm)
+        return filename;
+    else
+        return filenameBinary;
+}
+
+unsigned int IO::getFileSize() const
+{
+    return filesize;
+}
+
+/*
+vector<char> IO::loadBinary()
+{
+    ifstream f(filename, ios::in | ios::binary);
+    if (!f.is_open()) {
+        throw runtime_error((string("Cannot open file: ") + filename));
+    }
+    std::vector<char> binary(istreambuf_iterator<char>(f), (istreambuf_iterator<char>()));
+    f.close();
+
+    return binary;
+}
+*/

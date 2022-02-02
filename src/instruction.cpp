@@ -372,7 +372,7 @@ void Read::execute(Registers& reg, Memory& memory)
     auto storageOffset = arg3.getValue(reg, memory);
 
     std::vector<VM_BYTE> readed;
-    auto readedNoBytes = memory.io.read(fileOffset, noBytes, readed);
+    auto readedNoBytes = memory.io.read(fileOffset, noBytes, readed, IO::Filetype::bin);
 
     for (size_t i = 0; i < readed.size(); i++)
         memory.write(storageOffset+i, Memory::msize::byte, readed[i]);
