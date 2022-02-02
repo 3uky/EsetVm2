@@ -11,7 +11,7 @@ Argument::Argument(type iType, int iIndex) : argType(iType), index(iIndex)
 {
 }
 
-Argument::Argument(type iType, int iIndex, Memory::msize iMemSize) : argType(iType), msize(iMemSize), index(iIndex)
+Argument::Argument(type iType, int iIndex, Memory::Size iMemSize) : argType(iType), msize(iMemSize), index(iIndex)
 {
 }
 
@@ -44,11 +44,11 @@ void Argument::storeResult(VM_QWORD value, Registers& reg, Memory& memory)
 const std::string Argument::getStr() const
 {
     std::stringstream ss;
-    static std::map<Memory::msize, std::string> sizeTable = {
-        {Memory::msize::byte, "byte"},
-        {Memory::msize::word, "word"},
-        {Memory::msize::dword, "dword"},
-        {Memory::msize::qword, "qword"}
+    static std::map<Memory::Size, std::string> sizeTable = {
+        {Memory::Size::byte, "byte"},
+        {Memory::Size::word, "word"},
+        {Memory::Size::dword, "dword"},
+        {Memory::Size::qword, "qword"}
     };
 
     if(isRegister())

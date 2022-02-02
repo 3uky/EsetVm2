@@ -73,7 +73,7 @@ void Memory::initiateDataMemory()
     data.resize(header.dataSize);
 }
 
-VM_QWORD Memory::read(int64_t adr, Memory::msize msize) const
+VM_QWORD Memory::read(int64_t adr, Memory::Size msize) const
 {
     if((adr + msize) > int64_t(data.size()))
         throw runtime_error(std::string("Memory read out of bound!"));
@@ -85,7 +85,7 @@ VM_QWORD Memory::read(int64_t adr, Memory::msize msize) const
     return res;
 }
 
-void Memory::write(int64_t adr, Memory::msize msize, VM_QWORD value)
+void Memory::write(int64_t adr, Memory::Size msize, VM_QWORD value)
 {
     if((adr + msize) > int64_t(data.size()))
         throw runtime_error(std::string("Memory write out of bound!"));

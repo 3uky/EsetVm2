@@ -15,7 +15,7 @@ typedef struct {
 class Memory
 {
 public:
-    enum msize { byte=1, word=2, dword=4, qword=8 };
+    enum Size { byte=1, word=2, dword=4, qword=8 };
 
     Memory(IO&);
 
@@ -25,8 +25,8 @@ public:
     std::vector<VM_BYTE> code;
     std::vector<VM_BYTE> data;
 
-    VM_QWORD read(int64_t, Memory::msize) const;
-    void write(int64_t, Memory::msize, VM_QWORD);
+    VM_QWORD read(int64_t, Memory::Size) const;
+    void write(int64_t, Memory::Size, VM_QWORD);
     void printData() const;
     void printHeaderSizes() const;
 

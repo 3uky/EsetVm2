@@ -33,11 +33,11 @@ namespace instruction {
 }
 
 namespace argument {
-    std::map<VM_BYTE, Memory::msize> sizeTable = {
-        { 0b00, Memory::msize::byte },
-        { 0b01, Memory::msize::word },
-        { 0b10, Memory::msize::dword },
-        { 0b11, Memory::msize::qword }
+    std::map<VM_BYTE, Memory::Size> sizeTable = {
+        { 0b00, Memory::Size::byte },
+        { 0b01, Memory::Size::word },
+        { 0b10, Memory::Size::dword },
+        { 0b11, Memory::Size::qword }
     };
     std::map<VM_BYTE, Argument::type> typeTable = {
         { 1, Argument::type::mem },

@@ -9,12 +9,12 @@ class Argument // data access argument type
 {
 public:
     enum type { mem, reg } argType;
-    enum Memory::msize msize;
+    enum Memory::Size msize;
     int index;
 
     Argument();
     Argument(type, int);
-    Argument(type, int, Memory::msize);
+    Argument(type, int, Memory::Size);
 
     VM_QWORD getValue(Registers&, Memory&);
     void storeResult(VM_QWORD value, Registers&, Memory&);

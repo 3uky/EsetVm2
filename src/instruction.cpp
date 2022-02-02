@@ -375,7 +375,7 @@ void Read::execute(Registers& reg, Memory& memory)
     auto readedNoBytes = memory.io.read(fileOffset, noBytes, readed, IO::Filetype::bin);
 
     for (size_t i = 0; i < readed.size(); i++)
-        memory.write(storageOffset+i, Memory::msize::byte, readed[i]);
+        memory.write(storageOffset+i, Memory::Size::byte, readed[i]);
 
     arg4.storeResult(readedNoBytes, reg, memory);
 }
