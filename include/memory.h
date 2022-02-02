@@ -5,12 +5,7 @@
 
 #include "global.h"
 #include "io.h"
-
-typedef struct {
-    VM_DWORD codeSize;
-    VM_DWORD dataSize;
-    VM_DWORD initialDataSize;
-} HEADER ;
+#include "header.h"
 
 class Memory
 {
@@ -21,27 +16,18 @@ public:
 
     IO &io;
 
-    std::vector<VM_BYTE> head;
     std::vector<VM_BYTE> code;
     std::vector<VM_BYTE> data;
 
     VM_QWORD read(int64_t, Memory::Size) const;
     void write(int64_t, Memory::Size, VM_QWORD);
     void printData() const;
-    void printHeaderSizes() const;
 
 private:
-    HEADER header;
+    Header header;
 
-    void initiateHeader();
-    void checkHeader();
-    VM_DWORD readDwordForHeader(int) const; // tbd: replace with read
-
-    bool isMagicValueValid() const;
-    bool isHeadeSizesValid() const;
-
-    void initiateCodeMemory();
-    void initiateDataMemory();
+    void initializeCodeMemory();
+    void initializeDataMemory();
 };
 
 #endif // MEMORY_H
