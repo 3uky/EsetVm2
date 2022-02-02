@@ -67,12 +67,12 @@ Argument Decoder::decodeArg()
 
     if(argType == Argument::Type::reg) {
         auto regIndex = decodeRegIndex();
-        return Argument(argType, regIndex);
+        return Argument(argType, regIndex, &memory);
     }
     else { // argType == Argument::type::mem
         auto memSize = argument::sizeTable[decodeMemSize()];
         auto regIndex = decodeRegIndex();
-        return Argument(argType, regIndex, memSize);
+        return Argument(argType, regIndex, memSize, &memory);
     }
 }
 
