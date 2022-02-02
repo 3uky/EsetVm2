@@ -6,32 +6,17 @@
 
 #include "../include/instruction.h"
 #include "../include/decoder.h"
+#include "../include/engine.h"
 
 using namespace std;
 
-Instruction::Instruction()
+Instruction::Instruction(Engine& eng) : engine(eng)
 {
-}
-
-void Instruction::run(Decoder& decoder, Registers& reg, Memory& memory)
-{
-    if(DEBUG) {
-        printInstructionCounter(reg);
-        printName();
-    }
-
-    decode(decoder);
-    execute(reg, memory);
-
-    if(DEBUG) {
-        printExpression();
-        printResult(reg, memory);
-    }
 }
 
 void Instruction::printName() const
 {
-    static std::map<Instruction::Type, string> name = {
+    static map<Instruction::Type, string> name = {
         {Instruction::Type::mov, "mov"},
         {Instruction::Type::loadConstant, "loadConstant"},
         {Instruction::Type::add, "add"},
@@ -59,36 +44,25 @@ void Instruction::printName() const
     cout << "Instruction: " << name[iType] << endl;
 }
 
-void Instruction::printInstructionCounter(Registers& reg) const
-{
-    reg.printInstCounter();
-}
-
-void Instruction::printResult(Registers& reg, Memory& memory) const
-{
-    memory.printData();
-    reg.print();
-}
-
 bool Instruction::isHlt() const
 {
     return iType == Instruction::Type::hlt;
 }
 
-LoadConstant::LoadConstant()
+LoadConstant::LoadConstant(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::loadConstant;
 }
 
-void LoadConstant::decode(Decoder& decoder)
+void LoadConstant::decode()
 {
-    constant = decoder.decodeConstant();
-    arg1 = decoder.decodeArg();
+    constant = engine.decoder.decodeConstant();
+    arg1 = engine.decoder.decodeArg();
 }
 
-void LoadConstant::execute(Registers& reg, Memory& memory)
+void LoadConstant::execute(Registers& reg)
 {
-    arg1.storeResult(constant, reg, memory);
+    arg1.storeResult(constant, reg);
 }
 
 void LoadConstant::printExpression() const
@@ -96,35 +70,35 @@ void LoadConstant::printExpression() const
     cout << "Expression : " << arg1.getStr() << " = 0x" << hex << constant << endl;
 }
 
-ConsoleWrite::ConsoleWrite()
+ConsoleWrite::ConsoleWrite(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::consoleWrite;
 }
 
-void ConsoleWrite::decode(Decoder& decoder)
+void ConsoleWrite::decode()
 {
-    arg1 = decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg();
 }
 
-void ConsoleWrite::execute(Registers& reg, Memory& memory)
+void ConsoleWrite::execute(Registers& reg)
 {
-    cout << setfill('0') << setw(16) << right << hex << arg1.getValue(reg, memory) << endl;
+    cout << setfill('0') << setw(16) << right << hex << arg1.getValue(reg) << endl;
 }
 
-ConsoleRead::ConsoleRead()
+ConsoleRead::ConsoleRead(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::consoleRead;
 }
 
-void ConsoleRead::decode(Decoder& decoder)
+void ConsoleRead::decode()
 {
-    arg1 = decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg();
 }
 
-void ConsoleRead::execute(Registers& reg, Memory& memory)
+void ConsoleRead::execute(Registers& reg)
 {
     cin >> value;
-    arg1.storeResult(value, reg, memory);
+    arg1.storeResult(value, reg);
 }
 
 void ConsoleRead::printExpression() const
@@ -132,15 +106,15 @@ void ConsoleRead::printExpression() const
     cout << "Expression : " << arg1.getStr() << " = " << dec << value << " (0x" << hex << value << ")" << endl;
 }
 
-Alu::Alu()
+Alu::Alu(Engine& eng) : Instruction(eng)
 {
 }
 
-void Alu::decode(Decoder& decoder)
+void Alu::decode()
 {
-    arg1 = decoder.decodeArg();
-    arg2 = decoder.decodeArg();
-    arg3 = decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg();
+    arg2 = engine.decoder.decodeArg();
+    arg3 = engine.decoder.decodeArg();
 }
 
 void Alu::printExpression() const
@@ -157,70 +131,70 @@ void Alu::printExpression() const
     std::cout << "Expression : " << arg3.getStr() << " = " << arg1.getStr() << operand[iType] << arg2.getStr() << std::endl;
 }
 
-Add::Add()
+Add::Add(Engine& eng) : Alu(eng)
 {
     iType = Instruction::Type::add;
 }
 
-void Add::execute(Registers& reg, Memory& memory)
+void Add::execute(Registers& reg)
 {
-    arg3.storeResult(arg1.getValue(reg, memory) + arg2.getValue(reg, memory), reg, memory);
+    arg3.storeResult(arg1.getValue(reg) + arg2.getValue(reg), reg);
 }
 
-Sub::Sub()
+Sub::Sub(Engine& eng) : Alu(eng)
 {
     iType = Instruction::Type::sub;
 }
 
-void Sub::execute(Registers& reg, Memory& memory)
+void Sub::execute(Registers& reg)
 {
-    arg3.storeResult(arg1.getValue(reg, memory) - arg2.getValue(reg, memory), reg, memory);
+    arg3.storeResult(arg1.getValue(reg) - arg2.getValue(reg), reg);
 }
 
-Div::Div()
+Div::Div(Engine& eng) : Alu(eng)
 {
     iType = Instruction::Type::div;
 }
 
-void Div::execute(Registers& reg, Memory& memory)
+void Div::execute(Registers& reg)
 {
-    arg3.storeResult(arg1.getValue(reg, memory) / arg2.getValue(reg, memory), reg, memory);
+    arg3.storeResult(arg1.getValue(reg) / arg2.getValue(reg), reg);
 }
 
-Mod::Mod()
+Mod::Mod(Engine& eng) : Alu(eng)
 {
     iType = Instruction::Type::mod;
 }
 
-void Mod::execute(Registers& reg, Memory& memory)
+void Mod::execute(Registers& reg)
 {
-    arg3.storeResult(arg1.getValue(reg, memory) % arg2.getValue(reg, memory), reg, memory);
+    arg3.storeResult(arg1.getValue(reg) % arg2.getValue(reg), reg);
 }
 
-Mul::Mul()
+Mul::Mul(Engine& eng) : Alu(eng)
 {
     iType = Instruction::Type::mul;
 }
 
-void Mul::execute(Registers& reg, Memory& memory)
+void Mul::execute(Registers& reg)
 {
-    arg3.storeResult(arg1.getValue(reg, memory) * arg2.getValue(reg, memory), reg, memory);
+    arg3.storeResult(arg1.getValue(reg) * arg2.getValue(reg), reg);
 }
 
-Compare::Compare()
+Compare::Compare(Engine& eng) : Alu(eng)
 {
     iType = Instruction::Type::compare;
 }
 
-void Compare::execute(Registers& reg, Memory& memory)
+void Compare::execute(Registers& reg)
 {
-    arg3.storeResult(getCompareResult(reg, memory), reg, memory);
+    arg3.storeResult(getCompareResult(reg), reg);
 }
 
-int Compare::getCompareResult(Registers& reg, Memory& memory)
+int Compare::getCompareResult(Registers& reg)
 {
-    int64_t arg1Val = arg1.getValue(reg, memory);
-    int64_t arg2Val = arg2.getValue(reg, memory);
+    int64_t arg1Val = arg1.getValue(reg);
+    int64_t arg2Val = arg2.getValue(reg);
 
     if(arg1Val == arg2Val)
         result = 0;
@@ -242,20 +216,20 @@ void Compare::printExpression() const
         cout << "Expression : " << arg1.getStr() << " > " << arg2.getStr() << " -> " << arg3.getStr() << " = 1" << endl;
 }
 
-Mov::Mov()
+Mov::Mov(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::mov;
 }
 
-void Mov::decode(Decoder& decoder)
+void Mov::decode()
 {
-    arg1 = decoder.decodeArg();
-    arg2 = decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg();
+    arg2 = engine.decoder.decodeArg();
 }
 
-void Mov::execute(Registers& reg, Memory& memory)
+void Mov::execute(Registers& reg)
 {
-    arg2.storeResult(arg1.getValue(reg, memory), reg, memory);
+    arg2.storeResult(arg1.getValue(reg), reg);
 }
 
 void Mov::printExpression() const
@@ -263,17 +237,17 @@ void Mov::printExpression() const
     cout << "Expression : " << arg2.getStr() << " = " << arg1.getStr() << endl;
 }
 
-Jump::Jump()
+Jump::Jump(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::jump;
 }
 
-void Jump::decode(Decoder& decoder)
+void Jump::decode()
 {
-    address = decoder.decodeAddress();
+    address = engine.decoder.decodeAddress();
 }
 
-void Jump::execute(Registers& reg, Memory& memory)
+void Jump::execute(Registers& reg)
 {
     reg.ip = address;
 }
@@ -283,21 +257,22 @@ void Jump::printExpression() const
     cout << "Expression : jump to address " << address << endl;
 }
 
-JumpEqual::JumpEqual() : jumping(false)
+JumpEqual::JumpEqual(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::jump;
+    jumping = false;
 }
 
-void JumpEqual::decode(Decoder& decoder)
+void JumpEqual::decode()
 {
-    address = decoder.decodeAddress();
-    arg1 = decoder.decodeArg();
-    arg2 = decoder.decodeArg();
+    address = engine.decoder.decodeAddress();
+    arg1 = engine.decoder.decodeArg();
+    arg2 = engine.decoder.decodeArg();
 }
 
-void JumpEqual::execute(Registers& reg, Memory& memory)
+void JumpEqual::execute(Registers& reg)
 {
-    if (arg1.getValue(reg, memory) == arg2.getValue(reg, memory)) {
+    if (arg1.getValue(reg) == arg2.getValue(reg)) {
         jumping = true;
         reg.ip = address;
     }
@@ -314,17 +289,17 @@ void JumpEqual::printExpression() const
 }
 
 
-Call::Call()
+Call::Call(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::call;
 }
 
-void Call::decode(Decoder& decoder)
+void Call::decode()
 {
-    address = decoder.decodeAddress();
+    address = engine.decoder.decodeAddress();
 }
 
-void Call::execute(Registers& reg, Memory& memory)
+void Call::execute(Registers& reg)
 {
     reg.sp.push(reg.ip);
     reg.ip = address;
@@ -335,12 +310,12 @@ void Call::printExpression() const
     cout << "Expression : call -> " << address << endl;
 }
 
-Ret::Ret()
+Ret::Ret(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::ret;
 }
 
-void Ret::execute(Registers& reg, Memory& memory)
+void Ret::execute(Registers& reg)
 {
      returnAddress = reg.sp.top();
      reg.sp.pop();
@@ -352,32 +327,32 @@ void Ret::printExpression() const
     cout << "Expression : return -> " << returnAddress << endl;
 }
 
-Read::Read()
+Read::Read(Engine& eng) : Instruction(eng)
 {
     iType = Instruction::Type::read;
 }
 
-void Read::decode(Decoder& decoder)
+void Read::decode()
 {
-    arg1 = decoder.decodeArg();
-    arg2 = decoder.decodeArg();
-    arg3 = decoder.decodeArg();
-    arg4 = decoder.decodeArg();
+    arg1 = engine.decoder.decodeArg();
+    arg2 = engine.decoder.decodeArg();
+    arg3 = engine.decoder.decodeArg();
+    arg4 = engine.decoder.decodeArg();
 }
 
-void Read::execute(Registers& reg, Memory& memory)
+void Read::execute(Registers& reg)
 {
-    auto fileOffset = arg1.getValue(reg, memory);
-    auto noBytes = arg2.getValue(reg, memory);
-    auto storageOffset = arg3.getValue(reg, memory);
+    auto fileOffset = arg1.getValue(reg);
+    auto noBytes = arg2.getValue(reg);
+    auto storageOffset = arg3.getValue(reg);
 
     std::vector<VM_BYTE> readed;
-    auto readedNoBytes = memory.io.read(fileOffset, noBytes, readed, IO::Filetype::bin);
+    auto readedNoBytes = engine.io.read(fileOffset, noBytes, readed, IO::Filetype::bin);
 
     for (size_t i = 0; i < readed.size(); i++)
-        memory.write(storageOffset+i, Memory::Size::byte, readed[i]);
+        engine.memory.write(storageOffset+i, Memory::Size::byte, readed[i]);
 
-    arg4.storeResult(readedNoBytes, reg, memory);
+    arg4.storeResult(readedNoBytes, reg);
 }
 
 void Read::printExpression() const
