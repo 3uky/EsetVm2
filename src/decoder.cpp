@@ -65,7 +65,7 @@ Argument Decoder::decodeArg()
 {
     auto argType = argument::typeTable[getBitFromMemory()];
 
-    if(argType == Argument::type::reg) {
+    if(argType == Argument::Type::reg) {
         auto regIndex = decodeRegIndex();
         return Argument(argType, regIndex);
     }

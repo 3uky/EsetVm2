@@ -39,9 +39,9 @@ namespace argument {
         { 0b10, Memory::Size::dword },
         { 0b11, Memory::Size::qword }
     };
-    std::map<VM_BYTE, Argument::type> typeTable = {
-        { 1, Argument::type::mem },
-        { 0, Argument::type::reg }
+    std::map<VM_BYTE, Argument::Type> typeTable = {
+        { 1, Argument::Type::mem },
+        { 0, Argument::Type::reg }
     };
 }
 

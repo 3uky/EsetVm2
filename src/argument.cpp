@@ -3,26 +3,26 @@
 #include <sstream>
 #include <map>
 
-Argument::Argument() : argType(type::reg), index(0)
+Argument::Argument() : argType(Type::reg), index(0)
 {
 }
 
-Argument::Argument(type iType, int iIndex) : argType(iType), index(iIndex)
+Argument::Argument(Type iType, int iIndex) : argType(iType), index(iIndex)
 {
 }
 
-Argument::Argument(type iType, int iIndex, Memory::Size iMemSize) : argType(iType), msize(iMemSize), index(iIndex)
+Argument::Argument(Type iType, int iIndex, Memory::Size iMemSize) : argType(iType), msize(iMemSize), index(iIndex)
 {
 }
 
 bool Argument::isRegister() const
 {
-    return (argType == type::reg);
+    return (argType == Type::reg);
 }
 
 bool Argument::isMemory() const
 {
-    return (argType == type::mem);
+    return (argType == Type::mem);
 }
 
 VM_QWORD Argument::getValue(Registers& reg, Memory& memory)
