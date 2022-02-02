@@ -16,18 +16,6 @@ void checkUserInput(int argc)
     }
 }
 
-vector<char> loadBinary(const string& filename)
-{
-	ifstream f(filename, ios::in | ios::binary);
-    if (!f.is_open()) {
-        throw runtime_error((std::string("Cannot open file: ") + filename));
-    }
-	vector<char> binary(istreambuf_iterator<char>(f), (istreambuf_iterator<char>()));
-	f.close();
-
-	return binary;
-}
-
 int main(int argc,char* argv[])
 {
     string filename;
@@ -51,8 +39,7 @@ int main(int argc,char* argv[])
             filename = argv[1];
         }
 
-        auto programBytes = loadBinary(filename);
-        VirtualMachine vm(programBytes);
+        VirtualMachine vm(filename);
         vm.run();
     }
     catch (const exception& e) {

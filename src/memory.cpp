@@ -11,7 +11,7 @@ const int DATA_OFFSET=12;
 const int INIT_DATA_OFFSET=16;
 const string MAGIC_VALUE = "ESET-VM2";
 
-Memory::Memory(vector<char>& programMemory) : binary(programMemory)
+Memory::Memory(IO& iio) : io(iio), binary(io.loadBinary())
 {
     initializeHeader();
     checkHeader();

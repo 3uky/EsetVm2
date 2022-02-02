@@ -7,7 +7,7 @@
 
 using namespace std;
 
-VirtualMachine::VirtualMachine(std::vector<char>& programMemory) : reg(), memory(programMemory), decoder(memory, reg)
+VirtualMachine::VirtualMachine(std::string& filename) : reg(), io(filename), memory(io), decoder(memory, reg)
 {
 }
 

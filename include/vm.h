@@ -8,18 +8,22 @@
 #include "registers.h"
 #include "memory.h"
 #include "decoder.h"
+#include "io.h"
 
 class VirtualMachine
 {
 public:
-    VirtualMachine(std::vector<char>& programBytes);
+    VirtualMachine(std::string&);
 
     void run();
 
 private:
     Registers reg;
+    IO io;
     Memory memory;
     Decoder decoder;
+
+    //Engine engine;
 
     Mov iMov;
     Add iAdd;

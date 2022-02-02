@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "global.h"
+#include "io.h"
 
 typedef struct {
     VM_DWORD codeSize;
@@ -16,12 +17,14 @@ class Memory
 public:
     enum msize { byte=1, word=2, dword=4, qword=8 };
 
-    std::vector<char>& binary;
+    IO &io;
+
+    std::vector<char> binary; // tbd
     std::vector<VM_BYTE> head;
     std::vector<VM_BYTE> code;
     std::vector<VM_BYTE> data;
 
-    Memory(std::vector<char>&);
+    Memory(IO&);
 
     VM_QWORD read(int64_t, Memory::msize) const;
     void write(int64_t, Memory::msize, VM_QWORD);
@@ -29,6 +32,7 @@ public:
     void printHeaderSizes() const;
 
 private:
+
     HEADER header;
 
     void initializeHeader(); // tbd: initiate from file without vector copy

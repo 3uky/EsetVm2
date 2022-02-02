@@ -239,8 +239,6 @@ private:
     virtual void decode(Decoder&);
     virtual void execute(Registers&, Memory&);
     virtual void printExpression() const;
-
-    int read(const std::string&, int, int, std::vector<VM_BYTE>&);
 };
 
 #endif // INSTRUCTION_H
