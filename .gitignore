@@ -44,5 +44,6 @@ bin
 
 # other files
 note
+log
 *~
 *.swp
