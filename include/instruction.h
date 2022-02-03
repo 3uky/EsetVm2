@@ -284,4 +284,34 @@ private:
     virtual void printExpression() const;
 };
 
+class Lock : public Instruction
+{
+public:
+    Lock(ThreadingModel&);
+
+private:
+    ThreadingModel& tm;
+
+    Argument arg1;
+
+    virtual void decode(Registers&, Decoder&);
+    virtual void execute(Registers&);
+    virtual void printExpression() const;
+};
+
+class Unlock : public Instruction
+{
+public:
+    Unlock(ThreadingModel&);
+
+private:
+    ThreadingModel& tm;
+
+    Argument arg1;
+
+    virtual void decode(Registers&, Decoder&);
+    virtual void execute(Registers&);
+    virtual void printExpression() const;
+};
+
 #endif // INSTRUCTION_H

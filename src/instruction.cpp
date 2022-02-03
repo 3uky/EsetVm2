@@ -377,12 +377,12 @@ void CreateThread::execute(Registers& reg)
 {
     // prepare new registers copy (tbd copy constructor)
     Registers regCopy = reg;
-    regCopy.tId = tm.threads.size();
+    regCopy.tId = tm.threads.size() + 1; // tId==0 has main thread
     regCopy.emptyStack();
     // set ip
     regCopy.ip = address;
     // store identifier
-    arg1.storeResult(regCopy.tId, reg);
+    arg1.storeResult(tm.threads.size(), reg);
     // start new thread
     tm.threads.push_back(thread(&VirtualMachine::execute, vm, regCopy));
 }
@@ -412,7 +412,6 @@ void JoinThread::printExpression() const
     cout << "Expression : joinThread " << arg1.getStr() << endl;
 }
 
-
 Sleep::Sleep()
 {
     iType = Instruction::Type::sleep;
@@ -431,4 +430,48 @@ void Sleep::execute(Registers& reg)
 void Sleep::printExpression() const
 {
     cout << "Expression : sleep " << arg1.getStr() << " (wake up from sleep)" << endl;
+}
+
+
+
+
+Lock::Lock(ThreadingModel& itm) : tm(itm)
+{
+    iType = Instruction::Type::lock;
+}
+
+void Lock::decode(Registers& reg, Decoder& decoder)
+{
+    arg1 = decoder.decodeArg(reg);
+}
+
+void Lock::execute(Registers& reg)
+{
+    tm.lock(arg1.getValue(reg));
+}
+
+void Lock::printExpression() const
+{
+    cout << "Expression : lock " << arg1.getStr() << endl;
+}
+
+
+Unlock::Unlock(ThreadingModel& itm) : tm(itm)
+{
+    iType = Instruction::Type::unlock;
+}
+
+void Unlock::decode(Registers& reg, Decoder& decoder)
+{
+    arg1 = decoder.decodeArg(reg);
+}
+
+void Unlock::execute(Registers& reg)
+{
+    tm.unlock(arg1.getValue(reg));
+}
+
+void Unlock::printExpression() const
+{
+    cout << "Expression : unlock " << arg1.getStr() << endl;
 }

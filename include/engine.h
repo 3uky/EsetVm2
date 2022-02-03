@@ -44,8 +44,8 @@ private:
     Sleep sleep;
     Call call;
     Ret ret;
-    // lock
-    // unlock
+    Lock lock;
+    Unlock unlock;
 };
 
 #endif // ENGINE_H

@@ -5,7 +5,8 @@
 
 using namespace std;
 
-Engine::Engine(VirtualMachine* ivm) : vm(*ivm), read(vm.io, vm.memory), createThread(vm.tm, ivm), joinThread(vm.tm)
+Engine::Engine(VirtualMachine* ivm) : vm(*ivm),
+    read(vm.io, vm.memory), createThread(vm.tm, ivm), joinThread(vm.tm), lock(vm.tm), unlock(vm.tm)
 {
     instructions = {
         { Instruction::Type::mov, &mov},
@@ -27,9 +28,9 @@ Engine::Engine(VirtualMachine* ivm) : vm(*ivm), read(vm.io, vm.memory), createTh
         { Instruction::Type::hlt, &hlt},
         { Instruction::Type::sleep, &sleep},
         { Instruction::Type::call, &call},
-        { Instruction::Type::ret, &ret}
-        // lock
-        // unlock
+        { Instruction::Type::ret, &ret},
+        { Instruction::Type::lock, &lock},
+        { Instruction::Type::unlock, &unlock}
     };
 }
 
