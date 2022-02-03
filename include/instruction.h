@@ -17,9 +17,9 @@ class Instruction
 public:
     enum Type { mov, loadConstant, add, sub, div, mod, mul, compare, jump, jumpEqual, read, write, consoleRead, consoleWrite, createThread, joinThread, hlt, sleep, call, ret, lock, unlock};
 
-    Instruction(Engine&);
+    Instruction();
 
-    virtual void decode(Registers&) = 0;
+    virtual void decode(Registers&, Decoder&) = 0;
     virtual void execute(Registers&) = 0;
     virtual void printExpression() const = 0;
 
@@ -28,19 +28,18 @@ public:
 
 protected:
     Instruction::Type iType;
-    Engine& engine;
 };
 
 class LoadConstant : public Instruction
 {
 public:
-    LoadConstant(Engine&);
+    LoadConstant();
 
 private:
     VM_QWORD constant;
     Argument arg1;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -48,9 +47,9 @@ private:
 class Hlt : public Instruction
 {
 public:
-    Hlt(Engine& eng) : Instruction(eng) { iType = Instruction::hlt; };
+    Hlt() { iType = Instruction::hlt; };
 private:
-    virtual void decode(Registers&) {};
+    virtual void decode(Registers&, Decoder&) {};
     virtual void execute(Registers&) {};
     virtual void printExpression() const {};
 };
@@ -58,11 +57,11 @@ private:
 class ConsoleWrite : public Instruction
 {
 public:
-    ConsoleWrite(Engine&);
+    ConsoleWrite();
 private:
     Argument arg1;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const {};
 };
@@ -70,12 +69,12 @@ private:
 class ConsoleRead : public Instruction
 {
 public:
-    ConsoleRead(Engine&);
+    ConsoleRead();
 private:
     Argument arg1;
     VM_DWORD value;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -83,14 +82,14 @@ private:
 class Alu : public Instruction
 {
 public:
-    Alu(Engine&);
+    Alu();
 
 protected:
     Argument arg1;
     Argument arg2;
     Argument arg3;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&) = 0;
     virtual void printExpression() const;
 };
@@ -98,7 +97,7 @@ protected:
 class Add : public Alu
 {
 public:
-    Add(Engine&);
+    Add();
 
 private:
     virtual void execute(Registers&);
@@ -107,7 +106,7 @@ private:
 class Sub : public Alu
 {
 public:
-    Sub(Engine&);
+    Sub();
 
 private:
     virtual void execute(Registers&);
@@ -116,7 +115,7 @@ private:
 class Div : public Alu
 {
 public:
-    Div(Engine&);
+    Div();
 
 private:
     virtual void execute(Registers&);
@@ -125,7 +124,7 @@ private:
 class Mod : public Alu
 {
 public:
-    Mod(Engine&);
+    Mod();
 
 private:
     virtual void execute(Registers&);
@@ -134,7 +133,7 @@ private:
 class Mul : public Alu
 {
 public:
-    Mul(Engine&);
+    Mul();
 
 private:
     virtual void execute(Registers&);
@@ -143,7 +142,7 @@ private:
 class Compare : public Alu
 {
 public:
-    Compare(Engine&);
+    Compare();
 
 private:
     int result;
@@ -156,13 +155,13 @@ private:
 class Mov : public Instruction
 {
 public:
-    Mov(Engine&);
+    Mov();
 
 private:
     Argument arg1;
     Argument arg2;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -170,12 +169,12 @@ private:
 class Jump : public Instruction
 {
 public:
-    Jump(Engine&);
+    Jump();
 
 private:
     VM_DWORD address;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -183,7 +182,7 @@ private:
 class JumpEqual : public Instruction
 {
 public:
-    JumpEqual(Engine&);
+    JumpEqual();
 
 private:
     VM_DWORD address;
@@ -191,7 +190,7 @@ private:
     Argument arg2;
     bool jumping;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -199,12 +198,12 @@ private:
 class Call : public Instruction
 {
 public:
-    Call(Engine&);
+    Call();
 
 private:
     VM_DWORD address;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -212,11 +211,11 @@ private:
 class Ret : public Instruction
 {
 public:
-    Ret(Engine&);
+    Ret();
 
 private:
     VM_DWORD returnAddress;
-    virtual void decode(Registers&) {};
+    virtual void decode(Registers&, Decoder&) {};
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };
@@ -224,9 +223,12 @@ private:
 class Read : public Instruction
 {
 public:
-    Read(Engine&);
+    Read(IO&, Memory&);
 
 private:
+    IO& io;
+    Memory& memory;
+
     Argument arg1;
     Argument arg2;
     Argument arg3;
@@ -234,7 +236,7 @@ private:
 
     std::string filename;
 
-    virtual void decode(Registers&);
+    virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);
     virtual void printExpression() const;
 };

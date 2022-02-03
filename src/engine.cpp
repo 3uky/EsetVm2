@@ -4,8 +4,7 @@
 
 using namespace std;
 
-Engine::Engine(Memory& mem, Decoder& dec, IO& iio) : memory(mem), decoder(dec), io(iio),
-    mov(*this), loadConstant(*this), add(*this), sub(*this), div(*this), mod(*this), mul(*this), compare(*this), jump(*this), jumpEqual(*this), read(*this), consoleWrite(*this), consoleRead(*this), call(*this), ret(*this), hlt(*this)
+Engine::Engine(Memory& mem, Decoder& dec, IO& iio) : memory(mem), decoder(dec), io(iio), read(io, memory)
 {
     instructions = {
         { Instruction::Type::mov, &mov},
@@ -35,11 +34,12 @@ Instruction::Type Engine::executeNextInstruction(Registers& reg)
         throw std::runtime_error(std::string("Engine tried access uninitialized instruction pointer!"));
 
     if(DEBUG) {
+        cout << "thread id : " << reg.tId << endl;
         reg.printInstCounter();
         instructions[type]->printName();
     }
 
-    instructions[type]->decode(reg);
+    instructions[type]->decode(reg, decoder);
     instructions[type]->execute(reg);
 
     if(DEBUG) {
