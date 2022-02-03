@@ -17,3 +17,6 @@ echo 11 29 | ./esetvm2 $BINARY_DIR/xor-with-stack-frame.evm
 
 echo crc.evm
 ./esetvm2 $BINARY_DIR/crc.evm
+
+echo threadingBase.evm
+./esetvm2 $BINARY_DIR/threadingBase.evm
