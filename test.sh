@@ -20,3 +20,6 @@ echo crc.evm
 
 echo threadingBase.evm
 ./esetvm2 $BINARY_DIR/threadingBase.evm
+
+echo lock.evm
+./esetvm2 $BINARY_DIR/lock.evm
