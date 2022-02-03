@@ -2,7 +2,6 @@
 #define VIRTUALMACHINE_H
 
 #include <string>
-#include <map>
 
 #include "global.h"
 #include "registers.h"
@@ -10,6 +9,7 @@
 #include "memory.h"
 #include "decoder.h"
 #include "engine.h"
+#include "threading_model.h"
 
 class VirtualMachine
 {
@@ -17,13 +17,14 @@ public:
     VirtualMachine(std::string&);
 
     void run();
+    void execute(Registers);
 
-private:
     Registers reg;
     IO io;
     Memory memory;
     Decoder decoder;
     Engine engine;
+    ThreadingModel tm;
 };
 
 #endif // VIRTUALMACHINE_H
