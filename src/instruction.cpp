@@ -6,7 +6,7 @@
 
 #include "../include/instruction.h"
 #include "../include/decoder.h"
-#include "../include/engine.h"
+#include "../include/vm.h"
 
 using namespace std;
 
@@ -358,4 +358,54 @@ void Read::execute(Registers& reg)
 void Read::printExpression() const
 {
     cout << "Expression : read " << arg1.getStr() << ", " << arg2.getStr() << ", " << arg3.getStr() << ", " << arg4.getStr() << "  file=" << filename << endl;
+}
+
+CreateThread::CreateThread(ThreadingModel& itm, VirtualMachine* ivm) : tm(itm), vm(ivm)
+{
+    iType = Instruction::Type::createThread;
+}
+
+void CreateThread::decode(Registers& reg, Decoder& decoder)
+{
+    address = decoder.decodeAddress(reg);
+    arg1 = decoder.decodeArg(reg);
+}
+
+void CreateThread::execute(Registers& reg)
+{
+    // prepare new registers copy (tbd copy constructor)
+    Registers regCopy = reg;
+    regCopy.tId = tm.threads.size();
+    regCopy.emptyStack();
+    // set ip
+    regCopy.ip = address;
+    // store identifier
+    arg1.storeResult(regCopy.tId, reg);
+    // start new thread
+    tm.threads.push_back(thread(&VirtualMachine::execute, vm, regCopy));
+}
+
+void CreateThread::printExpression() const
+{
+    cout << "Expression : createThread " << address << ", " << arg1.getStr() << endl;
+}
+
+JoinThread::JoinThread(ThreadingModel& itm) : tm(itm)
+{
+    iType = Instruction::Type::joinThread;
+}
+
+void JoinThread::decode(Registers& reg, Decoder& decoder)
+{
+    arg1 = decoder.decodeArg(reg);
+}
+
+void JoinThread::execute(Registers& reg)
+{
+    tm.threads.at(arg1.getValue(reg)).join();
+}
+
+void JoinThread::printExpression() const
+{
+    cout << "Expression : joinThread " << arg1.getStr() << endl;
 }

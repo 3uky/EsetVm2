@@ -1,10 +1,11 @@
 #include "engine.h"
+#include "vm.h"
 
 #include <string>
 
 using namespace std;
 
-Engine::Engine(Memory& mem, Decoder& dec, IO& iio) : memory(mem), decoder(dec), io(iio), read(io, memory)
+Engine::Engine(VirtualMachine* ivm) : vm(*ivm), read(vm.io, vm.memory), createThread(vm.tm, ivm), joinThread(vm.tm)
 {
     instructions = {
         { Instruction::Type::mov, &mov},
@@ -19,8 +20,10 @@ Engine::Engine(Memory& mem, Decoder& dec, IO& iio) : memory(mem), decoder(dec), 
         { Instruction::Type::call, &call},
         { Instruction::Type::ret, &ret},
         { Instruction::Type::read, &read},
-        { Instruction::Type::consoleWrite, &consoleWrite},
         { Instruction::Type::consoleRead, &consoleRead},
+        { Instruction::Type::consoleWrite, &consoleWrite},
+        { Instruction::Type::createThread, &createThread},
+        { Instruction::Type::joinThread, &joinThread},
         { Instruction::Type::loadConstant, &loadConstant},
         { Instruction::Type::hlt, &hlt}
     };
@@ -29,22 +32,22 @@ Engine::Engine(Memory& mem, Decoder& dec, IO& iio) : memory(mem), decoder(dec), 
 Instruction::Type Engine::executeNextInstruction(Registers& reg)
 {
     reg.instcount++;
-    auto type = decoder.decodeInstructionCode(reg);
+    auto type = vm.decoder.decodeInstructionCode(reg);
     if(instructions[type] == nullptr)
         throw std::runtime_error(std::string("Engine tried access uninitialized instruction pointer!"));
 
     if(DEBUG) {
         cout << "thread id : " << reg.tId << endl;
-        reg.printInstCounter();
+        vm.reg.printInstCounter();
         instructions[type]->printName();
     }
 
-    instructions[type]->decode(reg, decoder);
+    instructions[type]->decode(reg, vm.decoder);
     instructions[type]->execute(reg);
 
     if(DEBUG) {
         instructions[type]->printExpression();
-        memory.printData();
+        vm.memory.printData();
         reg.print();
     }
 

@@ -1,15 +1,13 @@
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 
-#include <array>
-#include <iostream>
-
 #include "global.h"
 #include "registers.h"
 #include "memory.h"
 #include "argument.h"
+#include "threading_model.h"
 
-class Engine;
+class VirtualMachine;
 class Decoder;
 
 class Instruction
@@ -235,6 +233,38 @@ private:
     Argument arg4;
 
     std::string filename;
+
+    virtual void decode(Registers&, Decoder&);
+    virtual void execute(Registers&);
+    virtual void printExpression() const;
+};
+
+class CreateThread : public Instruction
+{
+public:
+    CreateThread(ThreadingModel&, VirtualMachine*);
+
+private:
+    ThreadingModel& tm;
+    VirtualMachine* vm;
+
+    VM_DWORD address;
+    Argument arg1;
+
+    virtual void decode(Registers&, Decoder&);
+    virtual void execute(Registers&);
+    virtual void printExpression() const;
+};
+
+class JoinThread : public Instruction
+{
+public:
+    JoinThread(ThreadingModel&);
+
+private:
+    ThreadingModel& tm;
+
+    Argument arg1;
 
     virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);

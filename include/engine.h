@@ -8,15 +8,16 @@
 #include "decoder.h"
 #include "io.h"
 #include "registers.h"
+#include "threading_model.h"
+
+class VirtualMachine;
 
 class Engine
 {
 public:
-    Engine(Memory&, Decoder&, IO&);
+    Engine(VirtualMachine*);
 
-    Memory& memory;
-    Decoder& decoder;
-    IO& io;
+    VirtualMachine& vm;
 
     Instruction::Type executeNextInstruction(Registers&);
 
@@ -34,8 +35,10 @@ private:
     Jump jump;
     JumpEqual jumpEqual;
     Read read;
-    ConsoleWrite consoleWrite;
     ConsoleRead consoleRead;
+    ConsoleWrite consoleWrite;
+    CreateThread createThread;
+    JoinThread joinThread;
     Call call;
     Ret ret;
     Hlt hlt;
