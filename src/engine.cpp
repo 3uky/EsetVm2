@@ -9,6 +9,7 @@ Engine::Engine(VirtualMachine* ivm) : vm(*ivm), read(vm.io, vm.memory), createTh
 {
     instructions = {
         { Instruction::Type::mov, &mov},
+        { Instruction::Type::loadConstant, &loadConstant},
         { Instruction::Type::add, &add},
         { Instruction::Type::sub, &sub},
         { Instruction::Type::div, &div},
@@ -17,15 +18,18 @@ Engine::Engine(VirtualMachine* ivm) : vm(*ivm), read(vm.io, vm.memory), createTh
         { Instruction::Type::compare, &compare},
         { Instruction::Type::jump, &jump},
         { Instruction::Type::jumpEqual, &jumpEqual},
-        { Instruction::Type::call, &call},
-        { Instruction::Type::ret, &ret},
         { Instruction::Type::read, &read},
+        // write
         { Instruction::Type::consoleRead, &consoleRead},
         { Instruction::Type::consoleWrite, &consoleWrite},
         { Instruction::Type::createThread, &createThread},
         { Instruction::Type::joinThread, &joinThread},
-        { Instruction::Type::loadConstant, &loadConstant},
-        { Instruction::Type::hlt, &hlt}
+        { Instruction::Type::hlt, &hlt},
+        { Instruction::Type::sleep, &sleep},
+        { Instruction::Type::call, &call},
+        { Instruction::Type::ret, &ret}
+        // lock
+        // unlock
     };
 }
 

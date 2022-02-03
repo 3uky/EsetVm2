@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <thread>
+#include <chrono>
 
 #include "../include/instruction.h"
 #include "../include/decoder.h"
@@ -408,4 +410,25 @@ void JoinThread::execute(Registers& reg)
 void JoinThread::printExpression() const
 {
     cout << "Expression : joinThread " << arg1.getStr() << endl;
+}
+
+
+Sleep::Sleep()
+{
+    iType = Instruction::Type::sleep;
+}
+
+void Sleep::decode(Registers& reg, Decoder& decoder)
+{
+    arg1 = decoder.decodeArg(reg);
+}
+
+void Sleep::execute(Registers& reg)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(arg1.getValue(reg)));
+}
+
+void Sleep::printExpression() const
+{
+    cout << "Expression : sleep " << arg1.getStr() << " (wake up from sleep)" << endl;
 }

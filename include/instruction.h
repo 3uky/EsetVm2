@@ -271,4 +271,17 @@ private:
     virtual void printExpression() const;
 };
 
+class Sleep : public Instruction
+{
+public:
+    Sleep();
+
+private:
+    Argument arg1;
+
+    virtual void decode(Registers&, Decoder&);
+    virtual void execute(Registers&);
+    virtual void printExpression() const;
+};
+
 #endif // INSTRUCTION_H

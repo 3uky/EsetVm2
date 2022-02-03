@@ -35,13 +35,17 @@ private:
     Jump jump;
     JumpEqual jumpEqual;
     Read read;
+    // write
     ConsoleRead consoleRead;
     ConsoleWrite consoleWrite;
     CreateThread createThread;
     JoinThread joinThread;
+    Hlt hlt;
+    Sleep sleep;
     Call call;
     Ret ret;
-    Hlt hlt;
+    // lock
+    // unlock
 };
 
 #endif // ENGINE_H
