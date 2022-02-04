@@ -22,18 +22,8 @@ public:
     ThreadingModel(VirtualMachine*);
 
     void createThread(unsigned int, Registers&);
+    void joinStillRunningThreads();
 
-    /*
-    void lock(VM_QWORD index)
-    {
-        mtxs.emplace(std::piecewise_construct, std::make_tuple(index), std::make_tuple());
-        mtxs[index].lock();
-    }
-    void unlock(VM_QWORD index)
-    {
-        mtxs[index].unlock();
-    }
-    */
     void lock(VM_QWORD);
     void unlock(VM_QWORD);
 };

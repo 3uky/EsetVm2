@@ -17,7 +17,7 @@ public:
     VirtualMachine(std::string&);
 
     void run();
-    void execute(Registers);
+    void executeLoop(Registers);
 
     Registers reg;
     IO io;

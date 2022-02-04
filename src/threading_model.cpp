@@ -14,7 +14,7 @@ ThreadingModel::ThreadingModel(VirtualMachine* ivm) : vm(ivm)
 
 void ThreadingModel::createThread(unsigned int index, Registers& regCopy)
 {
-    threads.emplace(threads.begin() + index, std::thread(&VirtualMachine::execute, vm, regCopy));
+    threads.emplace(threads.begin() + index, std::thread(&VirtualMachine::executeLoop, vm, regCopy));
 }
 
 void ThreadingModel::lock(VM_QWORD index)
@@ -26,4 +26,12 @@ void ThreadingModel::lock(VM_QWORD index)
 void ThreadingModel::unlock(VM_QWORD index)
 {
     mtxs[index].unlock();
+}
+
+void ThreadingModel::joinStillRunningThreads()
+{
+    for (auto& t: threads) {
+        if(t.joinable())
+            t.join();
+    }
 }

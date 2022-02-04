@@ -11,12 +11,15 @@ VirtualMachine::VirtualMachine(string& filename) : reg(), io(filename), memory(i
 {
 }
 
+// only main thread
 void VirtualMachine::run()
 {
-    execute(reg);
+    executeLoop(reg);
+
+    tm.joinStillRunningThreads();
 }
 
-void VirtualMachine::execute(Registers reg)
+void VirtualMachine::executeLoop(Registers reg)
 {
     while(1)
     {
