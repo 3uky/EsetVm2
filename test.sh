@@ -23,3 +23,12 @@ echo threadingBase.evm
 
 echo lock.evm
 ./esetvm2 $BINARY_DIR/lock.evm
+
+echo multithreaded_file_write.evm
+./esetvm2 $BINARY_DIR/multithreaded_file_write.evm
+
+echo pseudorandom.evm
+sleep 0.0$((($RANDOM % 100))); echo 1 | ./esetvm2 $BINARY_DIR/pseudorandom.evm
+
+echo philosophers.evm
+./esetvm2 $BINARY_DIR/philosophers.evm
