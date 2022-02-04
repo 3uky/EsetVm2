@@ -415,14 +415,13 @@ void CreateThread::execute(Registers& reg)
 
     // prepare new registers copy
     Registers regCopy = reg;
-    regCopy.tId = index + 1; // tId==0 has main thread, threads with tid 1 has 0 index in vector!
+    regCopy.tId = index + 1; // tId==0 has main thread, other threads has index +1 then
     regCopy.emptyStack();
 
     // set starting address for new thread
     regCopy.ip = address;
 
     // start new thread
-    //tm.threads.emplace(tm.threads.begin() + index, thread(&VirtualMachine::execute, vm, regCopy));
     tm.createThread(index, regCopy);
 }
 

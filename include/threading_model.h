@@ -14,7 +14,8 @@ class ThreadingModel
 {
 public:
     std::vector<std::thread> threads;
-    std::map<VM_QWORD, std::mutex> mtxs;
+    std::map<VM_QWORD, std::mutex> mtxs;    // used by evm programs
+    std::recursive_mutex mtx;               // used for mutual exclusion to critical sections
 
     unsigned int noThreads;
 

@@ -20,11 +20,13 @@ void ThreadingModel::createThread(unsigned int index, Registers& regCopy)
 void ThreadingModel::lock(VM_QWORD index)
 {
     mtxs.emplace(std::piecewise_construct, std::make_tuple(index), std::make_tuple());
+    mtx.unlock();
     mtxs[index].lock();
 }
 
 void ThreadingModel::unlock(VM_QWORD index)
 {
+    mtx.unlock();
     mtxs[index].unlock();
 }
 

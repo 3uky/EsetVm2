@@ -21,8 +21,7 @@ public:
 
 private:
     Decoder& decoder;
-
-    std::mutex mtx;
+    ThreadingModel& threadingModel;
 
     std::map<Instruction::Type, Instruction*> instructions;
     Mov mov;

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Engine::Engine(Decoder& dec, IO& io, Memory& memory, ThreadingModel& tm) : decoder(dec),
+Engine::Engine(Decoder& dec, IO& io, Memory& memory, ThreadingModel& tm) : decoder(dec), threadingModel(tm),
     read(io, memory), write(io, memory), createThread(tm), joinThread(tm), lock(tm), unlock(tm)
 {
     initialize();
@@ -19,13 +19,13 @@ Instruction::Type Engine::executeNextInstruction(Registers& reg)
         instructions[type]->printName();
 
     if(isInstructionMemoryRelated(type))
-        mtx.lock();
+        threadingModel.mtx.lock();
 
     instructions[type]->decode(reg, decoder);
     instructions[type]->execute(reg);
 
     if(isInstructionMemoryRelated(type))
-        mtx.unlock();
+        threadingModel.mtx.unlock();
 
     if(DEBUG)
         instructions[type]->printExpression();
@@ -48,16 +48,16 @@ bool Engine::isInstructionMemoryRelated(Instruction::Type type) const
         { Instruction::Type::jumpEqual},
         { Instruction::Type::read},
         { Instruction::Type::write},
-        //{ Instruction::Type::consoleRead}, // peudorandom
-        //{ Instruction::Type::consoleWrite}, // philosophers
+        //{ Instruction::Type::consoleRead}, // pseudorandom
+        //{ Instruction::Type::consoleWrite},
         { Instruction::Type::createThread},
         //{ Instruction::Type::joinThread},
         //{ Instruction::Type::hlt},
         //{ Instruction::Type::sleep},
         //{ Instruction::Type::call},
         //{ Instruction::Type::ret},
-        //{ Instruction::Type::lock}
-        //{ Instruction::Type::unlock}
+        { Instruction::Type::lock},
+        { Instruction::Type::unlock}
     };
 
     return memoryRelated.find(type) != memoryRelated.end();
