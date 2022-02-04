@@ -47,3 +47,4 @@ note
 log
 *~
 *.swp
+*.gdb_history
