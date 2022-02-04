@@ -1,0 +1,37 @@
+.dataSize 16000
+.code
+
+loadConst 0, r0
+loadConst 1, r1
+loadConst 2, r2
+loadConst 3, r3
+loadConst 4, r4
+loadConst 5, r5
+loadConst 6, r6
+
+createThread threadProc, qword[r4]
+
+loadConst 666, r0
+loadConst 666, r1
+loadConst 666, r2
+loadConst 666, r3
+loadConst 666, r4
+loadConst 666, r5
+loadConst 666, r6
+
+joinThread qword[r4]
+
+hlt
+
+threadProc:
+	consoleWrite r0
+	consoleWrite r1
+	consoleWrite r2
+	consoleWrite r3
+	consoleWrite r4
+	consoleWrite r5
+	consoleWrite r6
+	
+	hlt
+
+.data
