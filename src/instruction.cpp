@@ -395,7 +395,7 @@ void Write::printExpression() const
     cout << "Expression : write " << arg1.getStr() << ", " << arg2.getStr() << ", " << arg3.getStr() << endl;
 }
 
-CreateThread::CreateThread(ThreadingModel& itm, VirtualMachine* ivm) : tm(itm), vm(ivm)
+CreateThread::CreateThread(ThreadingModel& itm) : tm(itm)
 {
     iType = Instruction::Type::createThread;
 }
@@ -415,14 +415,15 @@ void CreateThread::execute(Registers& reg)
 
     // prepare new registers copy
     Registers regCopy = reg;
-    regCopy.tId = index + 1; // tId==0 has main thread, threads has id+1 then their index in vector!
+    regCopy.tId = index + 1; // tId==0 has main thread, threads with tid 1 has 0 index in vector!
     regCopy.emptyStack();
 
     // set starting address for new thread
     regCopy.ip = address;
 
     // start new thread
-    tm.threads.emplace(tm.threads.begin() + index, thread(&VirtualMachine::execute, vm, regCopy));
+    //tm.threads.emplace(tm.threads.begin() + index, thread(&VirtualMachine::execute, vm, regCopy));
+    tm.createThread(index, regCopy);
 }
 
 void CreateThread::printExpression() const

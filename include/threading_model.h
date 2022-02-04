@@ -7,24 +7,35 @@
 #include <mutex>
 
 #include "global.h"
+#include "registers.h"
 
+class VirtualMachine;
 class ThreadingModel
 {
 public:
     std::vector<std::thread> threads;
     std::map<VM_QWORD, std::mutex> mtxs;
-    //std::mutex mtx;
 
-    void lock(VM_QWORD index) {
-        //mtx.lock();
+    unsigned int noThreads;
+
+    VirtualMachine* vm;
+    ThreadingModel(VirtualMachine*);
+
+    void createThread(unsigned int, Registers&);
+
+    /*
+    void lock(VM_QWORD index)
+    {
         mtxs.emplace(std::piecewise_construct, std::make_tuple(index), std::make_tuple());
         mtxs[index].lock();
-    };
-
-    void unlock(VM_QWORD index) {
-        //mtx.unlock();
-        mtxs[index].unlock(); // tbd: check if exists
-    };
+    }
+    void unlock(VM_QWORD index)
+    {
+        mtxs[index].unlock();
+    }
+    */
+    void lock(VM_QWORD);
+    void unlock(VM_QWORD);
 };
 
 #endif // THREADING_MODEL_H_INCLUDED

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-VirtualMachine::VirtualMachine(string& filename) : reg(), io(filename), memory(io), decoder(memory), engine(this)
+VirtualMachine::VirtualMachine(string& filename) : reg(), io(filename), memory(io), decoder(memory), tm(this), engine(decoder, io, memory, tm)
 {
 }
 
@@ -22,5 +22,10 @@ void VirtualMachine::execute(Registers reg)
     {
         if(engine.executeNextInstruction(reg) == Instruction::Type::hlt)
             break;
+
+        if(DEBUG) {
+            memory.printData();
+            reg.print();
+        }
     }
 }

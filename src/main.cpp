@@ -26,7 +26,10 @@ int main(int argc,char* argv[])
             //filename = "./task/samples/precompiled/fibonacci_loop.evm";
             //filename = "./task/samples/precompiled/xor.evm";
             //filename = "./task/samples/precompiled/crc.evm";
-            filename = "./task/samples/precompiled/threadingBase.evm";
+            //filename = "./task/samples/precompiled/threadingBase.evm";
+            //filename = "./task/samples/precompiled/lock.evm";
+            //filename = "./task/samples/precompiled/multithreaded_file_write.evm";
+            filename = "./task/samples/precompiled/philosophers.evm";
             //filename = "./task/samples/precompiled/xor-with-stack-frame.evm";
             //filename = "./analysis/samples/precompiled/console_read.evm";
             //filename = "./analysis/samples/precompiled/my.evm";

@@ -23,8 +23,8 @@ public:
     IO io;
     Memory memory;
     Decoder decoder;
-    Engine engine;
     ThreadingModel tm;
+    Engine engine;
 };
 
 #endif // VIRTUALMACHINE_H

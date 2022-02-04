@@ -258,11 +258,10 @@ private:
 class CreateThread : public Instruction
 {
 public:
-    CreateThread(ThreadingModel&, VirtualMachine*);
+    CreateThread(ThreadingModel&);
 
 private:
     ThreadingModel& tm;
-    VirtualMachine* vm;
 
     VM_DWORD address;
     Argument arg1;
