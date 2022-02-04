@@ -359,7 +359,40 @@ void Read::execute(Registers& reg)
 
 void Read::printExpression() const
 {
-    cout << "Expression : read " << arg1.getStr() << ", " << arg2.getStr() << ", " << arg3.getStr() << ", " << arg4.getStr() << "  file=" << filename << endl;
+    cout << "Expression : read " << arg1.getStr() << ", " << arg2.getStr() << ", " << arg3.getStr() << ", " << arg4.getStr() << endl;
+}
+
+Write::Write(IO& iio, Memory& mem) : io(iio), memory(mem)
+{
+    iType = Instruction::Type::write;
+}
+
+void Write::decode(Registers& reg, Decoder& decoder)
+{
+    arg1 = decoder.decodeArg(reg);
+    arg2 = decoder.decodeArg(reg);
+    arg3 = decoder.decodeArg(reg);
+}
+
+void Write::execute(Registers& reg)
+{
+    auto fileOffset = arg1.getValue(reg);
+    auto noBytes = arg2.getValue(reg);
+    auto memoryOffset = arg3.getValue(reg);
+
+    std::vector<VM_BYTE> toWrite;
+
+    // read data from memory
+    for(size_t i=0; i < noBytes; i++)
+        toWrite.push_back(memory.read(memoryOffset + i, Memory::Size::byte));
+
+    // write data to file
+    io.write(fileOffset, noBytes, toWrite);
+}
+
+void Write::printExpression() const
+{
+    cout << "Expression : write " << arg1.getStr() << ", " << arg2.getStr() << ", " << arg3.getStr() << endl;
 }
 
 CreateThread::CreateThread(ThreadingModel& itm, VirtualMachine* ivm) : tm(itm), vm(ivm)
@@ -375,16 +408,21 @@ void CreateThread::decode(Registers& reg, Decoder& decoder)
 
 void CreateThread::execute(Registers& reg)
 {
-    // prepare new registers copy (tbd copy constructor)
+    auto index = tm.noThreads++;
+
+    // store identifier (parent thread)
+    arg1.storeResult(index, reg);
+
+    // prepare new registers copy
     Registers regCopy = reg;
-    regCopy.tId = tm.threads.size() + 1; // tId==0 has main thread
+    regCopy.tId = index + 1; // tId==0 has main thread, threads has id+1 then their index in vector!
     regCopy.emptyStack();
-    // set ip
+
+    // set starting address for new thread
     regCopy.ip = address;
-    // store identifier
-    arg1.storeResult(tm.threads.size(), reg);
+
     // start new thread
-    tm.threads.push_back(thread(&VirtualMachine::execute, vm, regCopy));
+    tm.threads.emplace(tm.threads.begin() + index, thread(&VirtualMachine::execute, vm, regCopy));
 }
 
 void CreateThread::printExpression() const
@@ -432,9 +470,6 @@ void Sleep::printExpression() const
     cout << "Expression : sleep " << arg1.getStr() << " (wake up from sleep)" << endl;
 }
 
-
-
-
 Lock::Lock(ThreadingModel& itm) : tm(itm)
 {
     iType = Instruction::Type::lock;
@@ -454,7 +489,6 @@ void Lock::printExpression() const
 {
     cout << "Expression : lock " << arg1.getStr() << endl;
 }
-
 
 Unlock::Unlock(ThreadingModel& itm) : tm(itm)
 {

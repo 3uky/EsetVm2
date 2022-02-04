@@ -14,6 +14,7 @@ public:
     IO(std::string& ifilename);
 
     unsigned int read(unsigned int, unsigned int, std::vector<VM_BYTE>&, Filetype type=Filetype::evm);
+    void write(unsigned int, unsigned int, std::vector<VM_BYTE>&);
     unsigned int getFileSize() const;
 
 private:

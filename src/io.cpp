@@ -68,6 +68,19 @@ unsigned int IO::getFileSize() const
     return filesize;
 }
 
+void IO::write(unsigned int storageOffset, unsigned int noBytes, vector<VM_BYTE>& toWrite)
+{
+    ofstream f(filenameBinary, ios::binary | ios::out | ios::in);
+
+    if (!f.is_open())
+        throw runtime_error(string("Cannot open file: ") + filenameBinary);
+
+    f.seekp(storageOffset);
+    f.write(reinterpret_cast<char*>(toWrite.data()), noBytes);
+
+    f.close();
+}
+
 /*
 vector<char> IO::loadBinary()
 {
