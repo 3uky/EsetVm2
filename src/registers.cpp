@@ -2,7 +2,9 @@
 
 using namespace std;
 
-void Registers::print() const {
+void Registers::print() const
+{
+    cout << "tid = " << dec << tId << endl;
     cout << "ip = " << dec << ip << endl;
     if(!sp.empty())
         cout << "sp = " << dec << sp.top() << endl;
@@ -11,8 +13,9 @@ void Registers::print() const {
     cout << endl;
 }
 
-void Registers::printInstCounter() const {
-    cout << dec << instcount << ": ";
+void Registers::printInstCounter() const
+{
+    cout << "instruction no.: " << dec << instcount << endl;
 }
 
 void Registers::emptyStack()
