@@ -290,7 +290,6 @@ void JumpEqual::printExpression() const
         cout << "Expression : values are not equal NOP" << endl;
 }
 
-
 Call::Call()
 {
     iType = Instruction::Type::call;
@@ -408,21 +407,16 @@ void CreateThread::decode(Registers& reg, Decoder& decoder)
 
 void CreateThread::execute(Registers& reg)
 {
-    auto index = tm.noThreads++;
-
-    // store identifier (parent thread)
-    arg1.storeResult(index, reg);
-
-    // prepare new registers copy
+    // prepare new registers copy parent registers
     Registers regCopy = reg;
-    regCopy.tId = index + 1; // tId==0 has main thread, other threads has index +1 then
+    // empty stack
     regCopy.emptyStack();
-
     // set starting address for new thread
     regCopy.ip = address;
-
     // start new thread
-    tm.createThread(index, regCopy);
+    auto index = tm.createThread(regCopy);
+    // store child identifier in parent thread
+    arg1.storeResult(index, reg);
 }
 
 void CreateThread::printExpression() const

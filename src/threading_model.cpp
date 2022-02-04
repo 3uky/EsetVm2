@@ -12,9 +12,12 @@ ThreadingModel::ThreadingModel(VirtualMachine* ivm) : vm(ivm)
     noThreads = 0;
 }
 
-void ThreadingModel::createThread(unsigned int index, Registers& regCopy)
+unsigned int ThreadingModel::createThread(Registers& regCopy)
 {
+    auto index = noThreads++;
+    regCopy.tId = noThreads;
     threads.emplace(threads.begin() + index, std::thread(&VirtualMachine::executeLoop, vm, regCopy));
+    return index;
 }
 
 void ThreadingModel::lock(VM_QWORD index)

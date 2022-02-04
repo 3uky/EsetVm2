@@ -22,7 +22,7 @@ public:
     VirtualMachine* vm;
     ThreadingModel(VirtualMachine*);
 
-    void createThread(unsigned int, Registers&);
+    unsigned int createThread(Registers&);
     void joinStillRunningThreads();
 
     void lock(VM_QWORD);
