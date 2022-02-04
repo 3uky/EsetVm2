@@ -11,11 +11,10 @@ Decoder::Decoder(Memory& mem) : memory(mem)
 
 VM_BYTE Decoder::getBitFromMemory(Registers& reg)
 {
-    auto& ip = reg.ip;
-    auto currentByte = memory.code[ip / 8];
-    auto mask = 0b10000000 >> (ip % 8);
-    auto bit = (currentByte & mask) >> (7 - (ip % 8));
-    ip++;
+    auto currentByte = memory.code[reg.ip / 8];
+    auto mask = 0b10000000 >> (reg.ip % 8);
+    auto bit = (currentByte & mask) >> (7 - (reg.ip % 8));
+    reg.ip++;
     return bit;
 }
 
