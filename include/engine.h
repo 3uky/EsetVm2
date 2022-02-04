@@ -2,28 +2,29 @@
 #define ENGINE_H
 
 #include <map>
+#include <mutex>
 
 #include "instruction.h"
-#include "memory.h"
-#include "decoder.h"
-#include "io.h"
+//#include "memory.h"
+//#include "decoder.h"
+//#include "io.h"
 #include "registers.h"
-#include "threading_model.h"
 
 class VirtualMachine;
 
 class Engine
 {
 public:
-    Engine(VirtualMachine*);
-
-    VirtualMachine& vm;
+    Engine(Decoder&, IO&, Memory&, ThreadingModel&);
 
     Instruction::Type executeNextInstruction(Registers&);
 
 private:
-    std::map<Instruction::Type, Instruction*> instructions;
+    Decoder& decoder;
 
+    std::mutex mtx;
+
+    std::map<Instruction::Type, Instruction*> instructions;
     Mov mov;
     LoadConstant loadConstant;
     Add add;
@@ -35,7 +36,7 @@ private:
     Jump jump;
     JumpEqual jumpEqual;
     Read read;
-    // write
+    Write write;
     ConsoleRead consoleRead;
     ConsoleWrite consoleWrite;
     CreateThread createThread;
@@ -46,6 +47,9 @@ private:
     Ret ret;
     Lock lock;
     Unlock unlock;
+
+    void initialize();
+    bool isInstructionMemoryRelated(Instruction::Type) const;
 };
 
 #endif // ENGINE_H

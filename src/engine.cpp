@@ -1,12 +1,69 @@
 #include "engine.h"
 #include "vm.h"
 
-#include <string>
+#include <set>
 
 using namespace std;
 
-Engine::Engine(VirtualMachine* ivm) : vm(*ivm),
-    read(vm.io, vm.memory), createThread(vm.tm, ivm), joinThread(vm.tm), lock(vm.tm), unlock(vm.tm)
+Engine::Engine(Decoder& dec, IO& io, Memory& memory, ThreadingModel& tm) : decoder(dec),
+    read(io, memory), write(io, memory), createThread(tm), joinThread(tm), lock(tm), unlock(tm)
+{
+    initialize();
+}
+
+Instruction::Type Engine::executeNextInstruction(Registers& reg)
+{
+    auto type = decoder.decodeInstructionCode(reg);
+
+    if(DEBUG)
+        instructions[type]->printName();
+
+    if(isInstructionMemoryRelated(type))
+        mtx.lock();
+
+    instructions[type]->decode(reg, decoder);
+    instructions[type]->execute(reg);
+
+    if(isInstructionMemoryRelated(type))
+        mtx.unlock();
+
+    if(DEBUG)
+        instructions[type]->printExpression();
+
+    return type;
+}
+
+bool Engine::isInstructionMemoryRelated(Instruction::Type type) const
+{
+    static std::set<Instruction::Type> memoryRelated = {
+        { Instruction::Type::mov},
+        { Instruction::Type::loadConstant},
+        { Instruction::Type::add},
+        { Instruction::Type::sub},
+        { Instruction::Type::div},
+        { Instruction::Type::mod},
+        { Instruction::Type::mul},
+        { Instruction::Type::compare},
+        { Instruction::Type::jump},
+        { Instruction::Type::jumpEqual},
+        { Instruction::Type::read},
+        { Instruction::Type::write},
+        //{ Instruction::Type::consoleRead}, // peudorandom
+        //{ Instruction::Type::consoleWrite}, // philosophers
+        { Instruction::Type::createThread},
+        //{ Instruction::Type::joinThread},
+        //{ Instruction::Type::hlt},
+        //{ Instruction::Type::sleep},
+        //{ Instruction::Type::call},
+        //{ Instruction::Type::ret},
+        //{ Instruction::Type::lock}
+        //{ Instruction::Type::unlock}
+    };
+
+    return memoryRelated.find(type) != memoryRelated.end();
+}
+
+void Engine::initialize()
 {
     instructions = {
         { Instruction::Type::mov, &mov},
@@ -20,7 +77,7 @@ Engine::Engine(VirtualMachine* ivm) : vm(*ivm),
         { Instruction::Type::jump, &jump},
         { Instruction::Type::jumpEqual, &jumpEqual},
         { Instruction::Type::read, &read},
-        // write
+        { Instruction::Type::write, &write},
         { Instruction::Type::consoleRead, &consoleRead},
         { Instruction::Type::consoleWrite, &consoleWrite},
         { Instruction::Type::createThread, &createThread},
@@ -33,29 +90,3 @@ Engine::Engine(VirtualMachine* ivm) : vm(*ivm),
         { Instruction::Type::unlock, &unlock}
     };
 }
-
-Instruction::Type Engine::executeNextInstruction(Registers& reg)
-{
-    reg.instcount++;
-    auto type = vm.decoder.decodeInstructionCode(reg);
-    if(instructions[type] == nullptr)
-        throw std::runtime_error(std::string("Engine tried access uninitialized instruction pointer!"));
-
-    if(DEBUG) {
-        cout << "thread id : " << reg.tId << endl;
-        vm.reg.printInstCounter();
-        instructions[type]->printName();
-    }
-
-    instructions[type]->decode(reg, vm.decoder);
-    instructions[type]->execute(reg);
-
-    if(DEBUG) {
-        instructions[type]->printExpression();
-        vm.memory.printData();
-        reg.print();
-    }
-
-    return type;
-}
-
