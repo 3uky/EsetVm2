@@ -4,18 +4,18 @@
 
 using namespace std;
 
-Alu::Alu()
+Math::Math()
 {
 }
 
-void Alu::decode(Registers& reg, Decoder& decoder)
+void Math::decode(Registers& reg, Decoder& decoder)
 {
     arg1 = decoder.decodeArg(reg);
     arg2 = decoder.decodeArg(reg);
     arg3 = decoder.decodeArg(reg);
 }
 
-void Alu::printExpression() const
+void Math::printExpression() const
 {
     static map<Instruction::Type, std::string> operand = {
         { Instruction::Type::add, " + " },

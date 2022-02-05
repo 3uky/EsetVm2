@@ -6,10 +6,10 @@
 #include "registers.h"
 #include "decoder.h"
 
-class Alu : public Instruction
+class Math : public Instruction
 {
 public:
-    Alu();
+    Math();
 
 protected:
     Argument arg1;
@@ -21,7 +21,7 @@ protected:
     virtual void printExpression() const;
 };
 
-class Add : public Alu
+class Add : public Math
 {
 public:
     Add();
@@ -30,7 +30,7 @@ private:
     virtual void execute(Registers&);
 };
 
-class Sub : public Alu
+class Sub : public Math
 {
 public:
     Sub();
@@ -39,7 +39,7 @@ private:
     virtual void execute(Registers&);
 };
 
-class Div : public Alu
+class Div : public Math
 {
 public:
     Div();
@@ -48,7 +48,7 @@ private:
     virtual void execute(Registers&);
 };
 
-class Mod : public Alu
+class Mod : public Math
 {
 public:
     Mod();
@@ -57,7 +57,7 @@ private:
     virtual void execute(Registers&);
 };
 
-class Mul : public Alu
+class Mul : public Math
 {
 public:
     Mul();
@@ -66,7 +66,7 @@ private:
     virtual void execute(Registers&);
 };
 
-class Compare : public Alu
+class Compare : public Math
 {
 public:
     Compare();
