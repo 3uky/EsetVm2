@@ -119,42 +119,7 @@ private:
     virtual void printExpression() const;
 };
 
-class Read : public Instruction
-{
-public:
-    Read(IO&, Memory&);
 
-private:
-    IO& io;
-    Memory& memory;
-
-    Argument arg1;
-    Argument arg2;
-    Argument arg3;
-    Argument arg4;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
-
-class Write : public Instruction
-{
-public:
-    Write(IO&, Memory&);
-
-private:
-    IO& io;
-    Memory& memory;
-
-    Argument arg1;
-    Argument arg2;
-    Argument arg3;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
 
 class CreateThread : public Instruction
 {
