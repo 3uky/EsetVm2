@@ -6,13 +6,21 @@ TMP_DIR=./res
 
 function test() {
 	if [ $# -eq 1 ]; then
-		echo $1.evm
+		print_test_name $1
 		./esetvm2 $BINARY_DIR/$1.evm | tee $TMP_DIR/$1.res
 		check_result $1.res
 	elif [ $# -eq 2 ]; then
-		echo $1.evm \(input: $2\)
+		print_test_name $1 "(input: $2)"
 		echo $2 | ./esetvm2 $BINARY_DIR/$1.evm | tee $TMP_DIR/$1.res
 		check_result $1.res
+	fi
+}
+
+function print_test_name() {
+	if [ $# -eq 1 ]; then
+		echo -e "\e[0;32m $1.evm\033[0m"
+	elif [ $# -eq 2 ]; then
+		echo -e "\e[0;32m $1.evm\033[0m $2"
 	fi
 }
 
@@ -36,6 +44,8 @@ function print_result() {
 		echo $1
 	fi
 }
+
+
 mkdir $TMP_DIR
 
 make clean
@@ -51,11 +61,11 @@ test threadingBase
 test lock
 rm -dr $TMP_DIR
 
-echo multithreaded_file_write.evm
+print_test_name multithread_file_write
 ./esetvm2 $BINARY_DIR/multithreaded_file_write.evm
 check_result task/samples/multithreaded_file_write.bin analysis/results/multithreaded_file_write.bin
 
-echo pseudorandom.evm \(run twice with different delay\)
+print_test_name pseudorandom "(run twice with different delay)"
 RES1=$(echo 1; sleep 0.011 | ./esetvm2 $BINARY_DIR/pseudorandom.evm)
 RES2=$(echo 2; sleep 0.012 | ./esetvm2 $BINARY_DIR/pseudorandom.evm)
 echo $RES1
@@ -63,5 +73,5 @@ echo $RES2
 RES=""; [ "$RES1" == "$RES2" ] && RES="failed"
 print_result $RES
 
-echo philosophers.evm \(specify number of philosophers e.g. 5\)
+print_test_name philosophers.evm "(specify number of philosophers e.g. 5)"
 ./esetvm2 $BINARY_DIR/philosophers.evm
