@@ -7,6 +7,7 @@
 #include "instruction.h"
 #include "instructions_alu.h" // mov, loadConstant, add, sub, div, mod, mul, compare
 #include "instructions_io.h" // read, write
+#include "instructions_thread.h" // createThread, joinThread, sleep, lock, unlock
 //#include "memory.h"
 //#include "decoder.h"
 //#include "io.h"

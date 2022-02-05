@@ -3,9 +3,7 @@
 
 #include "global.h"
 #include "registers.h"
-#include "memory.h"
 #include "argument.h"
-#include "threading_model.h"
 
 class VirtualMachine;
 class Decoder;
@@ -121,78 +119,5 @@ private:
 
 
 
-class CreateThread : public Instruction
-{
-public:
-    CreateThread(ThreadingModel&);
-
-private:
-    ThreadingModel& tm;
-
-    VM_DWORD address;
-    Argument arg1;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
-
-class JoinThread : public Instruction
-{
-public:
-    JoinThread(ThreadingModel&);
-
-private:
-    ThreadingModel& tm;
-
-    Argument arg1;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
-
-class Sleep : public Instruction
-{
-public:
-    Sleep();
-
-private:
-    Argument arg1;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
-
-class Lock : public Instruction
-{
-public:
-    Lock(ThreadingModel&);
-
-private:
-    ThreadingModel& tm;
-
-    Argument arg1;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
-
-class Unlock : public Instruction
-{
-public:
-    Unlock(ThreadingModel&);
-
-private:
-    ThreadingModel& tm;
-
-    Argument arg1;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
 
 #endif // INSTRUCTION_H
