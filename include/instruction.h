@@ -186,7 +186,7 @@ private:
     VM_DWORD address;
     Argument arg1;
     Argument arg2;
-    bool jumping;
+    bool isEqual;
 
     virtual void decode(Registers&, Decoder&);
     virtual void execute(Registers&);

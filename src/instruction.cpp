@@ -262,7 +262,7 @@ void Jump::printExpression() const
 JumpEqual::JumpEqual()
 {
     iType = Instruction::Type::jump;
-    jumping = false;
+    isEqual = false;
 }
 
 void JumpEqual::decode(Registers& reg, Decoder& decoder)
@@ -275,16 +275,16 @@ void JumpEqual::decode(Registers& reg, Decoder& decoder)
 void JumpEqual::execute(Registers& reg)
 {
     if (arg1.getValue(reg) == arg2.getValue(reg)) {
-        jumping = true;
+        isEqual = true;
         reg.ip = address;
     }
     else
-        jumping = false;
+        isEqual = false;
 }
 
 void JumpEqual::printExpression() const
 {
-    if (jumping)
+    if (isEqual)
         cout << "Expression : jump to address " << address << endl;
     else
         cout << "Expression : values are not equal NOP" << endl;
