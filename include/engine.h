@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "instruction.h"
+#include "instructions_alu.h" // mov, loadConstant, add, sub, div, mod, mul, compare
 //#include "memory.h"
 //#include "decoder.h"
 //#include "io.h"
