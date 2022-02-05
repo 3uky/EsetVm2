@@ -38,30 +38,7 @@ private:
     virtual void printExpression() const {};
 };
 
-class ConsoleWrite : public Instruction
-{
-public:
-    ConsoleWrite();
-private:
-    Argument arg1;
 
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const {};
-};
-
-class ConsoleRead : public Instruction
-{
-public:
-    ConsoleRead();
-private:
-    Argument arg1;
-    VM_DWORD value;
-
-    virtual void decode(Registers&, Decoder&);
-    virtual void execute(Registers&);
-    virtual void printExpression() const;
-};
 
 class Jump : public Instruction
 {
