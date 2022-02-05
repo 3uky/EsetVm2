@@ -8,10 +8,7 @@
 #include "instructions_io.h" // read, write
 #include "instructions_thread.h" // createThread, joinThread, sleep, lock, unlock
 #include "instructions_console.h" // consoleRead, consoleWrite
-//#include "memory.h"
-//#include "decoder.h"
-//#include "io.h"
-//#include "registers.h"
+#include "instructions_jump.h" // jump, jumpEqual, call, ret, hlt
 
 class VirtualMachine;
 
