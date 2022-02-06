@@ -4,7 +4,7 @@ Virtual Machine for interpreting EsetVm2 (.evm) binary programs.
 
 ## description
 
-Input binaries (.evm) could be compiled from specific Eset assembeler (.easm) files with compiler ```task/compiler.py```. Eset assembler language is described in ```task/task.pdf```. Documentation contains also file format, bytecode description and other mechanisms. The code examples could be found in ```task/samples```. Precompiled examples are in ```task/samples/precompiled```.
+Input binaries (.evm) could be compiled from specific Eset assembeler (.easm) files with compiler ```task/compiler.py```. Eset assembler language is described in ```task/task.pdf```. Documentation contains description of file format, bytecode, data encoding, threading model, memory initialization etc. The code examples could be found in ```task/samples```. Precompiled examples are in ```task/samples/precompiled```.
 
 ## usage
 
@@ -42,10 +42,10 @@ Notes related to task and binary files analysis stored as cherry tree notes ```a
 I have created some own elementary easm/evm examples for specific testing purposes. They are stored under ```analysis/samples``` and ```analysis/samples/precompiled```. 
 
 ### memory leaks tests
-Application was tested with *valgrind* there are not memory leaks.
+Application was tested with *valgrind* and it's free of memory leaks.
 
 ### regression tests
-The regression ```test.sh``` recompiles esetvm2 application and run it with all input binaries from ```samples\precompiled```. The results are compared with expected outputs stored in ```analysis\results``` and specified by ```samples\sample.txt```. The *philosophers.evm* runs without deadlock. I have tested 30m+ long run.
+The regression ```test.sh``` recompiles esetvm2 application and run it with all input binaries from ```samples\precompiled```. The results are compared with expected outputs stored in ```analysis\results``` and specified by ```samples\sample.txt```. The *philosophers.evm* runs without deadlock they were tested for more then 30 minuts.
 
 ![](./analysis/notes/regression-tests-result.png)
 
