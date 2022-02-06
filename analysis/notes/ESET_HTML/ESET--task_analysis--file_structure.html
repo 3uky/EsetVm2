@@ -1,0 +1,8 @@
+<!doctype html><html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <title>file structure</title>
+      <meta name="generator" content="CherryTree">
+      <link rel="stylesheet" href="res/styles3.css" type="text/css" />
+    </head>
+    <body><div class='page'><h1 class='title'>file structure</h1><br/><strong>header structure / binary file structure</strong><br />8 byte magic value &quot;ESET-VM2&quot;<br />4 byte size code section<br />4 byte size data section<br />4 byte size initial data section<br /><br /><strong>file format validation</strong><br />data section size &gt;= initial data section<br />magic value == &quot;ESET-VM2&quot;<br />sizeof(header) 20B + size code section + size initial data section == file size<br /></div></body></html>

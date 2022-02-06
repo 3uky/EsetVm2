@@ -1,0 +1,8 @@
+<!doctype html><html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <title>memory</title>
+      <meta name="generator" content="CherryTree">
+      <link rel="stylesheet" href="res/styles3.css" type="text/css" />
+    </head>
+    <body><div class='page'><h1 class='title'>memory</h1><br/>Data section<br />- has size defined in header (bytes index 12-15)<br />- may be initialized with data loaded from file<br />- if initialDataSize &gt; 0 (size specified in header 3rd size (bytes index 16-19)<br />- initialDataSize bytes are read from file and copied to the beginning<br />- initialData could be found on byte index = header size (20) + code segment size (value on bytes index 8-11) in binsty file<br />- example crc.evm/easm<br /><br />Code section<br />- starts from byte index 20 has size defined in header (bytes index 8-11).<br />- read only</div></body></html>

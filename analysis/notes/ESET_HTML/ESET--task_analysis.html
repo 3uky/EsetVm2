@@ -1,0 +1,8 @@
+<!doctype html><html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <title>task analysis</title>
+      <meta name="generator" content="CherryTree">
+      <link rel="stylesheet" href="res/styles3.css" type="text/css" />
+    </head>
+    <body><div class='page'><h1 class='title'>task analysis</h1><br/>eset assembler to eset binary<br />*.easm -&gt; compiler.py -&gt; *.evm<br /><code><br />python2 compiler.py samples/math.easm math.evm<br />diff math.evm samples/precompiled/math.evm</code><br /><br /><code>hexdump -C samples/precimpiled/math.evm</code><br /><code>xxd -b samples/precimpiled/math.evm</code><br /><br /><em>harvard architecture</em><br />- there is separated instructions from data<br /><a href=""><img src="images/15-1.png" alt="images/15-1.png" /></a><br /><br />study material:<br /><a href="https://justinmeiners.github.io/lc3-vm/">https://justinmeiners.github.io/lc3-vm/</a><br /><a href="https://github.com/eaglx/VmInstructionsDecoder/blob/main/include/core.hpp">https://github.com/eaglx/VmInstructionsDecoder/blob/main/include/core.hpp</a><br /><br /></div></body></html>

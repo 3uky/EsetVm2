@@ -1,0 +1,8 @@
+<!doctype html><html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <title>threading model</title>
+      <meta name="generator" content="CherryTree">
+      <link rel="stylesheet" href="res/styles3.css" type="text/css" />
+    </head>
+    <body><div class='page'><h1 class='title'>threading model</h1><br/>Threading model<br /><br />each thread has own<br />- registers (copied from parent)<br />- stack (empty)<br />- instruction pointer (initialized with createThread argument value)<br /><br />main thread<br />- has to join all initialized threads before exits (don&#39;t rely on joinThread i. in easm program)<br /><br />thread synchronization<br />- two level of synchronization - defined by binary + critical sections in virtual machine<br />- threads could be synchronized with lock, unlock instruction based on easm/evm program<br />- threads has to be synchonized also in virtual machine<br />   → threads could overwrite e.g.: arguments, addresses, etc. to each other<br />   → several threads cannot write into file at once<br />   → instructions with KS have to be synchronized</div></body></html>

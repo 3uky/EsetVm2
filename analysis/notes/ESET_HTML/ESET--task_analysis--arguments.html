@@ -1,0 +1,8 @@
+<!doctype html><html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <title>arguments</title>
+      <meta name="generator" content="CherryTree">
+      <link rel="stylesheet" href="res/styles3.css" type="text/css" />
+    </head>
+    <body><div class='page'><h1 class='title'>arguments</h1><br/>based on instruction the <span style="text-decoration:underline;">argument</span> could be:<br />- address == 32bit unsigned integer in little endian (e.g.: jump instruction)<br />- constant == 64 bit signed integer in little endian (e.g.: loadConstant instruction)<br />- data == 5 bit or 7 bit encoded value in little endian (e.g.: add, mov, consoleWrite instructions)<br /><br />data<br />- has to be decoded have two types - register or memory<br /><br />register<br />- 5 bit long<br />- stars with bit 0 followed with 4 bit register index<br />- example 00001 is (0-0001) register with index 1 (r1)<br /><br />memory <br />- 7 bit long<br />- starts with bit 1 followed with two bits size 00, 01, 10, 11 followed with register index which containing address to data memory<br />- example 1110010 (1-11-0010) memory size of qword (64bit) with address stored under register 2 (qword[r2])<br /></div></body></html>
