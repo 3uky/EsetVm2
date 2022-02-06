@@ -36,6 +36,8 @@ The source code could be found under ```src``` and ```includes``` directories. T
 ### analysis
 Notes related to task and binary files analysis stored as cherry tree notes ```analysis/notes/notes.ctb``` or as web page ```analysis/notes/ESET_HTML/index.html```. There could be found also chapter related to documentation bugs.
 
+![](analysis/notes/analysis-example.png)
+
 ### own easm tests
 I have created some own elementary easm/evm examples for specific testing purposes. They are stored under ```analysis/samples``` and ```analysis/samples/precompiled```. 
 
