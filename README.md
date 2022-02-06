@@ -45,7 +45,7 @@ I have created some own elementary easm/evm examples for specific testing purpos
 Application was tested with *valgrind* and it's free of memory leaks.
 
 ### regression tests
-The regression ```test.sh``` recompiles esetvm2 application and run it with all input binaries from ```samples\precompiled```. The results are compared with expected outputs stored in ```analysis\results``` and specified by ```samples\sample.txt```. The *philosophers.evm* runs without deadlock they were tested for more then 30 minuts.
+The regression ```test.sh``` recompiles esetvm2 application and run it with all input binaries from ```samples\precompiled```. The results are compared with expected outputs stored in ```analysis\results``` and specified by ```samples\sample.txt```. The *philosophers.evm* runs without deadlock they were tested for more then 30 minutes.
 
 ![](./analysis/notes/regression-tests-result.png)
 
