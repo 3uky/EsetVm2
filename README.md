@@ -34,7 +34,7 @@ python2 task/samples/math.easm task/samples/precompiled/math.evm
 The source code could be found under ```src``` and ```includes``` directories. The ```task/task.pdf``` is fully implemented.
 
 ### analysis
-Notes related to task and binary file analysis are stored as cherry tree notes ```analysis/notes/notes.ctb``` or as web page ```analysis/notes/ESET_HTML/index.html```. There could be found also chapter related to documentation bugs.
+Notes related to task and binary files analysis are stored as cherry tree notes ```analysis/notes/notes.ctb``` or as web page ```analysis/notes/ESET_HTML/index.html```. There could be found also chapter related to documentation bugs.
 
 ![](analysis/notes/analysis-example.png)
 
