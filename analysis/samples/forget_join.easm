@@ -1,0 +1,19 @@
+.dataSize 8
+.code
+
+	createThread threadProc, r14
+
+	hlt
+
+threadProc:
+	loadConst 0, r0
+	loadConst 1, r5
+	loadConst 1000, r1
+
+	loop:
+		jumpEqual end, r1, r0
+		consoleWrite r0
+		add r0, r5, r0
+		jump loop
+	end:
+		hlt	
