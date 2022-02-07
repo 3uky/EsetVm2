@@ -34,7 +34,7 @@ python2 task/samples/math.easm task/samples/precompiled/math.evm
 The source code could be found under ```src``` and ```includes``` directories. The ```task/task.pdf``` is fully implemented.
 
 ### analysis
-Notes related to task and binary files analysis stored as cherry tree notes ```analysis/notes/notes.ctb``` or as web page ```analysis/notes/ESET_HTML/index.html```. There could be found also chapter related to documentation bugs.
+Notes related to task and binary file analysis are stored as cherry tree notes ```analysis/notes/notes.ctb``` or as web page ```analysis/notes/ESET_HTML/index.html```. There could be found also chapter related to documentation bugs.
 
 ![](analysis/notes/analysis-example.png)
 
@@ -42,7 +42,7 @@ Notes related to task and binary files analysis stored as cherry tree notes ```a
 I have created some own elementary easm/evm examples for specific testing purposes. They are stored under ```analysis/samples``` and ```analysis/samples/precompiled```. 
 
 ### memory leaks tests
-Application was tested with *valgrind* and it's free of memory leaks.
+The application was tested with *valgrind* and it's free of memory leaks.
 
 ### regression tests
 The regression ```test.sh``` recompiles esetvm2 application and run it with all input binaries from ```samples\precompiled```. The results are compared with expected outputs stored in ```analysis\results``` and specified by ```samples\sample.txt```. The *philosophers.evm* runs without deadlock they were tested for more then 30 minutes.
