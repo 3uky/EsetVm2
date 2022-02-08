@@ -1,4 +1,4 @@
-#include "../include/memory.h"
+#include "memory.h"
 
 #include <iomanip>
 

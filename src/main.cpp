@@ -5,7 +5,7 @@
 #include <fstream>
 #include <bitset>
 
-#include "../include/vm.h"
+#include "vm.h"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
-#include "../include/threading_model.h"
-#include "../include/vm.h"
-#include "../include/registers.h"
+#include "threading_model.h"
+#include "vm.h"
+#include "registers.h"
 
 #include <thread>
 #include <mutex>

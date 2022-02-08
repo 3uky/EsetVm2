@@ -1,7 +1,7 @@
 #include <map>
 
-#include "../include/decoder.h"
-#include "../include/decoding_tables.h"
+#include "decoder.h"
+#include "decoding_tables.h"
 
 using namespace std;
 

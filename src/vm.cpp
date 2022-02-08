@@ -2,8 +2,8 @@
 #include <map>
 #include <thread>
 
-#include "../include/vm.h"
-#include "../include/instruction.h"
+#include "vm.h"
+#include "instruction.h"
 
 using namespace std;
 

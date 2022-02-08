@@ -1,4 +1,4 @@
-#include "../include/registers.h"
+#include "registers.h"
 
 using namespace std;
 
