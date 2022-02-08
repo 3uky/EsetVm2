@@ -1,9 +1,7 @@
-#include <string>
-#include <map>
-#include <thread>
-
 #include "vm.h"
 #include "instruction.h"
+
+#include <string>
 
 using namespace std;
 

@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -13,10 +14,10 @@ IO::IO(string& ifilename) : filename(ifilename)
 
 void IO::InitializeFilenameBinary()
 {
-    std::string path = filename.substr(0, filename.find_last_of("/\\"));
-    std::string base_filename = filename.substr(filename.find_last_of("/\\") + 1);
-    std::string::size_type const p(base_filename.find_last_of('.'));
-    std::string file_without_extension = base_filename.substr(0, p);
+    string path = filename.substr(0, filename.find_last_of("/\\"));
+    string base_filename = filename.substr(filename.find_last_of("/\\") + 1);
+    string::size_type const p(base_filename.find_last_of('.'));
+    string file_without_extension = base_filename.substr(0, p);
     //filenameBinary = path + "/" + file_without_extension + ".bin"; // Do you expect to have bin file in same folder?
     filenameBinary = path + "/../" + file_without_extension + ".bin"; // Do you expect to have bin file in previous folder?
 }

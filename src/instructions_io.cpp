@@ -1,8 +1,6 @@
 #include "instructions_io.h"
 
 #include <vector>
-#include <iostream>
-#include <fstream>
 
 using namespace std;
 

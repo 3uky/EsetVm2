@@ -1,7 +1,10 @@
 #include "argument.h"
 
 #include <sstream>
+#include <string>
 #include <map>
+
+using namespace std;
 
 Argument::Argument() : argType(Type::reg), index(0)
 {
@@ -48,13 +51,13 @@ void Argument::storeResult(VM_QWORD value, Registers& reg)
 void Argument::checkInit(void* ptr)
 {
     if(ptr == nullptr)
-        throw std::runtime_error(std::string("Argument tried access uninitialized memory pointer!"));
+        throw runtime_error(string("Argument tried access uninitialized memory pointer!"));
 }
 
-const std::string Argument::getStr() const
+const string Argument::getStr() const
 {
-    std::stringstream ss;
-    static std::map<Memory::Size, std::string> sizeTable = {
+    stringstream ss;
+    static map<Memory::Size, string> sizeTable = {
         {Memory::Size::byte, "byte"},
         {Memory::Size::word, "word"},
         {Memory::Size::dword, "dword"},

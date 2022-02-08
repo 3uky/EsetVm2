@@ -1,9 +1,12 @@
 #ifndef DECODING_TABLES_H_INCLUDED
 #define DECODING_TABLES_H_INCLUDED
 
+#include "global.h"
 #include "instruction.h"
 #include "argument.h"
 #include "memory"
+
+#include <map>
 
 namespace instruction {
     std::map<std::pair<VM_BYTE, int>, Instruction::Type> table = {

@@ -35,7 +35,7 @@ Instruction::Type Engine::executeNextInstruction(Registers& reg)
 
 bool Engine::isInstructionMemoryRelated(Instruction::Type type) const
 {
-    static std::set<Instruction::Type> memoryRelated = {
+    static set<Instruction::Type> memoryRelated = {
         { Instruction::Type::mov},
         { Instruction::Type::loadConstant},
         { Instruction::Type::add},
