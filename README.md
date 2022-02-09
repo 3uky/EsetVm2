@@ -6,6 +6,8 @@ Virtual Machine for interpreting EsetVm2 (.evm) binary programs.
 
 Input binaries (.evm) could be compiled from specific Eset assembeler (.easm) files with compiler ```task/compiler.py```. Eset assembler language is described in ```task/task.pdf```. Documentation contains description of file format, bytecode, data encoding, threading model, memory initialization etc. The code examples could be found in ```task/samples```. Precompiled examples are in ```task/samples/precompiled```.
 
+The EsetVm2 virtual machine is able to interpret encoded instructions from input binary file in ```evm``` format. It simulates instructions execution on computer with harvard architecture with computing engine, code and data memory, io module, registers, instruction pointer or program counter, stack and also multi-threading program execution. The virtual machine provides support for instructions related to mathematical computation, program flow changes like function calls and jumps, multi threading support, console and file io operations.
+
 ## usage
 
 ### virtual machine compilation
